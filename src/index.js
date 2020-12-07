@@ -109,6 +109,7 @@ async function buildRef({
 	log('Getting package size');
 	let stdout = '';
 	await exec('npx pkg-size --json', null, {
+		cwd,
 		listeners: {
 			stdout(data) {
 				stdout += data.toString();
