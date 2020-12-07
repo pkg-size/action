@@ -23,7 +23,6 @@ async function isBaseDiffFromHead(baseRef) {
 	}
 
 	try {
-		await exec(`git diff --name-only origin/${baseRef}`);
 		await exec(`git diff --quiet origin/${baseRef}`);
 		return false;
 	} catch {
@@ -108,7 +107,7 @@ async function buildRef({
 
 	log('Getting package size');
 	let stdout = '';
-	await exec('npx pkg-size --json', null, {
+	await exec('npx pkg-size@2.1.0 --json', null, {
 		cwd,
 		listeners: {
 			stdout(data) {
