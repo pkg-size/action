@@ -11691,7 +11691,7 @@ function generateComment({
 			) : '—',
 		]),
 		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes unchanged files)_')),
+			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
 			c(dist_default()(baseTotalSize)),
 			sup(totalDelta) + c(dist_default()(headTotalSize)),
 		],

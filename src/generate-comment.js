@@ -115,7 +115,7 @@ function generateComment({
 			) : '—',
 		]),
 		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes unchanged files)_')),
+			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
 			c(byteSize(baseTotalSize)),
 			sup(totalDelta) + c(byteSize(headTotalSize)),
 		],
