@@ -141,13 +141,16 @@ function generateComment({
 	let hiddenTable = '';
 	if (hidden.length > 0) {
 		hiddenTable = markdownTable([
-			['File', 'Size'],
+			['File', 'Before', 'After'],
 			...hidden.map(data => [
 				data.link,
-				c(byteSize(data.baseSize)),
+				data.baseSize ? c(byteSize(data.baseSize)) : '—',
+				data.headSize ? (
+					(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
+				) : '—',
 			]),
 		], {
-			align: ['', 'r'],
+			align: ['', 'r', 'r'],
 		});
 
 		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;

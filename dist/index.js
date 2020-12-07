@@ -11717,13 +11717,16 @@ function generateComment({
 	let hiddenTable = '';
 	if (hidden.length > 0) {
 		hiddenTable = markdown_table_default()([
-			['File', 'Size'],
+			['File', 'Before', 'After'],
 			...hidden.map(data => [
 				data.link,
-				c(dist_default()(data.baseSize)),
+				data.baseSize ? c(dist_default()(data.baseSize)) : '—',
+				data.headSize ? (
+					(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(dist_default()(data.headSize))
+				) : '—',
 			]),
 		], {
-			align: ['', 'r'],
+			align: ['', 'r', 'r'],
 		});
 
 		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
