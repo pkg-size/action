@@ -137,6 +137,7 @@ async function buildRef({
 	const buildCommand = core.getInput('build-command');
 	const commentReport = core.getInput('comment-report');
 	const unchangedFiles = core.getInput('unchanged-files') || 'collapse';
+	const hideFiles = core.getInput('hide-files');
 	const sortBy = core.getInput('sort-by') || 'delta';
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
@@ -179,6 +180,7 @@ async function buildRef({
 			body: generateComment({
 				commentSignature: COMMENT_SIGNATURE,
 				unchangedFiles,
+				hideFiles,
 				sortBy,
 				sortOrder,
 				baseSizeData,

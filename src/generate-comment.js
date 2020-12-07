@@ -2,6 +2,7 @@ import byteSize from 'byte-size';
 import {partition, round} from 'lodash-es';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
+import globToRegExp from 'glob-to-regexp';
 import {c, link, sub, sup} from './markdown-utils';
 
 const percent = fraction => {
@@ -76,6 +77,7 @@ function processFiles(fileMap, type, sizeData) {
 function generateComment({
 	commentSignature,
 	unchangedFiles,
+	hideFiles,
 	sortBy,
 	sortOrder,
 	baseSizeData,
@@ -84,15 +86,21 @@ function generateComment({
 	const fileMap = {};
 	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
 	const headTotalSize = processFiles(fileMap, 'headSize', headSizeData);
+	const totalDelta = delta(baseTotalSize, headTotalSize);
 
-	const files = Object.values(fileMap);
+	let files = Object.values(fileMap);
 	files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
 	if (sortOrder === 'asc') {
 		files.reverse();
 	}
 
+	let hidden = [];
+	if (hideFiles) {
+		const hideFilesPtrn = globToRegExp(hideFiles);
+		[hidden, files] = partition(files, fileData => hideFilesPtrn.test(fileData.path));
+	}
+
 	const [unchanged, changed] = partition(files, fileData => (fileData.baseSize === fileData.headSize));
-	const totalDelta = delta(baseTotalSize, headTotalSize);
 
 	const table = markdownTable([
 		['File', 'Before', 'After'],
@@ -130,6 +138,21 @@ function generateComment({
 		unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
 	}
 
+	let hiddenTable = '';
+	if (hidden.length > 0) {
+		hiddenTable = markdownTable([
+			['File', 'Size'],
+			...hidden.map(data => [
+				data.link,
+				c(byteSize(data.baseSize)),
+			]),
+		], {
+			align: ['', 'r'],
+		});
+
+		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
+	}
+
 	return outdent`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
 
@@ -138,6 +161,8 @@ function generateComment({
 	${table}
 
 	${unchangedTable}
+
+	${hiddenTable}
 
 	${commentSignature}
 	`;

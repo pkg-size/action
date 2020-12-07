@@ -50,6 +50,7 @@
 		"lodash-es": "^4.17.15",
 		"markdown-table": "^2.0.0",
 		"outdent": "^0.7.1",
-		"xo": "^0.35.0"
+		"xo": "^0.35.0",
+		"glob-to-regexp": "^0.4.1"
 	}
 }
