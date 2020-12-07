@@ -3,7 +3,7 @@ import {partition, round} from 'lodash-es';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import globToRegExp from 'glob-to-regexp';
-import {c, link, sub, sup} from './markdown-utils';
+import {c, sub, sup} from './markdown-utils';
 
 const percent = fraction => {
 	if (fraction < 0.001) { // 0.09% and lower
@@ -62,7 +62,8 @@ function processFiles(fileMap, type, sizeData) {
 				Object.create(baseFileData),
 				{
 					path: file.path,
-					link: link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path),
+					// link: link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path),
+					link: c(file.path),
 				},
 			);
 		}

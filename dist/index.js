@@ -11638,7 +11638,8 @@ function processFiles(fileMap, type, sizeData) {
 				Object.create(baseFileData),
 				{
 					path: file.path,
-					link: markdown_utils_link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path),
+					// link: link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path),
+					link: c(file.path),
 				},
 			);
 		}
