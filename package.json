@@ -22,7 +22,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "ncc build -s --external='@npmcli/run-script' src/index.js && :",
+		"build": "ncc build -s src/index.js && :",
 		"lint": "xo"
 	},
 	"husky": {
