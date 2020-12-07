@@ -17,6 +17,8 @@ inputs:
     description: 'Which property to sort by: delta (size difference), headSize, baseSize, path'
   sort-order:
     description: 'Sort order: desc, asc'
+  hide-files:
+    description: 'Glob pattern to hide files with'
 runs:
   using: 'node12'
   main: 'dist/index.js'

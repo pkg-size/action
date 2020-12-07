@@ -5049,6 +5049,143 @@ exports.Deprecation = Deprecation;
 
 /***/ }),
 
+/***/ 7117:
+/***/ ((module) => {
+
+module.exports = function (glob, opts) {
+  if (typeof glob !== 'string') {
+    throw new TypeError('Expected a string');
+  }
+
+  var str = String(glob);
+
+  // The regexp we are building, as a string.
+  var reStr = "";
+
+  // Whether we are matching so called "extended" globs (like bash) and should
+  // support single character matching, matching ranges of characters, group
+  // matching, etc.
+  var extended = opts ? !!opts.extended : false;
+
+  // When globstar is _false_ (default), '/foo/*' is translated a regexp like
+  // '^\/foo\/.*$' which will match any string beginning with '/foo/'
+  // When globstar is _true_, '/foo/*' is translated to regexp like
+  // '^\/foo\/[^/]*$' which will match any string beginning with '/foo/' BUT
+  // which does not have a '/' to the right of it.
+  // E.g. with '/foo/*' these will match: '/foo/bar', '/foo/bar.txt' but
+  // these will not '/foo/bar/baz', '/foo/bar/baz.txt'
+  // Lastely, when globstar is _true_, '/foo/**' is equivelant to '/foo/*' when
+  // globstar is _false_
+  var globstar = opts ? !!opts.globstar : false;
+
+  // If we are doing extended matching, this boolean is true when we are inside
+  // a group (eg {*.html,*.js}), and false otherwise.
+  var inGroup = false;
+
+  // RegExp flags (eg "i" ) to pass in to RegExp constructor.
+  var flags = opts && typeof( opts.flags ) === "string" ? opts.flags : "";
+
+  var c;
+  for (var i = 0, len = str.length; i < len; i++) {
+    c = str[i];
+
+    switch (c) {
+    case "/":
+    case "$":
+    case "^":
+    case "+":
+    case ".":
+    case "(":
+    case ")":
+    case "=":
+    case "!":
+    case "|":
+      reStr += "\\" + c;
+      break;
+
+    case "?":
+      if (extended) {
+        reStr += ".";
+	    break;
+      }
+
+    case "[":
+    case "]":
+      if (extended) {
+        reStr += c;
+	    break;
+      }
+
+    case "{":
+      if (extended) {
+        inGroup = true;
+	    reStr += "(";
+	    break;
+      }
+
+    case "}":
+      if (extended) {
+        inGroup = false;
+	    reStr += ")";
+	    break;
+      }
+
+    case ",":
+      if (inGroup) {
+        reStr += "|";
+	    break;
+      }
+      reStr += "\\" + c;
+      break;
+
+    case "*":
+      // Move over all consecutive "*"'s.
+      // Also store the previous and next characters
+      var prevChar = str[i - 1];
+      var starCount = 1;
+      while(str[i + 1] === "*") {
+        starCount++;
+        i++;
+      }
+      var nextChar = str[i + 1];
+
+      if (!globstar) {
+        // globstar is disabled, so treat any number of "*" as one
+        reStr += ".*";
+      } else {
+        // globstar is enabled, so determine if this is a globstar segment
+        var isGlobstar = starCount > 1                      // multiple "*"'s
+          && (prevChar === "/" || prevChar === undefined)   // from the start of the segment
+          && (nextChar === "/" || nextChar === undefined)   // to the end of the segment
+
+        if (isGlobstar) {
+          // it's a globstar, so match zero or more path segments
+          reStr += "((?:[^/]*(?:\/|$))*)";
+          i++; // move over the "/"
+        } else {
+          // it's not a globstar, so only match one path segment
+          reStr += "([^/]*)";
+        }
+      }
+      break;
+
+    default:
+      reStr += c;
+    }
+  }
+
+  // When regexp 'g' flag is specified don't
+  // constrain the regular expression with ^ & $
+  if (!flags || !~flags.indexOf('g')) {
+    reStr = "^" + reStr + "$";
+  }
+
+  return new RegExp(reStr, flags);
+};
+
+
+/***/ }),
+
 /***/ 8999:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -11426,6 +11563,10 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 var lib = __webpack_require__(2321);
 var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
+// EXTERNAL MODULE: ./node_modules/glob-to-regexp/index.js
+var glob_to_regexp = __webpack_require__(7117);
+var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
+
 // CONCATENATED MODULE: ./src/markdown-utils.js
 const c = string => `\`${string}\``;
 const markdown_utils_link = (text, href) => `[${text}](${href})`;
@@ -11433,6 +11574,7 @@ const sub = string => `<sub>${string}</sub>`;
 const sup = string => `<sup>${string}</sup>`;
 
 // CONCATENATED MODULE: ./src/generate-comment.js
+
 
 
 
@@ -11511,6 +11653,7 @@ function processFiles(fileMap, type, sizeData) {
 function generateComment({
 	commentSignature,
 	unchangedFiles,
+	hideFiles,
 	sortBy,
 	sortOrder,
 	baseSizeData,
@@ -11519,15 +11662,21 @@ function generateComment({
 	const fileMap = {};
 	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
 	const headTotalSize = processFiles(fileMap, 'headSize', headSizeData);
+	const totalDelta = delta(baseTotalSize, headTotalSize);
 
-	const files = Object.values(fileMap);
+	let files = Object.values(fileMap);
 	files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
 	if (sortOrder === 'asc') {
 		files.reverse();
 	}
 
+	let hidden = [];
+	if (hideFiles) {
+		const hideFilesPtrn = glob_to_regexp_default()(hideFiles);
+		[hidden, files] = lodash_es_partition(files, fileData => hideFilesPtrn.test(fileData.path));
+	}
+
 	const [unchanged, changed] = lodash_es_partition(files, fileData => (fileData.baseSize === fileData.headSize));
-	const totalDelta = delta(baseTotalSize, headTotalSize);
 
 	const table = markdown_table_default()([
 		['File', 'Before', 'After'],
@@ -11542,7 +11691,7 @@ function generateComment({
 			) : '—',
 		]),
 		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes unchanged files)_')),
+			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
 			c(dist_default()(baseTotalSize)),
 			sup(totalDelta) + c(dist_default()(headTotalSize)),
 		],
@@ -11551,7 +11700,7 @@ function generateComment({
 	});
 
 	let unchangedTable = '';
-	if (unchangedFiles === 'collapse') {
+	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
 		unchangedTable = markdown_table_default()([
 			['File', 'Size'],
 			...unchanged.map(data => [
@@ -11565,6 +11714,21 @@ function generateComment({
 		unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
 	}
 
+	let hiddenTable = '';
+	if (hidden.length > 0) {
+		hiddenTable = markdown_table_default()([
+			['File', 'Size'],
+			...hidden.map(data => [
+				data.link,
+				c(dist_default()(data.baseSize)),
+			]),
+		], {
+			align: ['', 'r'],
+		});
+
+		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
+	}
+
 	return (lib_default())`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
 
@@ -11573,6 +11737,8 @@ function generateComment({
 	${table}
 
 	${unchangedTable}
+
+	${hiddenTable}
 
 	${commentSignature}
 	`;
@@ -11722,6 +11888,7 @@ async function buildRef({
 	const buildCommand = core.getInput('build-command');
 	const commentReport = core.getInput('comment-report');
 	const unchangedFiles = core.getInput('unchanged-files') || 'collapse';
+	const hideFiles = core.getInput('hide-files');
 	const sortBy = core.getInput('sort-by') || 'delta';
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
@@ -11764,6 +11931,7 @@ async function buildRef({
 			body: generate_comment({
 				commentSignature: COMMENT_SIGNATURE,
 				unchangedFiles,
+				hideFiles,
 				sortBy,
 				sortOrder,
 				baseSizeData,
