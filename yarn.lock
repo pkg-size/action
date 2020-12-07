@@ -968,6 +968,11 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
+byte-size@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/byte-size/-/byte-size-7.0.0.tgz#36528cd1ca87d39bd9abd51f5715dc93b6ceb032"
+  integrity sha512-NNiBxKgxybMBtWdmvx7ZITJi4ZG+CYUgwOSZTfqB1qogkRHrhbQE/R2r5Fh94X+InN5MCYz6SvB/ejHMj/HbsQ==
+
 cache-base@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cache-base/-/cache-base-1.0.1.tgz#0a7f46416831c8b662ee36fe4e7c59d76f666ab2"
@@ -2017,11 +2022,6 @@ file-entry-cache@^6.0.0:
   integrity sha512-fqoO76jZ3ZnYrXLDRxBR1YvOvc0k844kcOg40bgsPrE25LAb/PDqTY+ho64Xh2c8ZXgIKldchCFHczG2UVRcWA==
   dependencies:
     flat-cache "^3.0.4"
-
-filesize@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/filesize/-/filesize-6.1.0.tgz#e81bdaa780e2451d714d71c0d7a4f3238d37ad00"
-  integrity sha512-LpCHtPQ3sFx67z+uh2HnSyWSLLu5Jxo21795uRDuar/EOuYWXib5EmPaGIBuSnRqH2IODiKA2k5re/K9OnN/Yg==
 
 fill-range@^4.0.0:
   version "4.0.0"

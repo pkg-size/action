@@ -4892,6 +4892,135 @@ function removeHook (state, name, method) {
 
 /***/ }),
 
+/***/ 6446:
+/***/ (function(module) {
+
+(function (global, factory) {
+   true ? module.exports = factory() :
+  0;
+}(this, (function () { 'use strict';
+
+  /**
+   * @module byte-size
+   */
+
+  let defaultOptions = {};
+  const _options = new WeakMap();
+
+  class ByteSize {
+    constructor (bytes, options) {
+      options = Object.assign({
+        units: 'metric',
+        precision: 1
+      }, defaultOptions, options);
+      _options.set(this, options);
+
+      const tables = {
+        metric: [
+          { from: 0   , to: 1e3 , unit: 'B' , long: 'bytes' },
+          { from: 1e3 , to: 1e6 , unit: 'kB', long: 'kilobytes' },
+          { from: 1e6 , to: 1e9 , unit: 'MB', long: 'megabytes' },
+          { from: 1e9 , to: 1e12, unit: 'GB', long: 'gigabytes' },
+          { from: 1e12, to: 1e15, unit: 'TB', long: 'terabytes' },
+          { from: 1e15, to: 1e18, unit: 'PB', long: 'petabytes' },
+          { from: 1e18, to: 1e21, unit: 'EB', long: 'exabytes' },
+          { from: 1e21, to: 1e24, unit: 'ZB', long: 'zettabytes' },
+          { from: 1e24, to: 1e27, unit: 'YB', long: 'yottabytes' },
+        ],
+        metric_octet: [
+          { from: 0   , to: 1e3 , unit: 'o' , long: 'octets' },
+          { from: 1e3 , to: 1e6 , unit: 'ko', long: 'kilooctets' },
+          { from: 1e6 , to: 1e9 , unit: 'Mo', long: 'megaoctets' },
+          { from: 1e9 , to: 1e12, unit: 'Go', long: 'gigaoctets' },
+          { from: 1e12, to: 1e15, unit: 'To', long: 'teraoctets' },
+          { from: 1e15, to: 1e18, unit: 'Po', long: 'petaoctets' },
+          { from: 1e18, to: 1e21, unit: 'Eo', long: 'exaoctets' },
+          { from: 1e21, to: 1e24, unit: 'Zo', long: 'zettaoctets' },
+          { from: 1e24, to: 1e27, unit: 'Yo', long: 'yottaoctets' },
+        ],
+        iec: [
+          { from: 0                , to: Math.pow(1024, 1), unit: 'B'  , long: 'bytes' },
+          { from: Math.pow(1024, 1), to: Math.pow(1024, 2), unit: 'KiB', long: 'kibibytes' },
+          { from: Math.pow(1024, 2), to: Math.pow(1024, 3), unit: 'MiB', long: 'mebibytes' },
+          { from: Math.pow(1024, 3), to: Math.pow(1024, 4), unit: 'GiB', long: 'gibibytes' },
+          { from: Math.pow(1024, 4), to: Math.pow(1024, 5), unit: 'TiB', long: 'tebibytes' },
+          { from: Math.pow(1024, 5), to: Math.pow(1024, 6), unit: 'PiB', long: 'pebibytes' },
+          { from: Math.pow(1024, 6), to: Math.pow(1024, 7), unit: 'EiB', long: 'exbibytes' },
+          { from: Math.pow(1024, 7), to: Math.pow(1024, 8), unit: 'ZiB', long: 'zebibytes' },
+          { from: Math.pow(1024, 8), to: Math.pow(1024, 9), unit: 'YiB', long: 'yobibytes' },
+        ],
+        iec_octet: [
+          { from: 0                , to: Math.pow(1024, 1), unit: 'o'  , long: 'octets' },
+          { from: Math.pow(1024, 1), to: Math.pow(1024, 2), unit: 'Kio', long: 'kibioctets' },
+          { from: Math.pow(1024, 2), to: Math.pow(1024, 3), unit: 'Mio', long: 'mebioctets' },
+          { from: Math.pow(1024, 3), to: Math.pow(1024, 4), unit: 'Gio', long: 'gibioctets' },
+          { from: Math.pow(1024, 4), to: Math.pow(1024, 5), unit: 'Tio', long: 'tebioctets' },
+          { from: Math.pow(1024, 5), to: Math.pow(1024, 6), unit: 'Pio', long: 'pebioctets' },
+          { from: Math.pow(1024, 6), to: Math.pow(1024, 7), unit: 'Eio', long: 'exbioctets' },
+          { from: Math.pow(1024, 7), to: Math.pow(1024, 8), unit: 'Zio', long: 'zebioctets' },
+          { from: Math.pow(1024, 8), to: Math.pow(1024, 9), unit: 'Yio', long: 'yobioctets' },
+        ],
+      };
+      Object.assign(tables, options.customUnits);
+
+      const prefix = bytes < 0 ? '-' : '';
+      bytes = Math.abs(bytes);
+      const table = tables[options.units];
+      if (table) {
+        const units = table.find(u => bytes >= u.from && bytes < u.to);
+        if (units) {
+          const value = units.from === 0
+            ? prefix + bytes
+            : prefix + (bytes / units.from).toFixed(options.precision);
+          this.value = value;
+          this.unit = units.unit;
+          this.long = units.long;
+        } else {
+          this.value = prefix + bytes;
+          this.unit = '';
+          this.long = '';
+        }
+      } else {
+        throw new Error(`Invalid units specified: ${options.units}`)
+      }
+    }
+
+    toString () {
+      const options = _options.get(this);
+      return options.toStringFn ? options.toStringFn.bind(this)() : `${this.value} ${this.unit}`
+    }
+  }
+
+  /**
+   * Returns an object with the spec `{ value: string, unit: string, long: string }`. The returned object defines a `toString` method meaning it can be used in any string context.
+   * @param {number} - The bytes value to convert.
+   * @param [options] {object} - Optional config.
+   * @param [options.precision] {number} - Number of decimal places. Defaults to `1`.
+   * @param [options.units] {string} - Specify `'metric'`, `'iec'`, `'metric_octet'`, `'iec_octet'` or the name of a property from the custom units table in `options.customUnits`. Defaults to `metric`.
+   * @param [options.customUnits] {object} - An object containing one or more custom unit lookup tables.
+   * @param [options.toStringFn] {function} - A `toString` function to override the default.
+   * @returns {object}
+   * @alias module:byte-size
+   */
+  function byteSize (bytes, options) {
+    return new ByteSize(bytes, options)
+  }
+
+  /**
+   * Set the default `byteSize` options for the duration of the process.
+   * @param options {object} - A `byteSize` options object.
+   */
+  byteSize.defaultOptions = function (options) {
+    defaultOptions = options;
+  };
+
+  return byteSize;
+
+})));
+
+
+/***/ }),
+
 /***/ 8932:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -4916,197 +5045,6 @@ class Deprecation extends Error {
 }
 
 exports.Deprecation = Deprecation;
-
-
-/***/ }),
-
-/***/ 5060:
-/***/ ((module) => {
-
-"use strict";
-
-
-/**
- * filesize
- *
- * @copyright 2020 Jason Mulligan <jason.mulligan@avoidwork.com>
- * @license BSD-3-Clause
- * @version 6.1.0
- */
-(function (global) {
-  var b = /^(b|B)$/,
-      symbol = {
-    iec: {
-      bits: ["b", "Kib", "Mib", "Gib", "Tib", "Pib", "Eib", "Zib", "Yib"],
-      bytes: ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
-    },
-    jedec: {
-      bits: ["b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"],
-      bytes: ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-    }
-  },
-      fullform = {
-    iec: ["", "kibi", "mebi", "gibi", "tebi", "pebi", "exbi", "zebi", "yobi"],
-    jedec: ["", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"]
-  };
-  /**
-   * filesize
-   *
-   * @method filesize
-   * @param  {Mixed}   arg        String, Int or Float to transform
-   * @param  {Object}  descriptor [Optional] Flags
-   * @return {String}             Readable file size String
-   */
-
-  function filesize(arg) {
-    var descriptor = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var result = [],
-        val = 0,
-        e = void 0,
-        base = void 0,
-        bits = void 0,
-        ceil = void 0,
-        full = void 0,
-        fullforms = void 0,
-        locale = void 0,
-        localeOptions = void 0,
-        neg = void 0,
-        num = void 0,
-        output = void 0,
-        round = void 0,
-        unix = void 0,
-        separator = void 0,
-        spacer = void 0,
-        standard = void 0,
-        symbols = void 0;
-
-    if (isNaN(arg)) {
-      throw new TypeError("Invalid number");
-    }
-
-    bits = descriptor.bits === true;
-    unix = descriptor.unix === true;
-    base = descriptor.base || 2;
-    round = descriptor.round !== void 0 ? descriptor.round : unix ? 1 : 2;
-    locale = descriptor.locale !== void 0 ? descriptor.locale : "";
-    localeOptions = descriptor.localeOptions || {};
-    separator = descriptor.separator !== void 0 ? descriptor.separator : "";
-    spacer = descriptor.spacer !== void 0 ? descriptor.spacer : unix ? "" : " ";
-    symbols = descriptor.symbols || {};
-    standard = base === 2 ? descriptor.standard || "jedec" : "jedec";
-    output = descriptor.output || "string";
-    full = descriptor.fullform === true;
-    fullforms = descriptor.fullforms instanceof Array ? descriptor.fullforms : [];
-    e = descriptor.exponent !== void 0 ? descriptor.exponent : -1;
-    num = Number(arg);
-    neg = num < 0;
-    ceil = base > 2 ? 1000 : 1024; // Flipping a negative number to determine the size
-
-    if (neg) {
-      num = -num;
-    } // Determining the exponent
-
-
-    if (e === -1 || isNaN(e)) {
-      e = Math.floor(Math.log(num) / Math.log(ceil));
-
-      if (e < 0) {
-        e = 0;
-      }
-    } // Exceeding supported length, time to reduce & multiply
-
-
-    if (e > 8) {
-      e = 8;
-    }
-
-    if (output === "exponent") {
-      return e;
-    } // Zero is now a special case because bytes divide by 1
-
-
-    if (num === 0) {
-      result[0] = 0;
-      result[1] = unix ? "" : symbol[standard][bits ? "bits" : "bytes"][e];
-    } else {
-      val = num / (base === 2 ? Math.pow(2, e * 10) : Math.pow(1000, e));
-
-      if (bits) {
-        val = val * 8;
-
-        if (val >= ceil && e < 8) {
-          val = val / ceil;
-          e++;
-        }
-      }
-
-      result[0] = Number(val.toFixed(e > 0 ? round : 0));
-
-      if (result[0] === ceil && e < 8 && descriptor.exponent === void 0) {
-        result[0] = 1;
-        e++;
-      }
-
-      result[1] = base === 10 && e === 1 ? bits ? "kb" : "kB" : symbol[standard][bits ? "bits" : "bytes"][e];
-
-      if (unix) {
-        result[1] = standard === "jedec" ? result[1].charAt(0) : e > 0 ? result[1].replace(/B$/, "") : result[1];
-
-        if (b.test(result[1])) {
-          result[0] = Math.floor(result[0]);
-          result[1] = "";
-        }
-      }
-    } // Decorating a 'diff'
-
-
-    if (neg) {
-      result[0] = -result[0];
-    } // Applying custom symbol
-
-
-    result[1] = symbols[result[1]] || result[1];
-
-    if (locale === true) {
-      result[0] = result[0].toLocaleString();
-    } else if (locale.length > 0) {
-      result[0] = result[0].toLocaleString(locale, localeOptions);
-    } else if (separator.length > 0) {
-      result[0] = result[0].toString().replace(".", separator);
-    } // Returning Array, Object, or String (default)
-
-
-    if (output === "array") {
-      return result;
-    }
-
-    if (full) {
-      result[1] = fullforms[e] ? fullforms[e] : fullform[standard][e] + (bits ? "bit" : "byte") + (result[0] === 1 ? "" : "s");
-    }
-
-    if (output === "object") {
-      return {
-        value: result[0],
-        symbol: result[1],
-        exponent: e
-      };
-    }
-
-    return result.join(spacer);
-  } // Partial application for functional programming
-
-
-  filesize.partial = function (opt) {
-    return function (arg) {
-      return filesize(arg, opt);
-    };
-  }; // CommonJS, AMD, script tag
-
-
-  if (true) {
-    module.exports = filesize;
-  } else {}
-})(typeof window !== "undefined" ? window : global);
 
 
 /***/ }),
@@ -7900,9 +7838,9 @@ async function upsertComment({
 
 /* harmony default export */ const upsert_comment = (upsertComment);
 
-// EXTERNAL MODULE: ./node_modules/filesize/lib/filesize.js
-var filesize = __webpack_require__(5060);
-var filesize_default = /*#__PURE__*/__webpack_require__.n(filesize);
+// EXTERNAL MODULE: ./node_modules/byte-size/dist/index.js
+var dist = __webpack_require__(6446);
+var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/_root.js
 var _root = __webpack_require__(3138);
@@ -11501,7 +11439,6 @@ const sup = string => `<sup>${string}</sup>`;
 
 
 
-const size = filesize_default().partial({standard: 'iec'});
 const percent = fraction => {
 	if (fraction < 0.001) { // 0.09% and lower
 		fraction = lodash_es_round(fraction, 4);
@@ -11599,15 +11536,15 @@ function generateComment({
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(data => [
 			data.link,
-			data.baseSize ? c(size(data.baseSize)) : '—',
+			data.baseSize ? c(dist_default()(data.baseSize)) : '—',
 			data.headSize ? (
-				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(size(data.headSize))
+				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(dist_default()(data.headSize))
 			) : '—',
 		]),
 		[
 			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes unchanged files)_')),
-			c(size(baseTotalSize)),
-			sup(totalDelta) + c(size(headTotalSize)),
+			c(dist_default()(baseTotalSize)),
+			sup(totalDelta) + c(dist_default()(headTotalSize)),
 		],
 	], {
 		align: ['', 'r', 'r'],
@@ -11619,7 +11556,7 @@ function generateComment({
 			['File', 'Size'],
 			...unchanged.map(data => [
 				data.link,
-				c(size(data.baseSize)),
+				c(dist_default()(data.baseSize)),
 			]),
 		], {
 			align: ['', 'r'],
@@ -11631,7 +11568,7 @@ function generateComment({
 	return (lib_default())`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
 
-	**Tarball size** ${c(size(baseSizeData.tarballSize))} → ${sup(delta(baseSizeData.tarballSize, headSizeData.tarballSize)) + c(size(headSizeData.tarballSize))}
+	**Tarball size** ${c(dist_default()(baseSizeData.tarballSize))} → ${sup(delta(baseSizeData.tarballSize, headSizeData.tarballSize)) + c(dist_default()(headSizeData.tarballSize))}
 
 	${table}
 
