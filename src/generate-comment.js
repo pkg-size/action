@@ -1,10 +1,9 @@
-import filesize from 'filesize';
+import byteSize from 'byte-size';
 import {partition, round} from 'lodash-es';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import {c, link, sub, sup} from './markdown-utils';
 
-const size = filesize.partial({standard: 'iec'});
 const percent = fraction => {
 	if (fraction < 0.001) { // 0.09% and lower
 		fraction = round(fraction, 4);
@@ -102,15 +101,15 @@ function generateComment({
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(data => [
 			data.link,
-			data.baseSize ? c(size(data.baseSize)) : '—',
+			data.baseSize ? c(byteSize(data.baseSize)) : '—',
 			data.headSize ? (
-				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(size(data.headSize))
+				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
 			) : '—',
 		]),
 		[
 			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes unchanged files)_')),
-			c(size(baseTotalSize)),
-			sup(totalDelta) + c(size(headTotalSize)),
+			c(byteSize(baseTotalSize)),
+			sup(totalDelta) + c(byteSize(headTotalSize)),
 		],
 	], {
 		align: ['', 'r', 'r'],
@@ -122,7 +121,7 @@ function generateComment({
 			['File', 'Size'],
 			...unchanged.map(data => [
 				data.link,
-				c(size(data.baseSize)),
+				c(byteSize(data.baseSize)),
 			]),
 		], {
 			align: ['', 'r'],
@@ -134,7 +133,7 @@ function generateComment({
 	return outdent`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
 
-	**Tarball size** ${c(size(baseSizeData.tarballSize))} → ${sup(delta(baseSizeData.tarballSize, headSizeData.tarballSize)) + c(size(headSizeData.tarballSize))}
+	**Tarball size** ${c(byteSize(baseSizeData.tarballSize))} → ${sup(delta(baseSizeData.tarballSize, headSizeData.tarballSize)) + c(byteSize(headSizeData.tarballSize))}
 
 	${table}
 
