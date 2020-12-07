@@ -2,7 +2,7 @@ import assert from 'assert';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import {exec} from '@actions/exec';
-import pkgSize from '@pvtnbr/pkg-size';
+import pkgSize from 'pkg-size';
 import fs from 'fs';
 import path from 'path';
 import log from './log';

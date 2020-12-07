@@ -22,9 +22,7 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "npm run build:pre && npm run build:main",
-		"build:pre": "ncc build -s -o dist/pre src/pre.js && :",
-		"build:main": "ncc build -s --external='@npmcli/run-script' -o dist/main src/index.js && :",
+		"build": "ncc build -s --external='@npmcli/run-script' src/index.js && :",
 		"lint": "xo"
 	},
 	"husky": {

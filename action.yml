@@ -19,5 +19,4 @@ inputs:
     description: 'Sort order: desc, asc'
 runs:
   using: 'node12'
-  pre: 'dist/pre/index.js'
-  main: 'dist/main/index.js'
+  main: 'dist/index.js'

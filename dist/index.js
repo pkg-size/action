@@ -5683,74 +5683,6 @@ exports.isPlainObject = isPlainObject;
 
 /***/ }),
 
-/***/ 376:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const path_1 = __importDefault(__webpack_require__(5622));
-// @ts-expect-error
-const libnpmpack_1 = __importDefault(__webpack_require__(4030));
-const tar_1 = __importDefault(__webpack_require__(4674));
-const gzip_size_1 = __importDefault(__webpack_require__(9938));
-const brotli_size_1 = __importDefault(__webpack_require__(2852));
-async function streamToBuffer(readable) {
-    const chunks = [];
-    for await (const chunk of readable) {
-        chunks.push(chunk);
-    }
-    return Buffer.concat(chunks);
-}
-const getCompressionSizes = async (readEntry) => {
-    const fileBuffer = await streamToBuffer(readEntry);
-    const [sizeGzip, sizeBrotli] = await Promise.all([
-        gzip_size_1.default(fileBuffer),
-        brotli_size_1.default(fileBuffer),
-    ]);
-    return {
-        /*
-         * Sanitization from UNPKG:
-         * https://github.com/mjackson/unpkg/blob/4774e61d50f76c518d0628cfdf8beede5017455d/modules/actions/serveFileMetadata.js#L23
-         */
-        path: readEntry.path.replace(/^[^/]+\/?/, '/'),
-        mode: readEntry.mode,
-        size: readEntry.size,
-        sizeGzip,
-        sizeBrotli,
-    };
-};
-/*
- * Based on npm pack logic
- * https://github.com/npm/cli/blob/e9a440bcc5bd9a42dbdbf4bf9340d188c910857c/lib/utils/tar.js
- */
-const getTarFiles = async (tarball) => new Promise((resolve, reject) => {
-    const promises = [];
-    tar_1.default.list({ noResume: true })
-        .on('entry', readEntry => {
-        promises.push(getCompressionSizes(readEntry));
-    })
-        .on('error', error => reject(error))
-        .on('finish', () => resolve(Promise.all(promises)))
-        .end(tarball);
-});
-async function pkgSize(pkgPath = '') {
-    pkgPath = path_1.default.resolve(pkgPath);
-    const tarball = await libnpmpack_1.default(pkgPath);
-    const files = await getTarFiles(tarball);
-    return {
-        pkgPath,
-        tarballSize: tarball.length,
-        files,
-    };
-}
-module.exports = pkgSize;
-
-
-/***/ }),
-
 /***/ 1040:
 /***/ ((module) => {
 
@@ -31876,6 +31808,74 @@ module.exports.win32 = win32;
 
 /***/ }),
 
+/***/ 49:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+const path_1 = __importDefault(__webpack_require__(5622));
+// @ts-expect-error
+const libnpmpack_1 = __importDefault(__webpack_require__(4030));
+const tar_1 = __importDefault(__webpack_require__(4674));
+const gzip_size_1 = __importDefault(__webpack_require__(9938));
+const brotli_size_1 = __importDefault(__webpack_require__(2852));
+async function streamToBuffer(readable) {
+    const chunks = [];
+    for await (const chunk of readable) {
+        chunks.push(chunk);
+    }
+    return Buffer.concat(chunks);
+}
+const getCompressionSizes = async (readEntry) => {
+    const fileBuffer = await streamToBuffer(readEntry);
+    const [sizeGzip, sizeBrotli] = await Promise.all([
+        gzip_size_1.default(fileBuffer),
+        brotli_size_1.default(fileBuffer),
+    ]);
+    return {
+        /*
+         * Sanitization from UNPKG:
+         * https://github.com/mjackson/unpkg/blob/4774e61d50f76c518d0628cfdf8beede5017455d/modules/actions/serveFileMetadata.js#L23
+         */
+        path: readEntry.path.replace(/^[^/]+\/?/, '/'),
+        mode: readEntry.mode,
+        size: readEntry.size,
+        sizeGzip,
+        sizeBrotli,
+    };
+};
+/*
+ * Based on npm pack logic
+ * https://github.com/npm/cli/blob/e9a440bcc5bd9a42dbdbf4bf9340d188c910857c/lib/utils/tar.js
+ */
+const getTarFiles = async (tarball) => new Promise((resolve, reject) => {
+    const promises = [];
+    tar_1.default.list({ noResume: true })
+        .on('entry', readEntry => {
+        promises.push(getCompressionSizes(readEntry));
+    })
+        .on('error', error => reject(error))
+        .on('finish', () => resolve(Promise.all(promises)))
+        .end(tarball);
+});
+async function pkgSize(pkgPath = '') {
+    pkgPath = path_1.default.resolve(pkgPath);
+    const tarball = await libnpmpack_1.default(pkgPath);
+    const files = await getTarFiles(tarball);
+    return {
+        pkgPath,
+        tarballSize: tarball.length,
+        files,
+    };
+}
+module.exports = pkgSize;
+
+
+/***/ }),
+
 /***/ 439:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -43336,8 +43336,8 @@ var core = __webpack_require__(2186);
 var github = __webpack_require__(5438);
 // EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
 var exec = __webpack_require__(1514);
-// EXTERNAL MODULE: ./node_modules/@pvtnbr/pkg-size/dist/pkg-size.js
-var pkg_size = __webpack_require__(376);
+// EXTERNAL MODULE: ./node_modules/pkg-size/dist/pkg-size.js
+var pkg_size = __webpack_require__(49);
 var pkg_size_default = /*#__PURE__*/__webpack_require__.n(pkg_size);
 
 // EXTERNAL MODULE: external "fs"
