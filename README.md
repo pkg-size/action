@@ -11,9 +11,6 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
 - **Fully customizable**
 - **Supports npm, yarn, and pnpm** 
 
-- **🔥 Hot** Too hot!
-- **⚡️ Blazing fast** Can't keep up!
-- **🙌 Awesome support** Best in the world!
 
 ## 🚦 Quick Setup
 1. Create the following file in your repo: `.github/workflows/pkg-size-report.yml`:
@@ -34,6 +31,7 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
             uses: actions/checkout@v2
 
           - name: Package size report
+            uses: privatenumber/pkg-size-action@develop
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     ```
