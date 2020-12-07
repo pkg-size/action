@@ -11766,7 +11766,6 @@ async function buildRef({
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
 
-	src_log('stdout', stdout);
 	const sizeData = JSON.parse(stdout);
 
 	// Clean up
