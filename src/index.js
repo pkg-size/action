@@ -2,7 +2,6 @@ import assert from 'assert';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import {exec} from '@actions/exec';
-import pkgSize from 'pkg-size';
 import fs from 'fs';
 import path from 'path';
 import log from './log';
@@ -108,9 +107,19 @@ async function buildRef({
 	}
 
 	log('Getting package size');
-	const sizeData = await pkgSize(cwd).catch(error => {
+	let stdout = '';
+	await exec('npx pkg-size --json', null, {
+		listeners: {
+			stdout(data) {
+				stdout += data.toString();
+			},
+		},
+	}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
+
+	log('stdout', stdout);
+	const sizeData = JSON.parse(stdout);
 
 	// Clean up
 	await exec('git reset --hard');
