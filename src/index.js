@@ -2,7 +2,6 @@ import assert from 'assert';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import {exec} from '@actions/exec';
-import pkgSize from '@pvtnbr/pkg-size';
 import fs from 'fs';
 import path from 'path';
 import log from './log';
@@ -24,7 +23,6 @@ async function isBaseDiffFromHead(baseRef) {
 	}
 
 	try {
-		await exec(`git diff --name-only origin/${baseRef}`);
 		await exec(`git diff --quiet origin/${baseRef}`);
 		return false;
 	} catch {
@@ -108,9 +106,19 @@ async function buildRef({
 	}
 
 	log('Getting package size');
-	const sizeData = await pkgSize(cwd).catch(error => {
+	let stdout = '';
+	await exec('npx pkg-size@2.1.0 --json', null, {
+		cwd,
+		listeners: {
+			stdout(data) {
+				stdout += data.toString();
+			},
+		},
+	}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
+
+	const sizeData = JSON.parse(stdout);
 
 	// Clean up
 	await exec('git reset --hard');
