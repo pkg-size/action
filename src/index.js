@@ -124,8 +124,8 @@ async function buildRef({
 	const sizeData = JSON.parse(stdout);
 
 	// Clean up
-	await exec('git reset --hard');
-	await exec('git clean -dfx');
+	await exec('git reset --hard'); // Reverts changed files
+	await exec('git clean -dfx'); // Deletes untracked & ignored files
 
 	return sizeData;
 }
