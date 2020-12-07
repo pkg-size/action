@@ -49,5 +49,6 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
 - `unchanged-files` Whether to show unchanged files: show, collapse, hide
 - `sort-by` Which property to sort by: delta (size difference), headSize, baseSize, path
 - `sort-order` Sort order: desc, asc
+- `hide-files` Glob pattern to hide files with
 
 ## 💁‍♀️ FAQ
