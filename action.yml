@@ -1,0 +1,23 @@
+name: 'pkg-size-action'
+description: 'Check package size changes on pull-requests'
+author: 'Hiroki Osame <hiroki.osame@gmail.com>'
+branding:
+  icon: 'git-pull-request'
+  color: 'blue'
+inputs:
+  build-command:
+    description: 'Command to build the package with'
+  comment-report:
+    description: 'Whether to comment the build size report on the PR or not: true, false'
+  file-size-standard:
+    description: 'Standard unit of measure: iec or jedec'
+  unchanged-files:
+    description: 'Whether to show unchanged files: show, collapse, hide'
+  sort-by:
+    description: 'Which property to sort by: delta (size difference), headSize, baseSize, path'
+  sort-order:
+    description: 'Sort order: desc, asc'
+runs:
+  using: 'node12'
+  pre: 'dist/pre/index.js'
+  main: 'dist/main/index.js'
