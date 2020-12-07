@@ -11700,7 +11700,7 @@ function generateComment({
 	});
 
 	let unchangedTable = '';
-	if (unchangedFiles === 'collapse') {
+	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
 		unchangedTable = markdown_table_default()([
 			['File', 'Size'],
 			...unchanged.map(data => [

@@ -124,7 +124,7 @@ function generateComment({
 	});
 
 	let unchangedTable = '';
-	if (unchangedFiles === 'collapse') {
+	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
 		unchangedTable = markdownTable([
 			['File', 'Size'],
 			...unchanged.map(data => [
