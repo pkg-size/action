@@ -42,7 +42,8 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
 ## 👨🏻‍🏫 Examples
 
 <details>
-  <summary>Set a build command to produce distribution assets</summary>
+  <summary><strong>Set a build command to produce distribution assets</strong></summary>
+  <br>
 
 By default, pkg-size-action detects whether a "npm run build" script exists. If not, it assumes your repo doesn't have a build step and won't even install dependencies (disable this auto-check behavior by passing in `false`).
 
@@ -74,7 +75,8 @@ jobs:
 </details>
 
 <details>
-  <summary>Hiding source-map changes from report</summary>
+  <summary><strong>Hiding source-map changes from report</strong></summary>
+  <br>
 
 Source-maps can be a negligible when considering distribution size. Hide them from your report to reduce the noise using a glob.
 
@@ -104,7 +106,8 @@ jobs:
 </details>
 
 <details>
-  <summary>Show unchanged & changed files in the same table</summary>
+  <summary><strong>Show unchanged & changed files in the same table</strong></summary>
+  <br>
 
 ```yaml
 name: Package Size Report
