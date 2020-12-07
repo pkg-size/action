@@ -125,6 +125,7 @@ async function buildRef({
 
 	// Clean up
 	await exec('git reset --hard');
+	await exec('git clean -dfx');
 
 	return sizeData;
 }

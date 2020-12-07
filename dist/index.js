@@ -11880,6 +11880,7 @@ async function buildRef({
 
 	// Clean up
 	await (0,exec.exec)('git reset --hard');
+	await (0,exec.exec)('git clean -dfx');
 
 	return sizeData;
 }
