@@ -96,7 +96,7 @@ function generateComment({
 
 	let hidden = [];
 	if (hideFiles) {
-		const hideFilesPtrn = globToRegExp(hideFiles);
+		const hideFilesPtrn = globToRegExp(hideFiles, {extended: true});
 		[hidden, files] = partition(files, fileData => hideFilesPtrn.test(fileData.path));
 	}
 

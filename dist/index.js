@@ -11672,7 +11672,7 @@ function generateComment({
 
 	let hidden = [];
 	if (hideFiles) {
-		const hideFilesPtrn = glob_to_regexp_default()(hideFiles);
+		const hideFilesPtrn = glob_to_regexp_default()(hideFiles, {extended: true});
 		[hidden, files] = lodash_es_partition(files, fileData => hideFilesPtrn.test(fileData.path));
 	}
 
