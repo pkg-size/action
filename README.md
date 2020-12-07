@@ -1,4 +1,4 @@
-# pkg-size-action [![Latest version](https://badgen.net/npm/v/pkg-size-action)](https://npm.im/pkg-size-action) [![Monthly downloads](https://badgen.net/npm/dm/pkg-size-action)](https://npm.im/pkg-size-action) [![Install size](https://packagephobia.now.sh/badge?p=pkg-size-action)](https://packagephobia.now.sh/result?p=pkg-size-action)
+# pkg-size-action
 
 Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
 
