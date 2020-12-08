@@ -14,6 +14,9 @@ async function upsertComment({
 		issue_number: prNumber, // eslint-disable-line camelcase
 	});
 
+	const user = await octokit.users.getAuthenticated();
+	console.log(user);
+
 	const hasPreviousComment = comments.find(comment => (
 		// TODO: Replace with id from current token user ID
 		comment.user.id === 41898282 && // github-actions[bot] user id
