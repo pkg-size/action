@@ -110,14 +110,14 @@ async function buildRef({
 	const result = await exec2('npx pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
-	// details(JSON.stringify(result, null, 4));
+	core.debug(JSON.stringify(result, null, 4));
 
 	const sizeData = JSON.parse(result.stdout);
 
 	core.info('Cleaning up');
 	await exec2('git reset --hard'); // Reverts changed files
-	await exec2('git clean -dfx'); // Deletes untracked & ignored files
-	// details('Cleaned files', stdout);
+	const {stdout: cleanList} = await exec2('git clean -dfx'); // Deletes untracked & ignored files
+	core.debug(cleanList);
 
 	return sizeData;
 }
