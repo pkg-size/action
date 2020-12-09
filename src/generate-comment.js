@@ -99,19 +99,34 @@ function processPkgFiles(fileMap, type, pkgData) {
 	return data;
 }
 
-function comparePackages(headPkg, basePkg) {
+function comparePackages(headPkg, basePkg, {
+	hideFiles,
+}) {
 	const fileMap = {};
 	const head = processPkgFiles(fileMap, 'head', headPkg);
 	const base = processPkgFiles(fileMap, 'base', basePkg);
+
+	let allFiles = Object.values(fileMap);
+
+	let hidden = [];
+	if (hideFiles) {
+		const hideFilesPtrn = globToRegExp(hideFiles, {extended: true});
+		[hidden, allFiles] = partition(allFiles, file => hideFilesPtrn.test(file.path));
+	}
+
+	const [unchanged, changed] = partition(allFiles, file => (file.base.size === file.head.size));
 
 	return {
 		head,
 		base,
 		diff: calculateDiff(head, base),
-		files: Object.values(fileMap),
+		files: {
+			changed,
+			unchanged,
+			hidden,
+		},
 	};
 }
-
 
 function generateComment({
 	commentSignature,
