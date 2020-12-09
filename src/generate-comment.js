@@ -48,7 +48,7 @@ const delta = (from, to) => {
 };
 
 
-function calculateDiff(head, base, property) {
+function calculateDiffBy(head, base, property) {
 	const delta = head[property] - base[property];
 	return {
 		delta,
@@ -56,11 +56,19 @@ function calculateDiff(head, base, property) {
 	};
 }
 
+function calculateDiff(head, base) {
+	return {
+		size: calculateDiff(head, base, 'size'),
+		sizeGzip: calculateDiff(head, base, 'sizeGzip'),
+		sizeBrotli: calculateDiff(head, base, 'sizeBrotli'),
+	};
+}
+
 function processPkgFiles(fileMap, type, pkgData) {
 	const data = {
 		size: 0,
-		gzipSize: 0,
-		brotliSize: 0,
+		sizeGzip: 0,
+		sizeBrotli: 0,
 		tarballSize: pkgData.tarballSize,
 		files: pkgData.files,
 	};
@@ -83,13 +91,8 @@ function processPkgFiles(fileMap, type, pkgData) {
 		data.gzip += file.gzip;
 		data.brotli += file.brotli;
 
-
 		if (entry.head && entry.base) {
-			entry.diff = {
-				size: calculateDiff(entry.head, entry.base, 'size'),
-				gzipSize: calculateDiff(entry.head, entry.base, 'gzipSize'),
-				brotliSize: calculateDiff(entry.head, entry.base, 'brotliSize'),
-			};
+			entry.diff = calculateDiff(entry.head, entry.base);
 		}
 	});
 
@@ -104,6 +107,8 @@ function comparePackages(headPkg, basePkg) {
 	return {
 		head,
 		base,
+		diff: calculateDiff(head, base),
+		files: Object.values(fileMap),
 	};
 }
 
