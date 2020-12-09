@@ -125,6 +125,7 @@ async function buildRef({
 
 	// Clean up
 	await exec('git reset --hard'); // Reverts changed files
+	await rmRF('node_modules');
 	await exec('git clean -ndfx'); // Log files to delete
 	await exec('git clean -dfx'); // Deletes untracked & ignored files
 
