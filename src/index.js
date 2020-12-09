@@ -54,6 +54,11 @@ async function npmCi({cwd}) {
 	return await exec('npm i', {cwd});
 }
 
+async function isFileTracked(filePath) {
+	const {exitCode} = await exec(`git ls-files --error-unmatch ${filePath}`, {ignoreReturnCode: true});
+	return exitCode === 0;
+}
+
 async function buildRef({
 	ref,
 	buildCommand,
@@ -110,6 +115,12 @@ async function buildRef({
 	core.debug(JSON.stringify(result, null, 4));
 
 	const sizeData = JSON.parse(result.stdout);
+
+	await Promise.all(sizeData.files.map(async file => {
+		file.isTracked = await isFileTracked(file.path);
+	}));
+
+	console.log(JSON.stringify(sizeData, null, 4));
 
 	core.info('Cleaning up');
 	await exec('git reset --hard'); // Reverts changed files
