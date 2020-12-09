@@ -54,8 +54,8 @@ async function npmCi({cwd}) {
 	return await exec('npm i', {cwd});
 }
 
-async function isFileTracked(filePath) {
-	const result = await exec(`git ls-files --error-unmatch ${filePath}`, {ignoreReturnCode: true});
+async function isFileTracked(filePath, cwd) {
+	const result = await exec(`git ls-files --error-unmatch ${filePath}`, {cwd, ignoreReturnCode: true});
 	console.log(filePath, JSON.stringify(result, null, 4));
 	return result.exitCode === 0;
 }
@@ -118,7 +118,7 @@ async function buildRef({
 	const sizeData = JSON.parse(result.stdout);
 
 	await Promise.all(sizeData.files.map(async file => {
-		file.isTracked = await isFileTracked(file.path);
+		file.isTracked = await isFileTracked(file.path, cwd);
 	}));
 
 	console.log(JSON.stringify(sizeData, null, 4));
