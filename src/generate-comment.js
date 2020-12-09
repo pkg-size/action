@@ -1,8 +1,8 @@
 import byteSize from 'byte-size';
+import globToRegExp from 'glob-to-regexp';
 import {partition, round} from 'lodash-es';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
-import globToRegExp from 'glob-to-regexp';
 import {c, sub, sup} from './utils/markdown';
 
 const percent = fraction => {

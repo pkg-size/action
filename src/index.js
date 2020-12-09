@@ -1,14 +1,13 @@
-import assert from 'assert';
 import * as core from '@actions/core';
 import {context} from '@actions/github';
-import exec from './utils/exec';
+import {rmRF} from '@actions/io';
+import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
-// import log from './utils/log';
-import upsertComment from './utils/upsert-comment';
 import generateComment from './generate-comment';
+import exec from './utils/exec';
 import {sub} from './utils/markdown';
-import {rmRF} from '@actions/io';
+import upsertComment from './utils/upsert-comment';
 
 // import {createTempDirectory} from '@actions/cache/lib/internal/cacheUtils';
 

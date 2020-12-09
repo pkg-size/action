@@ -7911,48 +7911,15 @@ function wrappy (fn, cb) {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: external "assert"
-var external_assert_ = __webpack_require__(2357);
-var external_assert_default = /*#__PURE__*/__webpack_require__.n(external_assert_);
-
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __webpack_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __webpack_require__(5438);
-// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
-var exec = __webpack_require__(1514);
-// CONCATENATED MODULE: ./src/utils/exec.js
-
-
-async function exec_exec(commandLine, options) {
-	let stdout = '';
-	let stderr = '';
-
-	const startTime = Date.now();
-	const exitCode = await (0,exec.exec)(commandLine, null, {
-		...options,
-		// ignoreReturnCode: true,
-		silent: true,
-		listeners: {
-			stdout(data) {
-				stdout += data.toString();
-			},
-			stderr(data) {
-				stderr += data.toString();
-			},
-		},
-	});
-	const duration = Date.now() - startTime;
-
-	return {
-		exitCode,
-		duration,
-		stdout,
-		stderr,
-	};
-}
-
-/* harmony default export */ const utils_exec = (exec_exec);
+// EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
+var io = __webpack_require__(7436);
+// EXTERNAL MODULE: external "assert"
+var external_assert_ = __webpack_require__(2357);
+var external_assert_default = /*#__PURE__*/__webpack_require__.n(external_assert_);
 
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __webpack_require__(5747);
@@ -7962,52 +7929,13 @@ var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
 var external_path_ = __webpack_require__(5622);
 var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
 
-// CONCATENATED MODULE: ./src/utils/upsert-comment.js
-
-
-
-async function upsertComment({
-	token,
-	commentSignature,
-	repo,
-	prNumber,
-	body,
-}) {
-	(0,core.startGroup)('Comment on PR');
-
-	const octokit = (0,github.getOctokit)(token);
-
-	(0,core.info)('Getting list of comments');
-	const {data: comments} = await octokit.issues.listComments({
-		...repo,
-		issue_number: prNumber, // eslint-disable-line camelcase
-	});
-
-	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
-	if (hasPreviousComment) {
-		(0,core.info)(`Updating previous comment ID ${hasPreviousComment.id}`);
-		await octokit.issues.updateComment({
-			...repo,
-			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
-			body,
-		});
-	} else {
-		(0,core.info)('Posting new comment');
-		await octokit.issues.createComment({
-			...repo,
-			issue_number: prNumber, // eslint-disable-line camelcase
-			body,
-		});
-	}
-
-	(0,core.endGroup)();
-}
-
-/* harmony default export */ const upsert_comment = (upsertComment);
-
 // EXTERNAL MODULE: ./node_modules/byte-size/dist/index.js
 var dist = __webpack_require__(6446);
 var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// EXTERNAL MODULE: ./node_modules/glob-to-regexp/index.js
+var glob_to_regexp = __webpack_require__(7117);
+var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/_root.js
 var _root = __webpack_require__(3138);
@@ -11593,10 +11521,6 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 var lib = __webpack_require__(2321);
 var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
-// EXTERNAL MODULE: ./node_modules/glob-to-regexp/index.js
-var glob_to_regexp = __webpack_require__(7117);
-var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
-
 // CONCATENATED MODULE: ./src/utils/markdown.js
 const c = string => `\`${string}\``;
 const markdown_link = (text, href) => `[${text}](${href})`;
@@ -11780,8 +11704,84 @@ function generateComment({
 
 /* harmony default export */ const generate_comment = (generateComment);
 
-// EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
-var io = __webpack_require__(7436);
+// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
+var exec = __webpack_require__(1514);
+// CONCATENATED MODULE: ./src/utils/exec.js
+
+
+async function exec_exec(commandLine, options) {
+	let stdout = '';
+	let stderr = '';
+
+	const startTime = Date.now();
+	const exitCode = await (0,exec.exec)(commandLine, null, {
+		...options,
+		// ignoreReturnCode: true,
+		silent: true,
+		listeners: {
+			stdout(data) {
+				stdout += data.toString();
+			},
+			stderr(data) {
+				stderr += data.toString();
+			},
+		},
+	});
+	const duration = Date.now() - startTime;
+
+	return {
+		exitCode,
+		duration,
+		stdout,
+		stderr,
+	};
+}
+
+/* harmony default export */ const utils_exec = (exec_exec);
+
+// CONCATENATED MODULE: ./src/utils/upsert-comment.js
+
+
+
+async function upsertComment({
+	token,
+	commentSignature,
+	repo,
+	prNumber,
+	body,
+}) {
+	(0,core.startGroup)('Comment on PR');
+
+	const octokit = (0,github.getOctokit)(token);
+
+	(0,core.info)('Getting list of comments');
+	const {data: comments} = await octokit.issues.listComments({
+		...repo,
+		issue_number: prNumber, // eslint-disable-line camelcase
+	});
+
+	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
+	if (hasPreviousComment) {
+		(0,core.info)(`Updating previous comment ID ${hasPreviousComment.id}`);
+		await octokit.issues.updateComment({
+			...repo,
+			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
+			body,
+		});
+	} else {
+		(0,core.info)('Posting new comment');
+		await octokit.issues.createComment({
+			...repo,
+			issue_number: prNumber, // eslint-disable-line camelcase
+			body,
+		});
+	}
+
+	(0,core.endGroup)();
+}
+
+/* harmony default export */ const upsert_comment = (upsertComment);
+
 // CONCATENATED MODULE: ./src/index.js
 
 
@@ -11789,7 +11789,6 @@ var io = __webpack_require__(7436);
 
 
 
-// import log from './utils/log';
 
 
 

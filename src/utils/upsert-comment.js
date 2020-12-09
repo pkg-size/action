@@ -1,4 +1,4 @@
-import {startGroup, endGroup, info} from '@actions/core';
+import {endGroup, info, startGroup} from '@actions/core';
 import {getOctokit} from '@actions/github';
 
 async function upsertComment({
