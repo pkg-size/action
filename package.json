@@ -31,7 +31,7 @@
 		}
 	},
 	"lint-staged": {
-		"src/*.js": [
+		"src/**/*.js": [
 			"xo --fix",
 			"npm run build",
 			"git add dist"

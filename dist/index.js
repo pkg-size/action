@@ -8091,6 +8091,7 @@ async function exec_exec(commandLine, options) {
 	let stdout = '';
 	let stderr = '';
 
+	const startTime = Date.now();
 	const exitCode = await (0,exec.exec)(commandLine, null, {
 		...options,
 		ignoreReturnCode: true,
@@ -8104,9 +8105,11 @@ async function exec_exec(commandLine, options) {
 			},
 		},
 	});
+	const duration = Date.now() - startTime;
 
 	return {
 		exitCode,
+		duration,
 		stdout,
 		stderr,
 	};
