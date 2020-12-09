@@ -7904,23 +7904,23 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 6306:
+/***/ 3061:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: external "assert"
-var external_assert_ = __webpack_require__(2357);
-var external_assert_default = /*#__PURE__*/__webpack_require__.n(external_assert_);
-
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __webpack_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __webpack_require__(5438);
-// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
-var exec = __webpack_require__(1514);
+// EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
+var io = __webpack_require__(7436);
+// EXTERNAL MODULE: external "assert"
+var external_assert_ = __webpack_require__(2357);
+var external_assert_default = /*#__PURE__*/__webpack_require__.n(external_assert_);
+
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __webpack_require__(5747);
 var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
@@ -7929,50 +7929,13 @@ var external_fs_default = /*#__PURE__*/__webpack_require__.n(external_fs_);
 var external_path_ = __webpack_require__(5622);
 var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
 
-// CONCATENATED MODULE: ./src/log.js
-const log = (...msgs) => console.log('[ 🤖 pkg-size-action ]', ...msgs.map(object => JSON.stringify(object, null, 4)));
-/* harmony default export */ const src_log = (log);
-
-// CONCATENATED MODULE: ./src/upsert-comment.js
-
-
-
-async function upsertComment({
-	token,
-	commentSignature,
-	repo,
-	prNumber,
-	body,
-}) {
-	const octokit = github.getOctokit(token);
-	const {data: comments} = await octokit.issues.listComments({
-		...repo,
-		issue_number: prNumber, // eslint-disable-line camelcase
-	});
-
-	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
-	if (hasPreviousComment) {
-		src_log(`Updating previous comment ${hasPreviousComment.id}`);
-		await octokit.issues.updateComment({
-			...repo,
-			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
-			body,
-		});
-	} else {
-		src_log('Posting new comment');
-		await octokit.issues.createComment({
-			...repo,
-			issue_number: prNumber, // eslint-disable-line camelcase
-			body,
-		});
-	}
-}
-
-/* harmony default export */ const upsert_comment = (upsertComment);
-
 // EXTERNAL MODULE: ./node_modules/byte-size/dist/index.js
 var dist = __webpack_require__(6446);
 var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// EXTERNAL MODULE: ./node_modules/glob-to-regexp/index.js
+var glob_to_regexp = __webpack_require__(7117);
+var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/_root.js
 var _root = __webpack_require__(3138);
@@ -11558,13 +11521,9 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 var lib = __webpack_require__(2321);
 var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
-// EXTERNAL MODULE: ./node_modules/glob-to-regexp/index.js
-var glob_to_regexp = __webpack_require__(7117);
-var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
-
-// CONCATENATED MODULE: ./src/markdown-utils.js
+// CONCATENATED MODULE: ./src/utils/markdown.js
 const c = string => `\`${string}\``;
-const markdown_utils_link = (text, href) => `[${text}](${href})`;
+const markdown_link = (text, href) => `[${text}](${href})`;
 const sub = string => `<sub>${string}</sub>`;
 const sup = string => `<sup>${string}</sup>`;
 
@@ -11745,8 +11704,83 @@ function generateComment({
 
 /* harmony default export */ const generate_comment = (generateComment);
 
-// EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
-var io = __webpack_require__(7436);
+// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
+var exec = __webpack_require__(1514);
+// CONCATENATED MODULE: ./src/utils/exec.js
+
+
+async function exec_exec(commandLine, options) {
+	let stdout = '';
+	let stderr = '';
+
+	const startTime = Date.now();
+	const exitCode = await (0,exec.exec)(commandLine, null, {
+		...options,
+		silent: true,
+		listeners: {
+			stdout(data) {
+				stdout += data.toString();
+			},
+			stderr(data) {
+				stderr += data.toString();
+			},
+		},
+	});
+	const duration = Date.now() - startTime;
+
+	return {
+		exitCode,
+		duration,
+		stdout,
+		stderr,
+	};
+}
+
+/* harmony default export */ const utils_exec = (exec_exec);
+
+// CONCATENATED MODULE: ./src/utils/upsert-comment.js
+
+
+
+async function upsertComment({
+	token,
+	commentSignature,
+	repo,
+	prNumber,
+	body,
+}) {
+	(0,core.startGroup)('Comment on PR');
+
+	const octokit = (0,github.getOctokit)(token);
+
+	(0,core.info)('Getting list of comments');
+	const {data: comments} = await octokit.issues.listComments({
+		...repo,
+		issue_number: prNumber, // eslint-disable-line camelcase
+	});
+
+	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
+	if (hasPreviousComment) {
+		(0,core.info)(`Updating previous comment ID ${hasPreviousComment.id}`);
+		await octokit.issues.updateComment({
+			...repo,
+			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
+			body,
+		});
+	} else {
+		(0,core.info)('Posting new comment');
+		await octokit.issues.createComment({
+			...repo,
+			issue_number: prNumber, // eslint-disable-line camelcase
+			body,
+		});
+	}
+
+	(0,core.endGroup)();
+}
+
+/* harmony default export */ const upsert_comment = (upsertComment);
+
 // CONCATENATED MODULE: ./src/index.js
 
 
@@ -11770,42 +11804,38 @@ const COMMENT_SIGNATURE = sub('🤖 This report was automatically generated by [
  */
 async function isBaseDiffFromHead(baseRef) {
 	try {
-		await (0,exec.exec)(`git fetch origin ${baseRef} --depth=1`);
+		await utils_exec(`git fetch origin ${baseRef} --depth=1`);
 	} catch (error) {
-		src_log(`Failed to git fetch ${baseRef}`, error.message);
+		throw new Error(`Failed to git fetch ${baseRef} ${error.message}`);
 	}
 
-	try {
-		await (0,exec.exec)(`git diff --quiet origin/${baseRef}`);
-		return false;
-	} catch {
-		return true;
-	}
+	const {exitCode} = await utils_exec(`git diff --quiet origin/${baseRef}`, {ignoreReturnCode: true});
+	return exitCode !== 0;
 }
 
 async function npmCi({cwd}) {
 	if (external_fs_default().existsSync('node_modules')) {
-		src_log('Cleaning node_modules');
+		core.info('Cleaning node_modules');
 		await (0,io.rmRF)(external_path_default().join(cwd, 'node_modules'));
 	}
 
 	if (external_fs_default().existsSync('package-lock.json')) {
-		src_log('Installing dependencies with npm');
-		return await (0,exec.exec)('npm ci', null, {cwd});
+		core.info('Installing dependencies with npm');
+		return await utils_exec('npm ci', {cwd});
 	}
 
 	if (external_fs_default().existsSync('pnpm-lock.yaml')) {
-		src_log('Installing dependencies with pnpm');
-		return await (0,exec.exec)('npx pnpm i --frozen-lockfile', null, {cwd});
+		core.info('Installing dependencies with pnpm');
+		return await utils_exec('npx pnpm i --frozen-lockfile', {cwd});
 	}
 
 	if (external_fs_default().existsSync('yarn.lock')) {
-		src_log('Installing dependencies with yarn');
-		return await (0,exec.exec)('npx yarn install --frozen-lockfile', null, {cwd});
+		core.info('Installing dependencies with yarn');
+		return await utils_exec('npx yarn install --frozen-lockfile', {cwd});
 	}
 
-	src_log('No lock file detected. Installing dependencies with npm');
-	return await (0,exec.exec)('npm i', null, {cwd});
+	core.info('No lock file detected. Installing dependencies with npm');
+	return await utils_exec('npm i', {cwd});
 }
 
 async function buildRef({
@@ -11814,12 +11844,12 @@ async function buildRef({
 }) {
 	const cwd = process.cwd();
 
-	src_log('Current working directory', cwd);
+	core.info(`Current working directory: ${cwd}`);
 
 	if (ref) {
 		// const temporaryDir = await createTempDirectory();
-		src_log(`Checking out ref '${ref}'`);
-		await (0,exec.exec)(`git checkout -f ${ref}`);
+		core.info(`Checking out ref '${ref}'`);
+		await utils_exec(`git checkout -f ${ref}`);
 		/*
 		 * For parallel builds
 		 * Since this doesn't make it a git repo, installing some deps like husky fails
@@ -11832,16 +11862,15 @@ async function buildRef({
 
 	if (buildCommand !== 'false') {
 		if (!buildCommand) {
-			// Check if package.json has npm run build
 			let pkgJson;
 			try {
 				pkgJson = JSON.parse(external_fs_default().readFileSync('./package.json'));
 			} catch (error) {
-				src_log('Error reading package.json', error);
+				core.warning('Error reading package.json', error);
 			}
 
 			if (pkgJson && pkgJson.scripts && pkgJson.scripts.build) {
-				src_log('Build script detected in package.json');
+				core.info('Build script found in package.json');
 				buildCommand = 'npm run build';
 			}
 		}
@@ -11851,31 +11880,25 @@ async function buildRef({
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 
-			src_log('Running build command', buildCommand);
-			await (0,exec.exec)(buildCommand, null, {cwd}).catch(error => {
+			core.info(`Running build command: ${buildCommand}`);
+			await utils_exec(buildCommand, {cwd}).catch(error => {
 				throw new Error(`Failed to run build command: ${buildCommand}\n${error.message}`);
 			});
 		}
 	}
 
-	src_log('Getting package size');
-	let stdout = '';
-	await (0,exec.exec)('npx pkg-size@2.1.0 --json', null, {
-		cwd,
-		listeners: {
-			stdout(data) {
-				stdout += data.toString();
-			},
-		},
-	}).catch(error => {
+	core.info('Getting package size');
+	const result = await utils_exec('npx pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
+	core.debug(JSON.stringify(result, null, 4));
 
-	const sizeData = JSON.parse(stdout);
+	const sizeData = JSON.parse(result.stdout);
 
-	// Clean up
-	await (0,exec.exec)('git reset --hard'); // Reverts changed files
-	await (0,exec.exec)('git clean -dfx'); // Deletes untracked & ignored files
+	core.info('Cleaning up');
+	await utils_exec('git reset --hard'); // Reverts changed files
+	const {stdout: cleanList} = await utils_exec('git clean -dfx'); // Deletes untracked & ignored files
+	core.debug(cleanList);
 
 	return sizeData;
 }
@@ -11892,27 +11915,26 @@ async function buildRef({
 	const sortBy = core.getInput('sort-by') || 'delta';
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
-	src_log('options', {
-		buildCommand,
-		unchangedFiles,
-	});
-
+	core.startGroup('Build BASE');
 	const headSizeData = await buildRef({
 		buildCommand,
 	});
 	headSizeData.ref = pr.head;
+	core.endGroup();
 
 	const {ref: baseRef} = pr.base;
 	let baseSizeData;
 	if (await isBaseDiffFromHead(baseRef)) {
-		src_log('Head is different from base. Triggering build.');
+		core.info('HEAD is different from BASE. Triggering build.');
+		core.startGroup('Build HEAD');
 		baseSizeData = await buildRef({
 			ref: baseRef,
 			buildCommand,
 		});
 		baseSizeData.ref = pr.base;
+		core.endGroup();
 	} else {
-		src_log('Head is identical to base. No need to build.');
+		core.info('HEAD is identical to BASE. No need to build.');
 		baseSizeData = {
 			...headSizeData,
 			ref: pr.base,
@@ -12162,7 +12184,7 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(6306);
+/******/ 	return __webpack_require__(3061);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
