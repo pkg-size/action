@@ -5,7 +5,7 @@ import * as github from '@actions/github';
 import exec2 from './utils/exec';
 import fs from 'fs';
 import path from 'path';
-import log, {details} from './utils/log';
+// import log from './utils/log';
 import upsertComment from './utils/upsert-comment';
 import generateComment from './generate-comment';
 import {sub} from './utils/markdown';
@@ -33,26 +33,26 @@ async function isBaseDiffFromHead(baseRef) {
 
 async function npmCi({cwd}) {
 	if (fs.existsSync('node_modules')) {
-		log('Cleaning node_modules');
+		core.info('Cleaning node_modules');
 		await rmRF(path.join(cwd, 'node_modules'));
 	}
 
 	if (fs.existsSync('package-lock.json')) {
-		log('Installing dependencies with npm');
+		core.info('Installing dependencies with npm');
 		return await exec2('npm ci', {cwd});
 	}
 
 	if (fs.existsSync('pnpm-lock.yaml')) {
-		log('Installing dependencies with pnpm');
+		core.info('Installing dependencies with pnpm');
 		return await exec2('npx pnpm i --frozen-lockfile', {cwd});
 	}
 
 	if (fs.existsSync('yarn.lock')) {
-		log('Installing dependencies with yarn');
+		core.info('Installing dependencies with yarn');
 		return await exec2('npx yarn install --frozen-lockfile', {cwd});
 	}
 
-	log('No lock file detected. Installing dependencies with npm');
+	core.info('No lock file detected. Installing dependencies with npm');
 	return await exec2('npm i', {cwd});
 }
 
@@ -62,11 +62,11 @@ async function buildRef({
 }) {
 	const cwd = process.cwd();
 
-	log(`Current working directory: ${cwd}`);
+	core.info(`Current working directory: ${cwd}`);
 
 	if (ref) {
 		// const temporaryDir = await createTempDirectory();
-		log(`Checking out ref '${ref}'`);
+		core.info(`Checking out ref '${ref}'`);
 		await exec2(`git checkout -f ${ref}`);
 		/*
 		 * For parallel builds
@@ -85,11 +85,11 @@ async function buildRef({
 			try {
 				pkgJson = JSON.parse(fs.readFileSync('./package.json'));
 			} catch (error) {
-				log('Error reading package.json', error);
+				core.warning('Error reading package.json', error);
 			}
 
 			if (pkgJson && pkgJson.scripts && pkgJson.scripts.build) {
-				log('Build script found in package.json');
+				core.info('Build script found in package.json');
 				buildCommand = 'npm run build';
 			}
 		}
@@ -99,25 +99,25 @@ async function buildRef({
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 
-			log(`Running build command: ${buildCommand}`);
+			core.info(`Running build command: ${buildCommand}`);
 			await exec2(buildCommand, {cwd}).catch(error => {
 				throw new Error(`Failed to run build command: ${buildCommand}\n${error.message}`);
 			});
 		}
 	}
 
-	log('Getting package size');
+	core.info('Getting package size');
 	const result = await exec2('npx pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
-	details('pkg-size', JSON.stringify(result, null, 4));
+	// details(JSON.stringify(result, null, 4));
 
 	const sizeData = JSON.parse(result.stdout);
 
-	log('Cleaning up');
+	core.info('Cleaning up');
 	await exec2('git reset --hard'); // Reverts changed files
-	const {stdout} = await exec2('git clean -dfx'); // Deletes untracked & ignored files
-	details('Cleaned files', stdout);
+	await exec2('git clean -dfx'); // Deletes untracked & ignored files
+	// details('Cleaned files', stdout);
 
 	return sizeData;
 }
@@ -134,11 +134,6 @@ async function buildRef({
 	const sortBy = core.getInput('sort-by') || 'delta';
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
-	log('options', {
-		buildCommand,
-		unchangedFiles,
-	});
-
 	core.startGroup('Build BASE');
 	const headSizeData = await buildRef({
 		buildCommand,
@@ -149,7 +144,7 @@ async function buildRef({
 	const {ref: baseRef} = pr.base;
 	let baseSizeData;
 	if (await isBaseDiffFromHead(baseRef)) {
-		log('HEAD is different from BASE. Triggering build.');
+		core.info('HEAD is different from BASE. Triggering build.');
 		core.startGroup('Build HEAD');
 		baseSizeData = await buildRef({
 			ref: baseRef,
@@ -158,7 +153,7 @@ async function buildRef({
 		baseSizeData.ref = pr.base;
 		core.endGroup();
 	} else {
-		log('HEAD is identical to BASE. No need to build.');
+		core.info('HEAD is identical to BASE. No need to build.');
 		baseSizeData = {
 			...headSizeData,
 			ref: pr.base,

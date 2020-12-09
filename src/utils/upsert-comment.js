@@ -20,7 +20,7 @@ async function upsertComment({
 
 	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
 	if (hasPreviousComment) {
-		core.info(`Updating previous comment ${hasPreviousComment.id}`);
+		core.info(`Updating previous comment ID ${hasPreviousComment.id}`);
 		await octokit.issues.updateComment({
 			...repo,
 			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
