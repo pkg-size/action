@@ -7740,6 +7740,8 @@ var glob_to_regexp = __webpack_require__(5017);
 var markdown_table = __webpack_require__(8198);
 // EXTERNAL MODULE: ./node_modules/.pnpm/outdent@0.7.1/node_modules/outdent/lib/index.js
 var lib = __webpack_require__(2980);
+// EXTERNAL MODULE: ./node_modules/.pnpm/@vercel/ncc@0.25.1/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?./markdown
+var _notfoundmarkdown = __webpack_require__(8506);
 // CONCATENATED MODULE: ./src/generate-comment.js
 
 
@@ -7790,19 +7792,15 @@ const delta = (from, to) => {
 	return percent(fraction) + changeSymbol(from, to);
 };
 
-
-
 function generateComment({
 	commentSignature,
 	unchangedFiles,
-	hideFiles,
 	sortBy,
 	sortOrder,
-	basePkgData,
-	headPkgData,
+	pkgComparison,
 }) {
 
-	console.log(JSON.stringify(comparePackages(headPkgData, basePkgData, { hideFiles }), null, 4));
+	console.log(JSON.stringify(pkgComparison, null, 4));
 
 	return '';
 	// const fileMap = {};
@@ -7991,7 +7989,7 @@ function processPkgFiles(fileMap, type, pkgData) {
 	return data;
 }
 
-function compare_packages_comparePackages(headPkg, basePkg, {
+function comparePackages(headPkg, basePkg, {
 	hideFiles,
 } = {}) {
 	const fileMap = {};
@@ -8261,6 +8259,14 @@ async function buildRef({
 })().catch(error => {
 	core.setFailed(error.message);
 });
+
+
+/***/ }),
+
+/***/ 8506:
+/***/ ((module) => {
+
+module.exports = eval("require")("./markdown");
 
 
 /***/ }),

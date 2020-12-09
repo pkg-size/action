@@ -3,7 +3,7 @@ import globToRegExp from 'glob-to-regexp';
 import {partition, round} from 'lodash-es';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
-import {c, sub, sup, link} from './utils/markdown';
+import {c, sub, sup, link} from './markdown';
 
 const percent = fraction => {
 	if (fraction < 0.001) { // 0.09% and lower
@@ -47,19 +47,15 @@ const delta = (from, to) => {
 	return percent(fraction) + changeSymbol(from, to);
 };
 
-
-
 function generateComment({
 	commentSignature,
 	unchangedFiles,
-	hideFiles,
 	sortBy,
 	sortOrder,
-	basePkgData,
-	headPkgData,
+	pkgComparison,
 }) {
 
-	console.log(JSON.stringify(comparePackages(headPkgData, basePkgData, { hideFiles }), null, 4));
+	console.log(JSON.stringify(pkgComparison, null, 4));
 
 	return '';
 	// const fileMap = {};
