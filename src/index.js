@@ -118,7 +118,7 @@ async function buildRef({
 	const sizeData = JSON.parse(result.stdout);
 
 	await Promise.all(sizeData.files.map(async file => {
-		file.isTracked = await isFileTracked(file.path, cwd);
+		file.isTracked = await isFileTracked('.' + file.path, cwd);
 	}));
 
 	console.log(JSON.stringify(sizeData, null, 4));
