@@ -62,13 +62,15 @@ async function buildRef({
 	ref,
 	buildCommand,
 }) {
+	core.startGroup('Build ref');
+
 	const cwd = process.cwd();
 
-	log('Current working directory', cwd);
+	core.info('Current working directory', cwd);
 
 	if (ref) {
 		// const temporaryDir = await createTempDirectory();
-		log(`Checking out ref '${ref}'`);
+		core.info(`Checking out ref '${ref}'`);
 		await exec(`git checkout -f ${ref}`);
 		/*
 		 * For parallel builds
@@ -77,7 +79,7 @@ async function buildRef({
 		// await exec(`git --work-tree="${temporaryDir}" checkout -f origin/${ref} -- .`);
 
 		// cwd = temporaryDir;
-		// log('Changed working directory', cwd);
+		// core.info('Changed working directory', cwd);
 	}
 
 	if (buildCommand !== 'false') {
@@ -87,11 +89,11 @@ async function buildRef({
 			try {
 				pkgJson = JSON.parse(fs.readFileSync('./package.json'));
 			} catch (error) {
-				log('Error reading package.json', error);
+				core.info('Error reading package.json', error);
 			}
 
 			if (pkgJson && pkgJson.scripts && pkgJson.scripts.build) {
-				log('Build script detected in package.json');
+				core.info('Build script detected in package.json');
 				buildCommand = 'npm run build';
 			}
 		}
@@ -101,14 +103,14 @@ async function buildRef({
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 
-			log('Running build command', buildCommand);
+			core.info('Running build command', buildCommand);
 			await exec(buildCommand, null, {cwd}).catch(error => {
 				throw new Error(`Failed to run build command: ${buildCommand}\n${error.message}`);
 			});
 		}
 	}
 
-	log('Getting package size');
+	core.info('Getting package size');
 	let stdout = '';
 	await exec('npx pkg-size@2.1.0 --json', null, {
 		cwd,
@@ -126,6 +128,8 @@ async function buildRef({
 	// Clean up
 	await exec('git reset --hard'); // Reverts changed files
 	await exec('git clean -dfx'); // Deletes untracked & ignored files
+
+	core.endGroup();
 
 	return sizeData;
 }

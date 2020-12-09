@@ -11818,13 +11818,15 @@ async function buildRef({
 	ref,
 	buildCommand,
 }) {
+	core.startGroup('Build ref');
+
 	const cwd = process.cwd();
 
-	src_log('Current working directory', cwd);
+	core.info('Current working directory', cwd);
 
 	if (ref) {
 		// const temporaryDir = await createTempDirectory();
-		src_log(`Checking out ref '${ref}'`);
+		core.info(`Checking out ref '${ref}'`);
 		await (0,exec.exec)(`git checkout -f ${ref}`);
 		/*
 		 * For parallel builds
@@ -11833,7 +11835,7 @@ async function buildRef({
 		// await exec(`git --work-tree="${temporaryDir}" checkout -f origin/${ref} -- .`);
 
 		// cwd = temporaryDir;
-		// log('Changed working directory', cwd);
+		// core.info('Changed working directory', cwd);
 	}
 
 	if (buildCommand !== 'false') {
@@ -11843,11 +11845,11 @@ async function buildRef({
 			try {
 				pkgJson = JSON.parse(external_fs_default().readFileSync('./package.json'));
 			} catch (error) {
-				src_log('Error reading package.json', error);
+				core.info('Error reading package.json', error);
 			}
 
 			if (pkgJson && pkgJson.scripts && pkgJson.scripts.build) {
-				src_log('Build script detected in package.json');
+				core.info('Build script detected in package.json');
 				buildCommand = 'npm run build';
 			}
 		}
@@ -11857,14 +11859,14 @@ async function buildRef({
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 
-			src_log('Running build command', buildCommand);
+			core.info('Running build command', buildCommand);
 			await (0,exec.exec)(buildCommand, null, {cwd}).catch(error => {
 				throw new Error(`Failed to run build command: ${buildCommand}\n${error.message}`);
 			});
 		}
 	}
 
-	src_log('Getting package size');
+	core.info('Getting package size');
 	let stdout = '';
 	await (0,exec.exec)('npx pkg-size@2.1.0 --json', null, {
 		cwd,
@@ -11882,6 +11884,8 @@ async function buildRef({
 	// Clean up
 	await (0,exec.exec)('git reset --hard'); // Reverts changed files
 	await (0,exec.exec)('git clean -dfx'); // Deletes untracked & ignored files
+
+	core.endGroup();
 
 	return sizeData;
 }
