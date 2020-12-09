@@ -14,6 +14,7 @@ async function upsertComment({
 		issue_number: prNumber, // eslint-disable-line camelcase
 	});
 
+	log('getAuthenticated');
 	const user = await octokit.users.getAuthenticated();
 	console.log(user);
 
