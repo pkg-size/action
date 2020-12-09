@@ -56,6 +56,7 @@ async function npmCi({cwd}) {
 
 async function isFileTracked(filePath) {
 	const {exitCode} = await exec(`git ls-files --error-unmatch ${filePath}`, {ignoreReturnCode: true});
+	console.log(filePath, exitCode);
 	return exitCode === 0;
 }
 
