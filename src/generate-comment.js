@@ -58,9 +58,9 @@ function calculateDiffBy(head, base, property) {
 
 function calculateDiff(head, base) {
 	return {
-		size: calculateDiff(head, base, 'size'),
-		sizeGzip: calculateDiff(head, base, 'sizeGzip'),
-		sizeBrotli: calculateDiff(head, base, 'sizeBrotli'),
+		size: calculateDiffBy(head, base, 'size'),
+		sizeGzip: calculateDiffBy(head, base, 'sizeGzip'),
+		sizeBrotli: calculateDiffBy(head, base, 'sizeBrotli'),
 	};
 }
 
