@@ -9,8 +9,6 @@ inputs:
     description: 'Command to build the package with'
   comment-report:
     description: 'Whether to comment the build size report on the PR or not: true, false'
-  file-size-standard:
-    description: 'Standard unit of measure: iec or jedec'
   unchanged-files:
     description: 'Whether to show unchanged files: show, collapse, hide'
   sort-by:

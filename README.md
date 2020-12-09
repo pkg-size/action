@@ -137,7 +137,6 @@ jobs:
 ## ⚙️ Options
 - `build-command` Command to build the package with. (Default: auto-detects `npm run build`)
 - `comment-report` Whether to comment the build size report on the PR or not: true, false
-- `file-size-standard` Standard unit of measure: iec or jedec
 - `unchanged-files` Whether to show unchanged files: show, collapse, hide
 - `sort-by` Which property to sort by: delta (size difference), headSize, baseSize, path
 - `sort-order` Sort order: desc, asc
