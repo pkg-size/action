@@ -88,8 +88,8 @@ function processPkgFiles(fileMap, type, pkgData) {
 		const entry = fileMap[file.path];
 		entry[type] = file;
 		data.size += file.size;
-		data.gzip += file.gzip;
-		data.brotli += file.brotli;
+		data.sizeGzip += file.sizeGzip;
+		data.sizeBrotli += file.sizeBrotli;
 
 		if (entry.head && entry.base) {
 			entry.diff = calculateDiff(entry.head, entry.base);
