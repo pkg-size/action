@@ -7,7 +7,6 @@ async function exec(commandLine, options) {
 	const startTime = Date.now();
 	const exitCode = await _exec(commandLine, null, {
 		...options,
-		// ignoreReturnCode: true,
 		silent: true,
 		listeners: {
 			stdout(data) {
