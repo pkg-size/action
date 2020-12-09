@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import log from './utils/log';
 import upsertComment from './utils/upsert-comment';
-import generateComment from './utils/generate-comment';
+import generateComment from './generate-comment';
 import {sub} from './utils/markdown';
 import {rmRF} from '@actions/io';
 
