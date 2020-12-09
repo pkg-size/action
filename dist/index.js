@@ -7930,7 +7930,9 @@ var external_path_ = __webpack_require__(5622);
 var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
 
 // CONCATENATED MODULE: ./src/log.js
-const log = (...msgs) => console.log('[ 🤖 pkg-size-action ]', ...msgs.map(object => JSON.stringify(object, null, 4)));
+
+
+const log = (...msgs) => core.info('[ 🤖 pkg-size-action ]', ...msgs.map(object => JSON.stringify(object, null, 4)));
 /* harmony default export */ const src_log = (log);
 
 // CONCATENATED MODULE: ./src/upsert-comment.js
@@ -11818,15 +11820,13 @@ async function buildRef({
 	ref,
 	buildCommand,
 }) {
-	core.startGroup('Build ref');
-
 	const cwd = process.cwd();
 
-	core.info('Current working directory', cwd);
+	src_log('Current working directory', cwd);
 
 	if (ref) {
 		// const temporaryDir = await createTempDirectory();
-		core.info(`Checking out ref '${ref}'`);
+		src_log(`Checking out ref '${ref}'`);
 		await (0,exec.exec)(`git checkout -f ${ref}`);
 		/*
 		 * For parallel builds
@@ -11835,7 +11835,7 @@ async function buildRef({
 		// await exec(`git --work-tree="${temporaryDir}" checkout -f origin/${ref} -- .`);
 
 		// cwd = temporaryDir;
-		// core.info('Changed working directory', cwd);
+		// log('Changed working directory', cwd);
 	}
 
 	if (buildCommand !== 'false') {
@@ -11845,11 +11845,11 @@ async function buildRef({
 			try {
 				pkgJson = JSON.parse(external_fs_default().readFileSync('./package.json'));
 			} catch (error) {
-				core.info('Error reading package.json', error);
+				src_log('Error reading package.json', error);
 			}
 
 			if (pkgJson && pkgJson.scripts && pkgJson.scripts.build) {
-				core.info('Build script detected in package.json');
+				src_log('Build script detected in package.json');
 				buildCommand = 'npm run build';
 			}
 		}
@@ -11859,14 +11859,14 @@ async function buildRef({
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 
-			core.info('Running build command', buildCommand);
+			src_log('Running build command', buildCommand);
 			await (0,exec.exec)(buildCommand, null, {cwd}).catch(error => {
 				throw new Error(`Failed to run build command: ${buildCommand}\n${error.message}`);
 			});
 		}
 	}
 
-	core.info('Getting package size');
+	src_log('Getting package size');
 	let stdout = '';
 	await (0,exec.exec)('npx pkg-size@2.1.0 --json', null, {
 		cwd,
@@ -11884,8 +11884,6 @@ async function buildRef({
 	// Clean up
 	await (0,exec.exec)('git reset --hard'); // Reverts changed files
 	await (0,exec.exec)('git clean -dfx'); // Deletes untracked & ignored files
-
-	core.endGroup();
 
 	return sizeData;
 }
@@ -11907,20 +11905,24 @@ async function buildRef({
 		unchangedFiles,
 	});
 
+	core.startGroup('Build BASE');
 	const headSizeData = await buildRef({
 		buildCommand,
 	});
 	headSizeData.ref = pr.head;
+	core.endGroup();
 
 	const {ref: baseRef} = pr.base;
 	let baseSizeData;
 	if (await isBaseDiffFromHead(baseRef)) {
 		src_log('Head is different from base. Triggering build.');
+		core.startGroup('Build HEAD');
 		baseSizeData = await buildRef({
 			ref: baseRef,
 			buildCommand,
 		});
 		baseSizeData.ref = pr.base;
+		core.endGroup();
 	} else {
 		src_log('Head is identical to base. No need to build.');
 		baseSizeData = {
