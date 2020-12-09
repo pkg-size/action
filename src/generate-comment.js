@@ -84,8 +84,8 @@ function generateComment({
 	headSizeData,
 }) {
 	const fileMap = {};
-	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
 	const headTotalSize = processFiles(fileMap, 'headSize', headSizeData);
+	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
 	const totalDelta = delta(baseTotalSize, headTotalSize);
 
 	let files = Object.values(fileMap);

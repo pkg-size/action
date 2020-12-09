@@ -11568,8 +11568,8 @@ function generateComment({
 	headSizeData,
 }) {
 	const fileMap = {};
-	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
 	const headTotalSize = processFiles(fileMap, 'headSize', headSizeData);
+	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
 	const totalDelta = delta(baseTotalSize, headTotalSize);
 
 	let files = Object.values(fileMap);
@@ -11877,7 +11877,7 @@ async function buildRef({
 	const sortBy = core.getInput('sort-by') || 'delta';
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
-	core.startGroup('Build BASE');
+	core.startGroup('Build HEAD');
 	const headSizeData = await buildRef({
 		buildCommand,
 	});
@@ -11888,7 +11888,7 @@ async function buildRef({
 	let baseSizeData;
 	if (await isBaseDiffFromHead(baseRef)) {
 		core.info('HEAD is different from BASE. Triggering build.');
-		core.startGroup('Build HEAD');
+		core.startGroup('Build BASE');
 		baseSizeData = await buildRef({
 			ref: baseRef,
 			buildCommand,
