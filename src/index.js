@@ -29,7 +29,7 @@ async function isBaseDiffFromHead(baseRef) {
 	return exitCode !== 0;
 }
 
-async function npmCi({cwd}) {
+async function npmCi({cwd} = {}) {
 	if (fs.existsSync('node_modules')) {
 		core.info('Cleaning node_modules');
 		await rmRF(path.join(cwd, 'node_modules'));
@@ -52,6 +52,11 @@ async function npmCi({cwd}) {
 
 	core.info('No lock file detected. Installing dependencies with npm');
 	return await exec('npm i', {cwd});
+}
+
+async function isFileTracked(filePath) {
+	const {exitCode} = await exec(`git ls-files --error-unmatch ${filePath}`, {ignoreReturnCode: true});
+	return exitCode === 0;
 }
 
 async function buildRef({
@@ -110,6 +115,10 @@ async function buildRef({
 	core.debug(JSON.stringify(result, null, 4));
 
 	const sizeData = JSON.parse(result.stdout);
+
+	await Promise.all(sizeData.files.map(async file => {
+		file.isTracked = await isFileTracked('.' + file.path);
+	}));
 
 	core.info('Cleaning up');
 	await exec('git reset --hard'); // Reverts changed files
