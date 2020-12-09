@@ -1,6 +1,6 @@
 import assert from 'assert';
 import * as core from '@actions/core';
-import * as github from '@actions/github';
+import {context} from '@actions/github';
 import exec from './utils/exec';
 import fs from 'fs';
 import path from 'path';
@@ -124,7 +124,7 @@ async function buildRef({
 	const {GITHUB_TOKEN} = process.env;
 	assert(GITHUB_TOKEN, 'Environment variable "GITHUB_TOKEN" not set. Required for accessing and reporting on the PR.');
 
-	const {pull_request: pr} = github.context.payload;
+	const {pull_request: pr} = context.payload;
 	const buildCommand = core.getInput('build-command');
 	const commentReport = core.getInput('comment-report');
 	const unchangedFiles = core.getInput('unchanged-files') || 'collapse';
@@ -165,7 +165,7 @@ async function buildRef({
 		await upsertComment({
 			token: GITHUB_TOKEN,
 			commentSignature: COMMENT_SIGNATURE,
-			repo: github.context.repo,
+			repo: context.repo,
 			prNumber: pr.number,
 			body: generateComment({
 				commentSignature: COMMENT_SIGNATURE,

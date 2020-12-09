@@ -1,5 +1,5 @@
-import * as core from '@actions/core';
-import * as github from '@actions/github';
+import {startGroup, endGroup, info} from '@actions/core';
+import {getOctokit} from '@actions/github';
 
 async function upsertComment({
 	token,
@@ -8,11 +8,11 @@ async function upsertComment({
 	prNumber,
 	body,
 }) {
-	core.startGroup('Comment on PR');
+	startGroup('Comment on PR');
 
-	const octokit = github.getOctokit(token);
+	const octokit = getOctokit(token);
 
-	core.info('Getting list of comments');
+	info('Getting list of comments');
 	const {data: comments} = await octokit.issues.listComments({
 		...repo,
 		issue_number: prNumber, // eslint-disable-line camelcase
@@ -20,14 +20,14 @@ async function upsertComment({
 
 	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
 	if (hasPreviousComment) {
-		core.info(`Updating previous comment ID ${hasPreviousComment.id}`);
+		info(`Updating previous comment ID ${hasPreviousComment.id}`);
 		await octokit.issues.updateComment({
 			...repo,
 			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
 			body,
 		});
 	} else {
-		core.info('Posting new comment');
+		info('Posting new comment');
 		await octokit.issues.createComment({
 			...repo,
 			issue_number: prNumber, // eslint-disable-line camelcase
@@ -35,7 +35,7 @@ async function upsertComment({
 		});
 	}
 
-	core.endGroup();
+	endGroup();
 }
 
 export default upsertComment;
