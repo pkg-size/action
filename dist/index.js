@@ -7944,7 +7944,11 @@ async function upsertComment({
 	prNumber,
 	body,
 }) {
+	core.startGroup('Comment on PR');
+
 	const octokit = github.getOctokit(token);
+
+	core.info('Getting list of comments');
 	const {data: comments} = await octokit.issues.listComments({
 		...repo,
 		issue_number: prNumber, // eslint-disable-line camelcase
@@ -7952,20 +7956,22 @@ async function upsertComment({
 
 	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
 	if (hasPreviousComment) {
-		src_log(`Updating previous comment ${hasPreviousComment.id}`);
+		core.info(`Updating previous comment ${hasPreviousComment.id}`);
 		await octokit.issues.updateComment({
 			...repo,
 			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
 			body,
 		});
 	} else {
-		src_log('Posting new comment');
+		core.info('Posting new comment');
 		await octokit.issues.createComment({
 			...repo,
 			issue_number: prNumber, // eslint-disable-line camelcase
 			body,
 		});
 	}
+
+	core.endGroup();
 }
 
 /* harmony default export */ const upsert_comment = (upsertComment);
