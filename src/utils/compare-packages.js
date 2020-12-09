@@ -1,4 +1,4 @@
-import {c, link} from './utils/markdown';
+import {c, link} from './markdown';
 
 function calculateDiffBy(head, base, property) {
 	const delta = head[property] - base[property];

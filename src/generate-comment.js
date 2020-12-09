@@ -3,7 +3,7 @@ import globToRegExp from 'glob-to-regexp';
 import {partition, round} from 'lodash-es';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
-import {c, sub, sup, link} from './markdown';
+import {c, sub, sup, link} from './utils/markdown';
 
 const percent = fraction => {
 	if (fraction < 0.001) { // 0.09% and lower

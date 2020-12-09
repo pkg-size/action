@@ -7740,8 +7740,6 @@ var glob_to_regexp = __webpack_require__(5017);
 var markdown_table = __webpack_require__(8198);
 // EXTERNAL MODULE: ./node_modules/.pnpm/outdent@0.7.1/node_modules/outdent/lib/index.js
 var lib = __webpack_require__(2980);
-// EXTERNAL MODULE: ./node_modules/.pnpm/@vercel/ncc@0.25.1/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?./markdown
-var _notfoundmarkdown = __webpack_require__(8506);
 // CONCATENATED MODULE: ./src/generate-comment.js
 
 
@@ -7933,8 +7931,6 @@ const markdown_link = (text, href) => `[${text}](${href})`;
 const sub = string => `<sub>${string}</sub>`;
 const sup = string => `<sup>${string}</sup>`;
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/@vercel/ncc@0.25.1/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?./utils/markdown
-var markdown = __webpack_require__(4742);
 // CONCATENATED MODULE: ./src/utils/compare-packages.js
 
 
@@ -8259,22 +8255,6 @@ async function buildRef({
 })().catch(error => {
 	core.setFailed(error.message);
 });
-
-
-/***/ }),
-
-/***/ 8506:
-/***/ ((module) => {
-
-module.exports = eval("require")("./markdown");
-
-
-/***/ }),
-
-/***/ 4742:
-/***/ ((module) => {
-
-module.exports = eval("require")("./utils/markdown");
 
 
 /***/ }),
