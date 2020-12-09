@@ -11883,6 +11883,7 @@ async function buildRef({
 
 	// Clean up
 	await (0,exec.exec)('git reset --hard'); // Reverts changed files
+	await (0,exec.exec)('git clean -ndfx'); // Log files to delete
 	await (0,exec.exec)('git clean -dfx'); // Deletes untracked & ignored files
 
 	return sizeData;
