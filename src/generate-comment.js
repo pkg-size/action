@@ -101,7 +101,7 @@ function processPkgFiles(fileMap, type, pkgData) {
 
 function comparePackages(headPkg, basePkg, {
 	hideFiles,
-}) {
+} = {}) {
 	const fileMap = {};
 	const head = processPkgFiles(fileMap, 'head', headPkg);
 	const base = processPkgFiles(fileMap, 'base', basePkg);
@@ -138,7 +138,7 @@ function generateComment({
 	headPkgData,
 }) {
 
-	console.log(JSON.stringify(comparePackages(headPkgData, basePkgData), null, 4));
+	console.log(JSON.stringify(comparePackages(headPkgData, basePkgData, { hideFiles }), null, 4));
 
 	return '';
 	// const fileMap = {};
