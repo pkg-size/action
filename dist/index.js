@@ -7710,10 +7710,6 @@ function wrappy (fn, cb) {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// NAMESPACE OBJECT: ./src/utils/compare-packages.js
-var compare_packages_namespaceObject = {};
-__webpack_require__.r(compare_packages_namespaceObject);
-
 // EXTERNAL MODULE: ./node_modules/.pnpm/@actions/core@1.2.6/node_modules/@actions/core/lib/core.js
 var core = __webpack_require__(4533);
 // EXTERNAL MODULE: ./node_modules/.pnpm/@actions/github@4.0.0/node_modules/@actions/github/lib/github.js
@@ -7926,7 +7922,7 @@ async function exec_exec(commandLine, options) {
 /* harmony default export */ const utils_exec = (exec_exec);
 
 // CONCATENATED MODULE: ./src/utils/markdown.js
-const markdown_c = string => `\`${string}\``;
+const c = string => `\`${string}\``;
 const markdown_link = (text, href) => `[${text}](${href})`;
 const sub = string => `<sub>${string}</sub>`;
 const sup = string => `<sup>${string}</sup>`;
@@ -7965,7 +7961,7 @@ function processPkgFiles(fileMap, type, pkgData) {
 				path: file.path,
 				link: (
 					file.isTracked ?
-						link(c(file.path), pkgData.ref.repo.html_url + '/blob/' + pkgData.ref.ref + file.path) :
+						markdown_link(c(file.path), pkgData.ref.repo.html_url + '/blob/' + pkgData.ref.ref + file.path) :
 						c(file.path)
 				),
 			};
@@ -8013,6 +8009,8 @@ function comparePackages(headPkg, basePkg, {
 		},
 	};
 }
+
+/* harmony default export */ const compare_packages = (comparePackages);
 
 // CONCATENATED MODULE: ./src/utils/upsert-comment.js
 
@@ -8227,7 +8225,7 @@ async function buildRef({
 		};
 	}
 
-	const pkgComparison = (0,compare_packages_namespaceObject.default)(headPkgData, basePkgData, {
+	const pkgComparison = compare_packages(headPkgData, basePkgData, {
 		hideFiles,
 	});
 

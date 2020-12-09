@@ -79,3 +79,5 @@ function comparePackages(headPkg, basePkg, {
 		},
 	};
 }
+
+export default comparePackages;
