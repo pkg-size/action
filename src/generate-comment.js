@@ -47,32 +47,66 @@ const delta = (from, to) => {
 	return percent(fraction) + changeSymbol(from, to);
 };
 
-const baseFileData = {
-	get delta() {
-		return (this.headSize || 0) - (this.baseSize || 0);
-	},
-};
 
-function processFiles(fileMap, type, sizeData) {
-	let totalSize = 0;
+function calculateDiff(head, base, property) {
+	const delta = head[property] - base[property];
+	return {
+		delta,
+		percent: delta / head[property],
+	};
+}
 
-	sizeData.files.forEach(file => {
+function processPkgFiles(fileMap, type, pkgData) {
+	const data = {
+		size: 0,
+		gzipSize: 0,
+		brotliSize: 0,
+		tarballSize: pkgData.tarballSize,
+		files: pkgData.files,
+	};
+
+	pkgData.files.forEach(file => {
 		if (!fileMap[file.path]) {
-			fileMap[file.path] = Object.assign(
-				Object.create(baseFileData),
-				{
-					path: file.path,
-					link: file.isTracked ? link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path) : c(file.path),
-				},
-			);
+			fileMap[file.path] = {
+				path: file.path,
+				link: (
+					file.isTracked ?
+						link(c(file.path), pkgData.ref.repo.html_url + '/blob/' + pkgData.ref.ref + file.path) :
+						c(file.path)
+				),
+			};
 		}
 
-		fileMap[file.path][type] = file.size;
-		totalSize += file.size;
+		const entry = fileMap[file.path];
+		entry[type] = file;
+		data.size += file.size;
+		data.gzip += file.gzip;
+		data.brotli += file.brotli;
+
+
+		if (entry.head && entry.base) {
+			entry.diff = {
+				size: calculateDiff(entry.head, entry.base, 'size'),
+				gzipSize: calculateDiff(entry.head, entry.base, 'gzipSize'),
+				brotliSize: calculateDiff(entry.head, entry.base, 'brotliSize'),
+			};
+		}
 	});
 
-	return totalSize;
+	return data;
 }
+
+function comparePackages(headPkg, basePkg) {
+	const fileMap = {};
+	const head = processPkgFiles(fileMap, 'head', headPkg);
+	const base = processPkgFiles(fileMap, 'base', basePkg);
+
+	return {
+		head,
+		base,
+	};
+}
+
 
 function generateComment({
 	commentSignature,
@@ -80,95 +114,99 @@ function generateComment({
 	hideFiles,
 	sortBy,
 	sortOrder,
-	baseSizeData,
-	headSizeData,
+	basePkgData,
+	headPkgData,
 }) {
-	const fileMap = {};
-	const headTotalSize = processFiles(fileMap, 'headSize', headSizeData);
-	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
-	const totalDelta = delta(baseTotalSize, headTotalSize);
 
-	let files = Object.values(fileMap);
-	files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
-	if (sortOrder === 'asc') {
-		files.reverse();
-	}
+	console.log(JSON.stringify(comparePackages(headPkgData, basePkgData), null, 4));
 
-	let hidden = [];
-	if (hideFiles) {
-		const hideFilesPtrn = globToRegExp(hideFiles, {extended: true});
-		[hidden, files] = partition(files, fileData => hideFilesPtrn.test(fileData.path));
-	}
+	return '';
+	// const fileMap = {};
+	// const headTotalSize = processPkgFiles(fileMap, 'headSize', headPkgData);
+	// const baseTotalSize = processPkgFiles(fileMap, 'baseSize', basePkgData);
+	// const totalDelta = delta(baseTotalSize, headTotalSize);
 
-	const [unchanged, changed] = partition(files, fileData => (fileData.baseSize === fileData.headSize));
+	// let files = Object.values(fileMap);
+	// files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
+	// if (sortOrder === 'asc') {
+	// 	files.reverse();
+	// }
 
-	const table = markdownTable([
-		['File', 'Before', 'After'],
-		...[
-			...changed,
-			...(unchangedFiles === 'show' ? unchanged : []),
-		].map(data => [
-			data.link,
-			data.baseSize ? c(byteSize(data.baseSize)) : '—',
-			data.headSize ? (
-				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
-			) : '—',
-		]),
-		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
-			c(byteSize(baseTotalSize)),
-			sup(totalDelta) + c(byteSize(headTotalSize)),
-		],
-	], {
-		align: ['', 'r', 'r'],
-	});
+	// let hidden = [];
+	// if (hideFiles) {
+	// 	const hideFilesPtrn = globToRegExp(hideFiles, {extended: true});
+	// 	[hidden, files] = partition(files, fileData => hideFilesPtrn.test(fileData.path));
+	// }
 
-	let unchangedTable = '';
-	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
-		unchangedTable = markdownTable([
-			['File', 'Size'],
-			...unchanged.map(data => [
-				data.link,
-				c(byteSize(data.baseSize)),
-			]),
-		], {
-			align: ['', 'r'],
-		});
+	// const [unchanged, changed] = partition(files, fileData => (fileData.baseSize === fileData.headSize));
 
-		unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
-	}
+	// const table = markdownTable([
+	// 	['File', 'Before', 'After'],
+	// 	...[
+	// 		...changed,
+	// 		...(unchangedFiles === 'show' ? unchanged : []),
+	// 	].map(data => [
+	// 		data.link,
+	// 		data.baseSize ? c(byteSize(data.baseSize)) : '—',
+	// 		data.headSize ? (
+	// 			(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
+	// 		) : '—',
+	// 	]),
+	// 	[
+	// 		'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
+	// 		c(byteSize(baseTotalSize)),
+	// 		sup(totalDelta) + c(byteSize(headTotalSize)),
+	// 	],
+	// ], {
+	// 	align: ['', 'r', 'r'],
+	// });
 
-	let hiddenTable = '';
-	if (hidden.length > 0) {
-		hiddenTable = markdownTable([
-			['File', 'Before', 'After'],
-			...hidden.map(data => [
-				data.link,
-				data.baseSize ? c(byteSize(data.baseSize)) : '—',
-				data.headSize ? (
-					(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
-				) : '—',
-			]),
-		], {
-			align: ['', 'r', 'r'],
-		});
+	// let unchangedTable = '';
+	// if (unchangedFiles === 'collapse' && unchanged.length > 0) {
+	// 	unchangedTable = markdownTable([
+	// 		['File', 'Size'],
+	// 		...unchanged.map(data => [
+	// 			data.link,
+	// 			c(byteSize(data.baseSize)),
+	// 		]),
+	// 	], {
+	// 		align: ['', 'r'],
+	// 	});
 
-		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
-	}
+	// 	unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
+	// }
 
-	return outdent`
-	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
+	// let hiddenTable = '';
+	// if (hidden.length > 0) {
+	// 	hiddenTable = markdownTable([
+	// 		['File', 'Before', 'After'],
+	// 		...hidden.map(data => [
+	// 			data.link,
+	// 			data.baseSize ? c(byteSize(data.baseSize)) : '—',
+	// 			data.headSize ? (
+	// 				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
+	// 			) : '—',
+	// 		]),
+	// 	], {
+	// 		align: ['', 'r', 'r'],
+	// 	});
 
-	**Tarball size** ${c(byteSize(baseSizeData.tarballSize))} → ${sup(delta(baseSizeData.tarballSize, headSizeData.tarballSize)) + c(byteSize(headSizeData.tarballSize))}
+	// 	hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
+	// }
 
-	${table}
+	// return outdent`
+	// ### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
 
-	${unchangedTable}
+	// **Tarball size** ${c(byteSize(basePkgData.tarballSize))} → ${sup(delta(basePkgData.tarballSize, headPkgData.tarballSize)) + c(byteSize(headPkgData.tarballSize))}
 
-	${hiddenTable}
+	// ${table}
 
-	${commentSignature}
-	`;
+	// ${unchangedTable}
+
+	// ${hiddenTable}
+
+	// ${commentSignature}
+	// `;
 }
 
 export default generateComment;

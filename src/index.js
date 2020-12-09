@@ -114,9 +114,9 @@ async function buildRef({
 	});
 	core.debug(JSON.stringify(result, null, 4));
 
-	const sizeData = JSON.parse(result.stdout);
+	const pkgData = JSON.parse(result.stdout);
 
-	await Promise.all(sizeData.files.map(async file => {
+	await Promise.all(pkgData.files.map(async file => {
 		file.isTracked = await isFileTracked('.' + file.path);
 	}));
 
@@ -125,7 +125,7 @@ async function buildRef({
 	const {stdout: cleanList} = await exec('git clean -dfx'); // Deletes untracked & ignored files
 	core.debug(cleanList);
 
-	return sizeData;
+	return pkgData;
 }
 
 (async () => {
@@ -141,33 +141,33 @@ async function buildRef({
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
 	core.startGroup('Build HEAD');
-	const headSizeData = await buildRef({
+	const headPkgData = await buildRef({
 		buildCommand,
 	});
-	headSizeData.ref = pr.head;
+	headPkgData.ref = pr.head;
 	core.endGroup();
 
 	const {ref: baseRef} = pr.base;
-	let baseSizeData;
+	let basePkgData;
 	if (await isBaseDiffFromHead(baseRef)) {
 		core.info('HEAD is different from BASE. Triggering build.');
 		core.startGroup('Build BASE');
-		baseSizeData = await buildRef({
+		basePkgData = await buildRef({
 			ref: baseRef,
 			buildCommand,
 		});
-		baseSizeData.ref = pr.base;
+		basePkgData.ref = pr.base;
 		core.endGroup();
 	} else {
 		core.info('HEAD is identical to BASE. No need to build.');
-		baseSizeData = {
-			...headSizeData,
+		basePkgData = {
+			...headPkgData,
 			ref: pr.base,
 		};
 	}
 
-	core.setOutput('headSizeData', headSizeData);
-	core.setOutput('baseSizeData', baseSizeData);
+	core.setOutput('headPkgData', headPkgData);
+	core.setOutput('basePkgData', basePkgData);
 
 	if (commentReport !== 'false') {
 		await upsertComment({
@@ -181,8 +181,8 @@ async function buildRef({
 				hideFiles,
 				sortBy,
 				sortOrder,
-				baseSizeData,
-				headSizeData,
+				headPkgData,
+				basePkgData,
 			}),
 		});
 	}
