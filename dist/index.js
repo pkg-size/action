@@ -11546,8 +11546,7 @@ function processFiles(fileMap, type, sizeData) {
 				Object.create(baseFileData),
 				{
 					path: file.path,
-					// link: link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path),
-					link: c(file.path),
+					link: file.isTracked ? markdown_link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path) : c(file.path),
 				},
 			);
 		}
@@ -11767,7 +11766,7 @@ async function isBaseDiffFromHead(baseRef) {
 	return exitCode !== 0;
 }
 
-async function npmCi({cwd}) {
+async function npmCi({cwd} = {}) {
 	if (external_fs_default().existsSync('node_modules')) {
 		core.info('Cleaning node_modules');
 		await (0,io.rmRF)(external_path_default().join(cwd, 'node_modules'));
@@ -11792,10 +11791,9 @@ async function npmCi({cwd}) {
 	return await utils_exec('npm i', {cwd});
 }
 
-async function isFileTracked(filePath, cwd) {
-	const result = await utils_exec(`git ls-files --error-unmatch ${filePath}`, {cwd, ignoreReturnCode: true});
-	console.log(filePath, JSON.stringify(result, null, 4));
-	return result.exitCode === 0;
+async function isFileTracked(filePath) {
+	const {exitCode} = await utils_exec(`git ls-files --error-unmatch ${filePath}`, {ignoreReturnCode: true});
+	return exitCode === 0;
 }
 
 async function buildRef({
@@ -11856,10 +11854,8 @@ async function buildRef({
 	const sizeData = JSON.parse(result.stdout);
 
 	await Promise.all(sizeData.files.map(async file => {
-		file.isTracked = await isFileTracked('.' + file.path, cwd);
+		file.isTracked = await isFileTracked('.' + file.path);
 	}));
-
-	console.log(JSON.stringify(sizeData, null, 4));
 
 	core.info('Cleaning up');
 	await utils_exec('git reset --hard'); // Reverts changed files
