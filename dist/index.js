@@ -11786,7 +11786,6 @@ var io = __webpack_require__(7436);
 
 
 
-// import {exec} from '@actions/exec';
 
 
 
@@ -11865,7 +11864,6 @@ async function buildRef({
 
 	if (buildCommand !== 'false') {
 		if (!buildCommand) {
-			// Check if package.json has npm run build
 			let pkgJson;
 			try {
 				pkgJson = JSON.parse(external_fs_default().readFileSync('./package.json'));
