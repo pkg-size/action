@@ -1,11 +1,11 @@
 import assert from 'assert';
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import {exec} from '@actions/exec';
+// import {exec} from '@actions/exec';
 import exec2 from './utils/exec';
 import fs from 'fs';
 import path from 'path';
-import log from './utils/log';
+import log, {details} from './utils/log';
 import upsertComment from './utils/upsert-comment';
 import generateComment from './generate-comment';
 import {sub} from './utils/markdown';
@@ -62,7 +62,7 @@ async function buildRef({
 }) {
 	const cwd = process.cwd();
 
-	log('Current working directory', cwd);
+	log(`Current working directory: ${cwd}`);
 
 	if (ref) {
 		// const temporaryDir = await createTempDirectory();
@@ -110,14 +110,14 @@ async function buildRef({
 	const result = await exec2('npx pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
-
-	console.log(JSON.stringify(result, null, 4));
+	details('pkg-size', JSON.stringify(result, null, 4));
 
 	const sizeData = JSON.parse(result.stdout);
 
-	// Clean up
-	await exec('git reset --hard'); // Reverts changed files
-	await exec('git clean -dfx'); // Deletes untracked & ignored files
+	log('Cleaning up');
+	await exec2('git reset --hard'); // Reverts changed files
+	const {stdout} = await exec2('git clean -dfx'); // Deletes untracked & ignored files
+	details('Cleaned files', stdout);
 
 	return sizeData;
 }

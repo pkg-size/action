@@ -8137,6 +8137,12 @@ const log = (...msgs) => core.info(`${(ansi_styles_default()).cyan.open}[🤖 pk
 
 /* harmony default export */ const utils_log = (log);
 
+function details(summary, details) {
+	core.startGroup(summary);
+	core.info(details);
+	core.endGroup();
+}
+
 // CONCATENATED MODULE: ./src/utils/upsert-comment.js
 
 
@@ -11961,7 +11967,7 @@ var io = __webpack_require__(7436);
 
 
 
-
+// import {exec} from '@actions/exec';
 
 
 
@@ -12022,7 +12028,7 @@ async function buildRef({
 }) {
 	const cwd = process.cwd();
 
-	utils_log('Current working directory', cwd);
+	utils_log(`Current working directory: ${cwd}`);
 
 	if (ref) {
 		// const temporaryDir = await createTempDirectory();
@@ -12070,14 +12076,14 @@ async function buildRef({
 	const result = await utils_exec('npx pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
-
-	console.log(JSON.stringify(result, null, 4));
+	details('pkg-size', JSON.stringify(result, null, 4));
 
 	const sizeData = JSON.parse(result.stdout);
 
-	// Clean up
-	await (0,exec.exec)('git reset --hard'); // Reverts changed files
-	await (0,exec.exec)('git clean -dfx'); // Deletes untracked & ignored files
+	utils_log('Cleaning up');
+	await utils_exec('git reset --hard'); // Reverts changed files
+	const {stdout} = await utils_exec('git clean -dfx'); // Deletes untracked & ignored files
+	details('Cleaned files', stdout);
 
 	return sizeData;
 }
