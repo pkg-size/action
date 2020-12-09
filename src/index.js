@@ -7,6 +7,7 @@ import path from 'path';
 import generateComment from './generate-comment';
 import exec from './utils/exec';
 import {sub} from './utils/markdown';
+import comparePackages from './utils/compare-packages';
 import upsertComment from './utils/upsert-comment';
 
 // import {createTempDirectory} from '@actions/cache/lib/internal/cacheUtils';
@@ -166,8 +167,15 @@ async function buildRef({
 		};
 	}
 
+	const pkgComparison = comparePackages(headPkgData, basePkgData, {
+		hideFiles,
+	});
+
 	core.setOutput('headPkgData', headPkgData);
 	core.setOutput('basePkgData', basePkgData);
+	core.setOutput('pkgComparison', pkgComparison);
+
+	console.log('pkgComparison', JSON.stringify(pkgComparison, null, 4));
 
 	if (commentReport !== 'false') {
 		await upsertComment({
@@ -178,11 +186,9 @@ async function buildRef({
 			body: generateComment({
 				commentSignature: COMMENT_SIGNATURE,
 				unchangedFiles,
-				hideFiles,
 				sortBy,
 				sortOrder,
-				headPkgData,
-				basePkgData,
+				pkgComparison,
 			}),
 		});
 	}
