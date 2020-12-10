@@ -198,5 +198,6 @@ async function buildRef({
 	}
 })().catch(error => {
 	core.setFailed(error.message);
+	core.warning(error);
 	core.warning(error.stack);
 });
