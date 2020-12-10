@@ -129,6 +129,12 @@ async function buildRef({
 	return pkgData;
 }
 
+const logCollapsed = (message, data) => {
+	core.startGroup(message);
+	core.info(JSON.stringify(data, null, 4));
+	core.endGroup();
+};
+
 (async () => {
 	const {GITHUB_TOKEN} = process.env;
 	assert(GITHUB_TOKEN, 'Environment variable "GITHUB_TOKEN" not set. Required for accessing and reporting on the PR.');
@@ -167,8 +173,8 @@ async function buildRef({
 		};
 	}
 
-	console.log('head', JSON.stringify(headPkgData, null, 4));
-	console.log('base', JSON.stringify(basePkgData, null, 4));
+	logCollapsed('HEAD data', headPkgData);
+	logCollapsed('BASE data', basePkgData);
 
 	const pkgComparison = comparePackages(headPkgData, basePkgData, {
 		sortBy,
@@ -176,11 +182,11 @@ async function buildRef({
 		hideFiles,
 	});
 
+	logCollapsed('Package comparison data', pkgComparison);
+
 	core.setOutput('headPkgData', headPkgData);
 	core.setOutput('basePkgData', basePkgData);
 	core.setOutput('pkgComparison', pkgComparison);
-
-	console.log('pkgComparison', JSON.stringify(pkgComparison, null, 4));
 
 	if (commentReport !== 'false') {
 		await upsertComment({
