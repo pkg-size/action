@@ -173,6 +173,9 @@ async function buildRef({
 		hideFiles,
 	});
 
+	console.log('head', JSON.stringify(headPkgData, null, 4));
+	console.log('base', JSON.stringify(basePkgData, null, 4));
+
 	core.setOutput('headPkgData', headPkgData);
 	core.setOutput('basePkgData', basePkgData);
 	core.setOutput('pkgComparison', pkgComparison);
