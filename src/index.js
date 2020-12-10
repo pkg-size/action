@@ -197,6 +197,7 @@ async function buildRef({
 		});
 	}
 })().catch(error => {
-	console.log('caught error');
 	core.setFailed(error.message);
+	console.log(JSON.stringify(error.stack, null, 4));
+	console.log(error.stack);
 });
