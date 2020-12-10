@@ -6809,7 +6809,7 @@ function generateComment({
 			file.link,
 			file.base && file.base.size ? c$1(dist(file.base.size)) : '—',
 			file.head && file.head.size ? (
-				(file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
+				(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
 			) : '—',
 		]),
 		[
@@ -6844,7 +6844,7 @@ function generateComment({
 				file.link,
 				file.base && file.base.size ? c$1(dist(file.base.size)) : '—',
 				file.head && file.head.size ? (
-					(file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
+					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
 				) : '—',
 			]),
 		], {
