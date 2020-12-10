@@ -7858,7 +7858,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 4940:
+/***/ 9441:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -7891,548 +7891,6 @@ var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
 var glob_to_regexp = __webpack_require__(5017);
 var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_root.js
-var _root = __webpack_require__(1938);
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isObject.js
-/**
- * Checks if `value` is the
- * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
- * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(_.noop);
- * // => true
- *
- * _.isObject(null);
- * // => false
- */
-function isObject(value) {
-  var type = typeof value;
-  return value != null && (type == 'object' || type == 'function');
-}
-
-/* harmony default export */ const lodash_es_isObject = (isObject);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_Symbol.js
-
-
-/** Built-in value references. */
-var Symbol = _root/* default.Symbol */.Z.Symbol;
-
-/* harmony default export */ const _Symbol = (Symbol);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_getRawTag.js
-
-
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var _getRawTag_hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var nativeObjectToString = objectProto.toString;
-
-/** Built-in value references. */
-var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
-
-/**
- * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the raw `toStringTag`.
- */
-function getRawTag(value) {
-  var isOwn = _getRawTag_hasOwnProperty.call(value, symToStringTag),
-      tag = value[symToStringTag];
-
-  try {
-    value[symToStringTag] = undefined;
-    var unmasked = true;
-  } catch (e) {}
-
-  var result = nativeObjectToString.call(value);
-  if (unmasked) {
-    if (isOwn) {
-      value[symToStringTag] = tag;
-    } else {
-      delete value[symToStringTag];
-    }
-  }
-  return result;
-}
-
-/* harmony default export */ const _getRawTag = (getRawTag);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_objectToString.js
-/** Used for built-in method references. */
-var _objectToString_objectProto = Object.prototype;
-
-/**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var _objectToString_nativeObjectToString = _objectToString_objectProto.toString;
-
-/**
- * Converts `value` to a string using `Object.prototype.toString`.
- *
- * @private
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- */
-function objectToString(value) {
-  return _objectToString_nativeObjectToString.call(value);
-}
-
-/* harmony default export */ const _objectToString = (objectToString);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_baseGetTag.js
-
-
-
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var _baseGetTag_symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (_baseGetTag_symToStringTag && _baseGetTag_symToStringTag in Object(value))
-    ? _getRawTag(value)
-    : _objectToString(value);
-}
-
-/* harmony default export */ const _baseGetTag = (baseGetTag);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isObjectLike.js
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return value != null && typeof value == 'object';
-}
-
-/* harmony default export */ const lodash_es_isObjectLike = (isObjectLike);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isSymbol.js
-
-
-
-/** `Object#toString` result references. */
-var symbolTag = '[object Symbol]';
-
-/**
- * Checks if `value` is classified as a `Symbol` primitive or object.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
- * @example
- *
- * _.isSymbol(Symbol.iterator);
- * // => true
- *
- * _.isSymbol('abc');
- * // => false
- */
-function isSymbol(value) {
-  return typeof value == 'symbol' ||
-    (lodash_es_isObjectLike(value) && _baseGetTag(value) == symbolTag);
-}
-
-/* harmony default export */ const lodash_es_isSymbol = (isSymbol);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/toNumber.js
-
-
-
-/** Used as references for various `Number` constants. */
-var NAN = 0 / 0;
-
-/** Used to match leading and trailing whitespace. */
-var reTrim = /^\s+|\s+$/g;
-
-/** Used to detect bad signed hexadecimal string values. */
-var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
-
-/** Used to detect binary string values. */
-var reIsBinary = /^0b[01]+$/i;
-
-/** Used to detect octal string values. */
-var reIsOctal = /^0o[0-7]+$/i;
-
-/** Built-in method references without a dependency on `root`. */
-var freeParseInt = parseInt;
-
-/**
- * Converts `value` to a number.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to process.
- * @returns {number} Returns the number.
- * @example
- *
- * _.toNumber(3.2);
- * // => 3.2
- *
- * _.toNumber(Number.MIN_VALUE);
- * // => 5e-324
- *
- * _.toNumber(Infinity);
- * // => Infinity
- *
- * _.toNumber('3.2');
- * // => 3.2
- */
-function toNumber(value) {
-  if (typeof value == 'number') {
-    return value;
-  }
-  if (lodash_es_isSymbol(value)) {
-    return NAN;
-  }
-  if (lodash_es_isObject(value)) {
-    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
-    value = lodash_es_isObject(other) ? (other + '') : other;
-  }
-  if (typeof value != 'string') {
-    return value === 0 ? value : +value;
-  }
-  value = value.replace(reTrim, '');
-  var isBinary = reIsBinary.test(value);
-  return (isBinary || reIsOctal.test(value))
-    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-    : (reIsBadHex.test(value) ? NAN : +value);
-}
-
-/* harmony default export */ const lodash_es_toNumber = (toNumber);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/toFinite.js
-
-
-/** Used as references for various `Number` constants. */
-var INFINITY = 1 / 0,
-    MAX_INTEGER = 1.7976931348623157e+308;
-
-/**
- * Converts `value` to a finite number.
- *
- * @static
- * @memberOf _
- * @since 4.12.0
- * @category Lang
- * @param {*} value The value to convert.
- * @returns {number} Returns the converted number.
- * @example
- *
- * _.toFinite(3.2);
- * // => 3.2
- *
- * _.toFinite(Number.MIN_VALUE);
- * // => 5e-324
- *
- * _.toFinite(Infinity);
- * // => 1.7976931348623157e+308
- *
- * _.toFinite('3.2');
- * // => 3.2
- */
-function toFinite(value) {
-  if (!value) {
-    return value === 0 ? value : 0;
-  }
-  value = lodash_es_toNumber(value);
-  if (value === INFINITY || value === -INFINITY) {
-    var sign = (value < 0 ? -1 : 1);
-    return sign * MAX_INTEGER;
-  }
-  return value === value ? value : 0;
-}
-
-/* harmony default export */ const lodash_es_toFinite = (toFinite);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/toInteger.js
-
-
-/**
- * Converts `value` to an integer.
- *
- * **Note:** This method is loosely based on
- * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to convert.
- * @returns {number} Returns the converted integer.
- * @example
- *
- * _.toInteger(3.2);
- * // => 3
- *
- * _.toInteger(Number.MIN_VALUE);
- * // => 0
- *
- * _.toInteger(Infinity);
- * // => 1.7976931348623157e+308
- *
- * _.toInteger('3.2');
- * // => 3
- */
-function toInteger(value) {
-  var result = lodash_es_toFinite(value),
-      remainder = result % 1;
-
-  return result === result ? (remainder ? result - remainder : result) : 0;
-}
-
-/* harmony default export */ const lodash_es_toInteger = (toInteger);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_arrayMap.js
-/**
- * A specialized version of `_.map` for arrays without support for iteratee
- * shorthands.
- *
- * @private
- * @param {Array} [array] The array to iterate over.
- * @param {Function} iteratee The function invoked per iteration.
- * @returns {Array} Returns the new mapped array.
- */
-function arrayMap(array, iteratee) {
-  var index = -1,
-      length = array == null ? 0 : array.length,
-      result = Array(length);
-
-  while (++index < length) {
-    result[index] = iteratee(array[index], index, array);
-  }
-  return result;
-}
-
-/* harmony default export */ const _arrayMap = (arrayMap);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isArray.js
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @since 0.1.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an array, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(document.body.children);
- * // => false
- *
- * _.isArray('abc');
- * // => false
- *
- * _.isArray(_.noop);
- * // => false
- */
-var isArray = Array.isArray;
-
-/* harmony default export */ const lodash_es_isArray = (isArray);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_baseToString.js
-
-
-
-
-
-/** Used as references for various `Number` constants. */
-var _baseToString_INFINITY = 1 / 0;
-
-/** Used to convert symbols to primitives and strings. */
-var symbolProto = _Symbol ? _Symbol.prototype : undefined,
-    symbolToString = symbolProto ? symbolProto.toString : undefined;
-
-/**
- * The base implementation of `_.toString` which doesn't convert nullish
- * values to empty strings.
- *
- * @private
- * @param {*} value The value to process.
- * @returns {string} Returns the string.
- */
-function baseToString(value) {
-  // Exit early for strings to avoid a performance hit in some environments.
-  if (typeof value == 'string') {
-    return value;
-  }
-  if (lodash_es_isArray(value)) {
-    // Recursively convert values (susceptible to call stack limits).
-    return _arrayMap(value, baseToString) + '';
-  }
-  if (lodash_es_isSymbol(value)) {
-    return symbolToString ? symbolToString.call(value) : '';
-  }
-  var result = (value + '');
-  return (result == '0' && (1 / value) == -_baseToString_INFINITY) ? '-0' : result;
-}
-
-/* harmony default export */ const _baseToString = (baseToString);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/toString.js
-
-
-/**
- * Converts `value` to a string. An empty string is returned for `null`
- * and `undefined` values. The sign of `-0` is preserved.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
- * @example
- *
- * _.toString(null);
- * // => ''
- *
- * _.toString(-0);
- * // => '-0'
- *
- * _.toString([1, 2, 3]);
- * // => '1,2,3'
- */
-function toString_toString(value) {
-  return value == null ? '' : _baseToString(value);
-}
-
-/* harmony default export */ const lodash_es_toString = (toString_toString);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_createRound.js
-
-
-
-
-
-/* Built-in method references for those with the same name as other `lodash` methods. */
-var nativeIsFinite = _root/* default.isFinite */.Z.isFinite,
-    nativeMin = Math.min;
-
-/**
- * Creates a function like `_.round`.
- *
- * @private
- * @param {string} methodName The name of the `Math` method to use when rounding.
- * @returns {Function} Returns the new round function.
- */
-function createRound(methodName) {
-  var func = Math[methodName];
-  return function(number, precision) {
-    number = lodash_es_toNumber(number);
-    precision = precision == null ? 0 : nativeMin(lodash_es_toInteger(precision), 292);
-    if (precision && nativeIsFinite(number)) {
-      // Shift with exponential notation to avoid floating-point issues.
-      // See [MDN](https://mdn.io/round#Examples) for more details.
-      var pair = (lodash_es_toString(number) + 'e').split('e'),
-          value = func(pair[0] + 'e' + (+pair[1] + precision));
-
-      pair = (lodash_es_toString(value) + 'e').split('e');
-      return +(pair[0] + 'e' + (+pair[1] - precision));
-    }
-    return func(number);
-  };
-}
-
-/* harmony default export */ const _createRound = (createRound);
-
-// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/round.js
-
-
-/**
- * Computes `number` rounded to `precision`.
- *
- * @static
- * @memberOf _
- * @since 3.10.0
- * @category Math
- * @param {number} number The number to round.
- * @param {number} [precision=0] The precision to round to.
- * @returns {number} Returns the rounded number.
- * @example
- *
- * _.round(4.006);
- * // => 4
- *
- * _.round(4.006, 2);
- * // => 4.01
- *
- * _.round(4060, -2);
- * // => 4100
- */
-var round = _createRound('round');
-
-/* harmony default export */ const lodash_es_round = (round);
-
 // EXTERNAL MODULE: ./node_modules/.pnpm/markdown-table@2.0.0/node_modules/markdown-table/index.js
 var markdown_table = __webpack_require__(8198);
 var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
@@ -8453,56 +7911,62 @@ const sup = string => `<sup>${string}</sup>`;
 
 
 
-const percent = fraction => {
-	if (fraction < 0.001) { // 0.09% and lower
-		fraction = lodash_es_round(fraction, 4);
-	} else if (fraction < 0.01) { // 0.9% and lower
-		fraction = lodash_es_round(fraction, 3);
-	} else { // 1% and higher
-		fraction = lodash_es_round(fraction, 2);
-	}
+// const percent = fraction => {
+// 	if (fraction < 0.001) { // 0.09% and lower
+// 		fraction = round(fraction, 4);
+// 	} else if (fraction < 0.01) { // 0.9% and lower
+// 		fraction = round(fraction, 3);
+// 	} else { // 1% and higher
+// 		fraction = round(fraction, 2);
+// 	}
 
-	return fraction.toLocaleString(undefined, {
-		style: 'percent',
-		maximumSignificantDigits: 3,
-	});
+// 	return fraction.toLocaleString(undefined, {
+// 		style: 'percent',
+// 		maximumSignificantDigits: 3,
+// 	});
+// };
+
+// const changeSymbol = (from, to) => {
+// 	if (
+// 		from === undefined ||
+// 		to === undefined ||
+// 		from === to
+// 	) {
+// 		return '';
+// 	}
+
+// 	if (from > to) {
+// 		return '↓';
+// 	}
+
+// 	if (from < to) {
+// 		return '↑';
+// 	}
+// };
+
+// const delta = (from, to) => {
+// 	const fraction = (to - from) / from;
+// 	if (fraction === 0) {
+// 		return '';
+// 	}
+
+// 	return percent(fraction) + changeSymbol(from, to);
+// };
+
+const directionSymbol = (value) => {
+	if (value > 0) { return '↓'; }
+	if (value < 0) { return '↑'; }
+	return '';
 };
 
-const changeSymbol = (from, to) => {
-	if (
-		from === undefined ||
-		to === undefined ||
-		from === to
-	) {
-		return '';
-	}
-
-	if (from > to) {
-		return '↓';
-	}
-
-	if (from < to) {
-		return '↑';
-	}
-};
-
-const delta = (from, to) => {
-	const fraction = (to - from) / from;
-	if (fraction === 0) {
-		return '';
-	}
-
-	return percent(fraction) + changeSymbol(from, to);
-};
+const formatSize = ({delta, percent}) => percent + directionSymbol(delta);
 
 function generateComment({
-	commentSignature,
 	unchangedFiles,
 	sortBy,
 	sortOrder,
 	pkgComparison,
 }) {
-
 	const { changed, unchanged } = pkgComparison.files;
 
 	const table = markdown_table_default()([
@@ -8514,13 +7978,13 @@ function generateComment({
 			file.link,
 			file.base.size ? c(dist_default()(file.base.size)) : '—',
 			file.head.size ? (
-				(file.base.size ? sup(delta(file.base.size, file.head.size)) : '') + c(dist_default()(file.head.size))
+				(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(dist_default()(file.head.size))
 			) : '—',
 		]),
 		[
 			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
 			c(dist_default()(pkgComparison.base.size)),
-			sup(pkgComparison.diff.size.percent) + c(dist_default()(pkgComparison.head.size)),
+			sup(formatSize(pkgComparison.diff.size)) + c(dist_default()(pkgComparison.head.size)),
 		],
 	], {
 		align: ['', 'r', 'r'],
@@ -8746,6 +8210,149 @@ function baseTimes(n, iteratee) {
 
 /* harmony default export */ const _baseTimes = (baseTimes);
 
+// EXTERNAL MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_root.js
+var _root = __webpack_require__(1938);
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_Symbol.js
+
+
+/** Built-in value references. */
+var Symbol = _root/* default.Symbol */.Z.Symbol;
+
+/* harmony default export */ const _Symbol = (Symbol);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_getRawTag.js
+
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var _getRawTag_hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = _getRawTag_hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+/* harmony default export */ const _getRawTag = (getRawTag);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_objectToString.js
+/** Used for built-in method references. */
+var _objectToString_objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var _objectToString_nativeObjectToString = _objectToString_objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return _objectToString_nativeObjectToString.call(value);
+}
+
+/* harmony default export */ const _objectToString = (objectToString);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_baseGetTag.js
+
+
+
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var _baseGetTag_symToStringTag = _Symbol ? _Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (_baseGetTag_symToStringTag && _baseGetTag_symToStringTag in Object(value))
+    ? _getRawTag(value)
+    : _objectToString(value);
+}
+
+/* harmony default export */ const _baseGetTag = (baseGetTag);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isObjectLike.js
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+/* harmony default export */ const lodash_es_isObjectLike = (isObjectLike);
+
 // CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_baseIsArguments.js
 
 
@@ -8803,6 +8410,34 @@ var isArguments = _baseIsArguments(function() { return arguments; }()) ? _baseIs
 };
 
 /* harmony default export */ const lodash_es_isArguments = (isArguments);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isArray.js
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+/* harmony default export */ const lodash_es_isArray = (isArray);
 
 // EXTERNAL MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isBuffer.js + 1 modules
 var isBuffer = __webpack_require__(856);
@@ -9106,6 +8741,39 @@ function baseKeys(object) {
 }
 
 /* harmony default export */ const _baseKeys = (baseKeys);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isObject.js
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+/* harmony default export */ const lodash_es_isObject = (isObject);
 
 // CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isFunction.js
 
@@ -10404,14 +10072,14 @@ var _equalByTag_boolTag = '[object Boolean]',
     _equalByTag_regexpTag = '[object RegExp]',
     _equalByTag_setTag = '[object Set]',
     _equalByTag_stringTag = '[object String]',
-    _equalByTag_symbolTag = '[object Symbol]';
+    symbolTag = '[object Symbol]';
 
 var _equalByTag_arrayBufferTag = '[object ArrayBuffer]',
     _equalByTag_dataViewTag = '[object DataView]';
 
 /** Used to convert symbols to primitives and strings. */
-var _equalByTag_symbolProto = _Symbol ? _Symbol.prototype : undefined,
-    symbolValueOf = _equalByTag_symbolProto ? _equalByTag_symbolProto.valueOf : undefined;
+var symbolProto = _Symbol ? _Symbol.prototype : undefined,
+    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
 
 /**
  * A specialized version of `baseIsEqualDeep` for comparing objects of
@@ -10487,7 +10155,7 @@ function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
       stack['delete'](object);
       return result;
 
-    case _equalByTag_symbolTag:
+    case symbolTag:
       if (symbolValueOf) {
         return symbolValueOf.call(object) == symbolValueOf.call(other);
       }
@@ -11098,6 +10766,37 @@ function baseMatches(source) {
 
 /* harmony default export */ const _baseMatches = (baseMatches);
 
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/isSymbol.js
+
+
+
+/** `Object#toString` result references. */
+var isSymbol_symbolTag = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (lodash_es_isObjectLike(value) && _baseGetTag(value) == isSymbol_symbolTag);
+}
+
+/* harmony default export */ const lodash_es_isSymbol = (isSymbol);
+
 // CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_isKey.js
 
 
@@ -11260,6 +10959,98 @@ var stringToPath = _memoizeCapped(function(string) {
 });
 
 /* harmony default export */ const _stringToPath = (stringToPath);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_arrayMap.js
+/**
+ * A specialized version of `_.map` for arrays without support for iteratee
+ * shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function arrayMap(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length,
+      result = Array(length);
+
+  while (++index < length) {
+    result[index] = iteratee(array[index], index, array);
+  }
+  return result;
+}
+
+/* harmony default export */ const _arrayMap = (arrayMap);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_baseToString.js
+
+
+
+
+
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0;
+
+/** Used to convert symbols to primitives and strings. */
+var _baseToString_symbolProto = _Symbol ? _Symbol.prototype : undefined,
+    symbolToString = _baseToString_symbolProto ? _baseToString_symbolProto.toString : undefined;
+
+/**
+ * The base implementation of `_.toString` which doesn't convert nullish
+ * values to empty strings.
+ *
+ * @private
+ * @param {*} value The value to process.
+ * @returns {string} Returns the string.
+ */
+function baseToString(value) {
+  // Exit early for strings to avoid a performance hit in some environments.
+  if (typeof value == 'string') {
+    return value;
+  }
+  if (lodash_es_isArray(value)) {
+    // Recursively convert values (susceptible to call stack limits).
+    return _arrayMap(value, baseToString) + '';
+  }
+  if (lodash_es_isSymbol(value)) {
+    return symbolToString ? symbolToString.call(value) : '';
+  }
+  var result = (value + '');
+  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
+}
+
+/* harmony default export */ const _baseToString = (baseToString);
+
+// CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/toString.js
+
+
+/**
+ * Converts `value` to a string. An empty string is returned for `null`
+ * and `undefined` values. The sign of `-0` is preserved.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ * @example
+ *
+ * _.toString(null);
+ * // => ''
+ *
+ * _.toString(-0);
+ * // => '-0'
+ *
+ * _.toString([1, 2, 3]);
+ * // => '1,2,3'
+ */
+function toString_toString(value) {
+  return value == null ? '' : _baseToString(value);
+}
+
+/* harmony default export */ const lodash_es_toString = (toString_toString);
 
 // CONCATENATED MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_castPath.js
 
@@ -11694,11 +11485,26 @@ var partition = _createAggregator(function(result, value, key) {
 
 
 
+const percent = fraction => {
+	if (fraction < 0.001) { // 0.09% and lower
+		fraction = round(fraction, 4);
+	} else if (fraction < 0.01) { // 0.9% and lower
+		fraction = round(fraction, 3);
+	} else { // 1% and higher
+		fraction = round(fraction, 2);
+	}
+
+	return fraction.toLocaleString(undefined, {
+		style: 'percent',
+		maximumSignificantDigits: 3,
+	});
+};
+
 function calculateDiffBy(head, base, property) {
 	const delta = head[property] - base[property];
 	return {
 		delta,
-		percent: delta / head[property],
+		percent: percent(delta / head[property]),
 	};
 }
 
@@ -11788,6 +11594,8 @@ async function upsertComment({
 	body,
 }) {
 	(0,core.startGroup)('Comment on PR');
+
+	body += `\n${commentSignature}`;
 
 	const octokit = (0,github.getOctokit)(token);
 
@@ -12006,7 +11814,6 @@ async function buildRef({
 			repo: github.context.repo,
 			prNumber: pr.number,
 			body: generate_comment({
-				commentSignature: COMMENT_SIGNATURE,
 				unchangedFiles,
 				sortBy,
 				sortOrder,
@@ -12237,7 +12044,7 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(4940);
+/******/ 	return __webpack_require__(9441);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

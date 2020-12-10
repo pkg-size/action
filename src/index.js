@@ -184,7 +184,6 @@ async function buildRef({
 			repo: context.repo,
 			prNumber: pr.number,
 			body: generateComment({
-				commentSignature: COMMENT_SIGNATURE,
 				unchangedFiles,
 				sortBy,
 				sortOrder,

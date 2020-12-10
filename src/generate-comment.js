@@ -5,56 +5,62 @@ import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import {c, sub, sup, link} from './utils/markdown';
 
-const percent = fraction => {
-	if (fraction < 0.001) { // 0.09% and lower
-		fraction = round(fraction, 4);
-	} else if (fraction < 0.01) { // 0.9% and lower
-		fraction = round(fraction, 3);
-	} else { // 1% and higher
-		fraction = round(fraction, 2);
-	}
+// const percent = fraction => {
+// 	if (fraction < 0.001) { // 0.09% and lower
+// 		fraction = round(fraction, 4);
+// 	} else if (fraction < 0.01) { // 0.9% and lower
+// 		fraction = round(fraction, 3);
+// 	} else { // 1% and higher
+// 		fraction = round(fraction, 2);
+// 	}
 
-	return fraction.toLocaleString(undefined, {
-		style: 'percent',
-		maximumSignificantDigits: 3,
-	});
+// 	return fraction.toLocaleString(undefined, {
+// 		style: 'percent',
+// 		maximumSignificantDigits: 3,
+// 	});
+// };
+
+// const changeSymbol = (from, to) => {
+// 	if (
+// 		from === undefined ||
+// 		to === undefined ||
+// 		from === to
+// 	) {
+// 		return '';
+// 	}
+
+// 	if (from > to) {
+// 		return '↓';
+// 	}
+
+// 	if (from < to) {
+// 		return '↑';
+// 	}
+// };
+
+// const delta = (from, to) => {
+// 	const fraction = (to - from) / from;
+// 	if (fraction === 0) {
+// 		return '';
+// 	}
+
+// 	return percent(fraction) + changeSymbol(from, to);
+// };
+
+const directionSymbol = (value) => {
+	if (value > 0) { return '↓'; }
+	if (value < 0) { return '↑'; }
+	return '';
 };
 
-const changeSymbol = (from, to) => {
-	if (
-		from === undefined ||
-		to === undefined ||
-		from === to
-	) {
-		return '';
-	}
-
-	if (from > to) {
-		return '↓';
-	}
-
-	if (from < to) {
-		return '↑';
-	}
-};
-
-const delta = (from, to) => {
-	const fraction = (to - from) / from;
-	if (fraction === 0) {
-		return '';
-	}
-
-	return percent(fraction) + changeSymbol(from, to);
-};
+const formatSize = ({delta, percent}) => percent + directionSymbol(delta);
 
 function generateComment({
-	commentSignature,
 	unchangedFiles,
 	sortBy,
 	sortOrder,
 	pkgComparison,
 }) {
-
 	const { changed, unchanged } = pkgComparison.files;
 
 	const table = markdownTable([
@@ -66,13 +72,13 @@ function generateComment({
 			file.link,
 			file.base.size ? c(byteSize(file.base.size)) : '—',
 			file.head.size ? (
-				(file.base.size ? sup(delta(file.base.size, file.head.size)) : '') + c(byteSize(file.head.size))
+				(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
 			) : '—',
 		]),
 		[
 			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
 			c(byteSize(pkgComparison.base.size)),
-			sup(pkgComparison.diff.size.percent) + c(byteSize(pkgComparison.head.size)),
+			sup(formatSize(pkgComparison.diff.size)) + c(byteSize(pkgComparison.head.size)),
 		],
 	], {
 		align: ['', 'r', 'r'],

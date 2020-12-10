@@ -2,11 +2,26 @@ import globToRegExp from 'glob-to-regexp';
 import {partition} from 'lodash-es';
 import {c, link} from './markdown';
 
+const percent = fraction => {
+	if (fraction < 0.001) { // 0.09% and lower
+		fraction = round(fraction, 4);
+	} else if (fraction < 0.01) { // 0.9% and lower
+		fraction = round(fraction, 3);
+	} else { // 1% and higher
+		fraction = round(fraction, 2);
+	}
+
+	return fraction.toLocaleString(undefined, {
+		style: 'percent',
+		maximumSignificantDigits: 3,
+	});
+};
+
 function calculateDiffBy(head, base, property) {
 	const delta = head[property] - base[property];
 	return {
 		delta,
-		percent: delta / head[property],
+		percent: percent(delta / head[property]),
 	};
 }
 
