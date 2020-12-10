@@ -69,6 +69,8 @@ function processPkgFiles(fileMap, type, pkgData) {
 }
 
 function comparePackages(headPkg, basePkg, {
+	sortBy,
+	sortOrder,
 	hideFiles,
 } = {}) {
 	const fileMap = {};
@@ -76,6 +78,11 @@ function comparePackages(headPkg, basePkg, {
 	const base = processPkgFiles(fileMap, 'base', basePkg);
 
 	let allFiles = Object.values(fileMap);
+
+	allFiles.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
+	if (sortOrder === 'asc') {
+		allFiles.reverse();
+	}
 
 	let hidden = [];
 	if (hideFiles) {

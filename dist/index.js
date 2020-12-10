@@ -7887,10 +7887,6 @@ var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
 var dist = __webpack_require__(5571);
 var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/glob-to-regexp@0.4.1/node_modules/glob-to-regexp/index.js
-var glob_to_regexp = __webpack_require__(5017);
-var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
-
 // EXTERNAL MODULE: ./node_modules/.pnpm/markdown-table@2.0.0/node_modules/markdown-table/index.js
 var markdown_table = __webpack_require__(8198);
 var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
@@ -7911,53 +7907,15 @@ const sup = string => `<sup>${string}</sup>`;
 
 
 
+const directionSymbol = value => {
+	if (value < 0) {
+		return '↓';
+	}
 
+	if (value > 0) {
+		return '↑';
+	}
 
-// const percent = fraction => {
-// 	if (fraction < 0.001) { // 0.09% and lower
-// 		fraction = round(fraction, 4);
-// 	} else if (fraction < 0.01) { // 0.9% and lower
-// 		fraction = round(fraction, 3);
-// 	} else { // 1% and higher
-// 		fraction = round(fraction, 2);
-// 	}
-
-// 	return fraction.toLocaleString(undefined, {
-// 		style: 'percent',
-// 		maximumSignificantDigits: 3,
-// 	});
-// };
-
-// const changeSymbol = (from, to) => {
-// 	if (
-// 		from === undefined ||
-// 		to === undefined ||
-// 		from === to
-// 	) {
-// 		return '';
-// 	}
-
-// 	if (from > to) {
-// 		return '↓';
-// 	}
-
-// 	if (from < to) {
-// 		return '↑';
-// 	}
-// };
-
-// const delta = (from, to) => {
-// 	const fraction = (to - from) / from;
-// 	if (fraction === 0) {
-// 		return '';
-// 	}
-
-// 	return percent(fraction) + changeSymbol(from, to);
-// };
-
-const directionSymbol = (value) => {
-	if (value < 0) { return '↓'; }
-	if (value > 0) { return '↑'; }
 	return '';
 };
 
@@ -7965,11 +7923,9 @@ const formatSize = ({delta, percent}) => percent + directionSymbol(delta);
 
 function generateComment({
 	unchangedFiles,
-	sortBy,
-	sortOrder,
 	pkgComparison,
 }) {
-	const { changed, unchanged, hidden } = pkgComparison.files;
+	const {changed, unchanged, hidden} = pkgComparison.files;
 	const totalDelta = formatSize(pkgComparison.diff.size);
 
 	const table = markdown_table_default()([
@@ -8037,93 +7993,6 @@ function generateComment({
 
 	${hiddenTable}
 	`;
-
-	// const fileMap = {};
-	// const headTotalSize = processPkgFiles(fileMap, 'headSize', headPkgData);
-	// const baseTotalSize = processPkgFiles(fileMap, 'baseSize', basePkgData);
-	// const totalDelta = delta(baseTotalSize, headTotalSize);
-
-	// let files = Object.values(fileMap);
-	// files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
-	// if (sortOrder === 'asc') {
-	// 	files.reverse();
-	// }
-
-	// let hidden = [];
-	// if (hideFiles) {
-	// 	const hideFilesPtrn = globToRegExp(hideFiles, {extended: true});
-	// 	[hidden, files] = partition(files, fileData => hideFilesPtrn.test(fileData.path));
-	// }
-
-	// const [unchanged, changed] = partition(files, fileData => (fileData.baseSize === fileData.headSize));
-
-	// const table = markdownTable([
-	// 	['File', 'Before', 'After'],
-	// 	...[
-	// 		...changed,
-	// 		...(unchangedFiles === 'show' ? unchanged : []),
-	// 	].map(data => [
-	// 		data.link,
-	// 		data.baseSize ? c(byteSize(data.baseSize)) : '—',
-	// 		data.headSize ? (
-	// 			(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
-	// 		) : '—',
-	// 	]),
-	// 	[
-	// 		'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
-	// 		c(byteSize(baseTotalSize)),
-	// 		sup(totalDelta) + c(byteSize(headTotalSize)),
-	// 	],
-	// ], {
-	// 	align: ['', 'r', 'r'],
-	// });
-
-	// let unchangedTable = '';
-	// if (unchangedFiles === 'collapse' && unchanged.length > 0) {
-	// 	unchangedTable = markdownTable([
-	// 		['File', 'Size'],
-	// 		...unchanged.map(data => [
-	// 			data.link,
-	// 			c(byteSize(data.baseSize)),
-	// 		]),
-	// 	], {
-	// 		align: ['', 'r'],
-	// 	});
-
-	// 	unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
-	// }
-
-	// let hiddenTable = '';
-	// if (hidden.length > 0) {
-	// 	hiddenTable = markdownTable([
-	// 		['File', 'Before', 'After'],
-	// 		...hidden.map(data => [
-	// 			data.link,
-	// 			data.baseSize ? c(byteSize(data.baseSize)) : '—',
-	// 			data.headSize ? (
-	// 				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
-	// 			) : '—',
-	// 		]),
-	// 	], {
-	// 		align: ['', 'r', 'r'],
-	// 	});
-
-	// 	hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
-	// }
-
-	// return outdent`
-	// ### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
-
-	// **Tarball size** ${c(byteSize(basePkgData.tarballSize))} → ${sup(delta(basePkgData.tarballSize, headPkgData.tarballSize)) + c(byteSize(headPkgData.tarballSize))}
-
-	// ${table}
-
-	// ${unchangedTable}
-
-	// ${hiddenTable}
-
-	// ${commentSignature}
-	// `;
 }
 
 /* harmony default export */ const generate_comment = (generateComment);
@@ -8161,6 +8030,10 @@ async function exec_exec(commandLine, options) {
 }
 
 /* harmony default export */ const utils_exec = (exec_exec);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/glob-to-regexp@0.4.1/node_modules/glob-to-regexp/index.js
+var glob_to_regexp = __webpack_require__(5017);
+var glob_to_regexp_default = /*#__PURE__*/__webpack_require__.n(glob_to_regexp);
 
 // EXTERNAL MODULE: ./node_modules/.pnpm/lodash-es@4.17.15/node_modules/lodash-es/_root.js
 var _root = __webpack_require__(1938);
@@ -11810,6 +11683,8 @@ function processPkgFiles(fileMap, type, pkgData) {
 }
 
 function comparePackages(headPkg, basePkg, {
+	sortBy,
+	sortOrder,
 	hideFiles,
 } = {}) {
 	const fileMap = {};
@@ -11817,6 +11692,11 @@ function comparePackages(headPkg, basePkg, {
 	const base = processPkgFiles(fileMap, 'base', basePkg);
 
 	let allFiles = Object.values(fileMap);
+
+	allFiles.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
+	if (sortOrder === 'asc') {
+		allFiles.reverse();
+	}
 
 	let hidden = [];
 	if (hideFiles) {
@@ -12059,6 +11939,8 @@ async function buildRef({
 	}
 
 	const pkgComparison = compare_packages(headPkgData, basePkgData, {
+		sortBy,
+		sortOrder,
 		hideFiles,
 	});
 

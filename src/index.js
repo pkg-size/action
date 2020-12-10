@@ -168,6 +168,8 @@ async function buildRef({
 	}
 
 	const pkgComparison = comparePackages(headPkgData, basePkgData, {
+		sortBy,
+		sortOrder,
 		hideFiles,
 	});
 
