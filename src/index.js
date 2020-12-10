@@ -129,12 +129,6 @@ async function buildRef({
 	return pkgData;
 }
 
-const logCollapsed = (message, data) => {
-	core.startGroup(message);
-	core.info(JSON.stringify(data, null, 4));
-	core.endGroup();
-};
-
 (async () => {
 	const {GITHUB_TOKEN} = process.env;
 	assert(GITHUB_TOKEN, 'Environment variable "GITHUB_TOKEN" not set. Required for accessing and reporting on the PR.');
@@ -173,16 +167,11 @@ const logCollapsed = (message, data) => {
 		};
 	}
 
-	logCollapsed('HEAD data', headPkgData);
-	logCollapsed('BASE data', basePkgData);
-
 	const pkgComparison = comparePackages(headPkgData, basePkgData, {
 		sortBy,
 		sortOrder,
 		hideFiles,
 	});
-
-	logCollapsed('Package comparison data', pkgComparison);
 
 	core.setOutput('headPkgData', headPkgData);
 	core.setOutput('basePkgData', basePkgData);
