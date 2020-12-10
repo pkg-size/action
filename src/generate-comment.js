@@ -55,6 +55,31 @@ function generateComment({
 	pkgComparison,
 }) {
 
+	const { changed, unchanged } = pkgComparison.files;
+
+	const table = markdownTable([
+		['File', 'Before', 'After'],
+		...[
+			...changed,
+			...(unchangedFiles === 'show' ? unchanged : []),
+		].map(file => [
+			file.link,
+			file.base.size ? c(byteSize(file.base.size)) : '—',
+			file.head.size ? (
+				(file.base.size ? sup(delta(file.base.size, file.head.size)) : '') + c(byteSize(file.head.size))
+			) : '—',
+		]),
+		[
+			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
+			c(byteSize(pkgComparison.base.size)),
+			sup(pkgComparison.diff.size.percent) + c(byteSize(pkgComparison.head.size)),
+		],
+	], {
+		align: ['', 'r', 'r'],
+	});
+
+	return table;
+
 	return JSON.stringify(pkgComparison, null, 4);
 
 	return '';
