@@ -4,7 +4,7 @@ import {rmRF} from '@actions/io';
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
-import generateComment from './generate-comment';
+import generateComment from './templates';
 import exec from './utils/exec';
 import {sub} from './utils/markdown';
 import comparePackages from './utils/compare-packages';
