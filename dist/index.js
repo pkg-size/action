@@ -6791,7 +6791,7 @@ const directionSymbol = value => {
 	return '';
 };
 
-const formatSize = ({delta, percent}) => percent + directionSymbol(delta);
+const formatSize = ({delta, percent}) => delta ? (percent + directionSymbol(delta)) : '';
 
 function generateComment({
 	unchangedFiles,
