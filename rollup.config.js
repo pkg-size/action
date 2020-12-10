@@ -3,7 +3,6 @@ import {nodeResolve} from '@rollup/plugin-node-resolve';
 import {terser} from 'rollup-plugin-terser';
 import filesize from 'rollup-plugin-filesize';
 import builtins from 'builtin-modules';
-import path from 'path';
 
 const rollupConfig = {
 	input: 'src/index.js',
@@ -19,6 +18,7 @@ const rollupConfig = {
 	output: {
 		format: 'cjs',
 		file: 'dist/index.js',
+		sourcemap: true,
 	},
 };
 
