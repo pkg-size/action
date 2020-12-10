@@ -7858,7 +7858,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 3595:
+/***/ 4114:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -7886,6 +7886,150 @@ var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
 // EXTERNAL MODULE: ./node_modules/.pnpm/byte-size@7.0.0/node_modules/byte-size/dist/index.js
 var dist = __webpack_require__(5571);
 var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/markdown-table@2.0.0/node_modules/markdown-table/index.js
+var markdown_table = __webpack_require__(8198);
+var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/outdent@0.7.1/node_modules/outdent/lib/index.js
+var lib = __webpack_require__(2980);
+var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
+
+// CONCATENATED MODULE: ./src/utils/markdown.js
+const c = string => `\`${string}\``;
+const markdown_link = (text, href) => `[${text}](${href})`;
+const sub = string => `<sub>${string}</sub>`;
+const sup = string => `<sup>${string}</sup>`;
+
+// CONCATENATED MODULE: ./src/templates/index.js
+
+
+
+
+
+const directionSymbol = value => {
+	if (value < 0) {
+		return '↓';
+	}
+
+	if (value > 0) {
+		return '↑';
+	}
+
+	return '';
+};
+
+const formatSize = ({delta, percent}) => percent + directionSymbol(delta);
+
+function generateComment({
+	unchangedFiles,
+	pkgComparison,
+}) {
+	const {changed, unchanged, hidden} = pkgComparison.files;
+	const totalDelta = formatSize(pkgComparison.diff.size);
+
+	const table = markdown_table_default()([
+		['File', 'Before', 'After'],
+		...[
+			...changed,
+			...(unchangedFiles === 'show' ? unchanged : []),
+		].map(file => [
+			file.link,
+			file.base.size ? c(dist_default()(file.base.size)) : '—',
+			file.head.size ? (
+				(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(dist_default()(file.head.size))
+			) : '—',
+		]),
+		[
+			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
+			c(dist_default()(pkgComparison.base.size)),
+			sup(totalDelta) + c(dist_default()(pkgComparison.head.size)),
+		],
+	], {
+		align: ['', 'r', 'r'],
+	});
+
+	let unchangedTable = '';
+	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
+		unchangedTable = markdown_table_default()([
+			['File', 'Size'],
+			...unchanged.map(file => [
+				file.link,
+				c(dist_default()(file.base.size)),
+			]),
+		], {
+			align: ['', 'r'],
+		});
+
+		unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
+	}
+
+	let hiddenTable = '';
+	if (hidden.length > 0) {
+		hiddenTable = markdown_table_default()([
+			['File', 'Before', 'After'],
+			...hidden.map(file => [
+				file.link,
+				file.base.size ? c(dist_default()(file.base.size)) : '—',
+				file.head.size ? (
+					(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(dist_default()(file.head.size))
+				) : '—',
+			]),
+		], {
+			align: ['', 'r', 'r'],
+		});
+
+		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
+	}
+
+	return (lib_default())`
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
+
+	**Tarball size** ${c(dist_default()(pkgComparison.base.tarballSize))} → ${sup(formatSize(pkgComparison.diff.tarballSize)) + c(dist_default()(pkgComparison.head.tarballSize))}
+
+	${table}
+
+	${unchangedTable}
+
+	${hiddenTable}
+	`;
+}
+
+/* harmony default export */ const templates = (generateComment);
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/@actions/exec@1.0.4/node_modules/@actions/exec/lib/exec.js
+var exec = __webpack_require__(3437);
+// CONCATENATED MODULE: ./src/utils/exec.js
+
+
+async function exec_exec(commandLine, options) {
+	let stdout = '';
+	let stderr = '';
+
+	const startTime = Date.now();
+	const exitCode = await (0,exec.exec)(commandLine, null, {
+		...options,
+		silent: true,
+		listeners: {
+			stdout(data) {
+				stdout += data.toString();
+			},
+			stderr(data) {
+				stderr += data.toString();
+			},
+		},
+	});
+	const duration = Date.now() - startTime;
+
+	return {
+		exitCode,
+		duration,
+		stdout,
+		stderr,
+	};
+}
+
+/* harmony default export */ const utils_exec = (exec_exec);
 
 // EXTERNAL MODULE: ./node_modules/.pnpm/glob-to-regexp@0.4.1/node_modules/glob-to-regexp/index.js
 var glob_to_regexp = __webpack_require__(5017);
@@ -11467,24 +11611,7 @@ var partition = _createAggregator(function(result, value, key) {
 
 /* harmony default export */ const lodash_es_partition = (partition);
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/markdown-table@2.0.0/node_modules/markdown-table/index.js
-var markdown_table = __webpack_require__(8198);
-var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
-
-// EXTERNAL MODULE: ./node_modules/.pnpm/outdent@0.7.1/node_modules/outdent/lib/index.js
-var lib = __webpack_require__(2980);
-var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
-
-// CONCATENATED MODULE: ./src/utils/markdown.js
-const c = string => `\`${string}\``;
-const markdown_link = (text, href) => `[${text}](${href})`;
-const sub = string => `<sub>${string}</sub>`;
-const sup = string => `<sup>${string}</sup>`;
-
-// CONCATENATED MODULE: ./src/generate-comment.js
-
-
-
+// CONCATENATED MODULE: ./src/utils/compare-packages.js
 
 
 
@@ -11504,192 +11631,97 @@ const percent = fraction => {
 	});
 };
 
-const changeSymbol = (from, to) => {
-	if (
-		from === undefined ||
-		to === undefined ||
-		from === to
-	) {
-		return '';
-	}
-
-	if (from > to) {
-		return '↓';
-	}
-
-	if (from < to) {
-		return '↑';
-	}
-};
-
-const delta = (from, to) => {
-	const fraction = (to - from) / from;
-	if (fraction === 0) {
-		return '';
-	}
-
-	return percent(fraction) + changeSymbol(from, to);
-};
-
-const baseFileData = {
-	get delta() {
-		return (this.headSize || 0) - (this.baseSize || 0);
-	},
-};
-
-function processFiles(fileMap, type, sizeData) {
-	let totalSize = 0;
-
-	sizeData.files.forEach(file => {
-		if (!fileMap[file.path]) {
-			fileMap[file.path] = Object.assign(
-				Object.create(baseFileData),
-				{
-					path: file.path,
-					link: file.isTracked ? markdown_link(c(file.path), sizeData.ref.repo.html_url + '/blob/' + sizeData.ref.ref + file.path) : c(file.path),
-				},
-			);
-		}
-
-		fileMap[file.path][type] = file.size;
-		totalSize += file.size;
-	});
-
-	return totalSize;
+function calculateDiffBy(head, base, property) {
+	const delta = head[property] - base[property];
+	return {
+		delta,
+		percent: percent(delta / head[property]),
+	};
 }
 
-function generateComment({
-	commentSignature,
-	unchangedFiles,
-	hideFiles,
+function calculateDiff(head, base) {
+	return {
+		size: calculateDiffBy(head, base, 'size'),
+		sizeGzip: calculateDiffBy(head, base, 'sizeGzip'),
+		sizeBrotli: calculateDiffBy(head, base, 'sizeBrotli'),
+	};
+}
+
+function processPkgFiles(fileMap, type, pkgData) {
+	const data = {
+		size: 0,
+		sizeGzip: 0,
+		sizeBrotli: 0,
+		tarballSize: pkgData.tarballSize,
+		files: pkgData.files,
+	};
+
+	pkgData.files.forEach(file => {
+		if (!fileMap[file.path]) {
+			fileMap[file.path] = {
+				path: file.path,
+				link: (
+					file.isTracked ?
+						markdown_link(c(file.path), pkgData.ref.repo.html_url + '/blob/' + pkgData.ref.ref + file.path) :
+						c(file.path)
+				),
+			};
+		}
+
+		const entry = fileMap[file.path];
+		entry[type] = file;
+		data.size += file.size;
+		data.sizeGzip += file.sizeGzip;
+		data.sizeBrotli += file.sizeBrotli;
+
+		if (entry.head && entry.base) {
+			entry.diff = calculateDiff(entry.head, entry.base);
+		}
+	});
+
+	return data;
+}
+
+function comparePackages(headPkg, basePkg, {
 	sortBy,
 	sortOrder,
-	baseSizeData,
-	headSizeData,
-}) {
+	hideFiles,
+} = {}) {
 	const fileMap = {};
-	const headTotalSize = processFiles(fileMap, 'headSize', headSizeData);
-	const baseTotalSize = processFiles(fileMap, 'baseSize', baseSizeData);
-	const totalDelta = delta(baseTotalSize, headTotalSize);
+	const head = processPkgFiles(fileMap, 'head', headPkg);
+	const base = processPkgFiles(fileMap, 'base', basePkg);
 
-	let files = Object.values(fileMap);
-	files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
+	let allFiles = Object.values(fileMap);
+
+	allFiles.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
 	if (sortOrder === 'asc') {
-		files.reverse();
+		allFiles.reverse();
 	}
 
 	let hidden = [];
 	if (hideFiles) {
 		const hideFilesPtrn = glob_to_regexp_default()(hideFiles, {extended: true});
-		[hidden, files] = lodash_es_partition(files, fileData => hideFilesPtrn.test(fileData.path));
+		[hidden, allFiles] = lodash_es_partition(allFiles, file => hideFilesPtrn.test(file.path));
 	}
 
-	const [unchanged, changed] = lodash_es_partition(files, fileData => (fileData.baseSize === fileData.headSize));
-
-	const table = markdown_table_default()([
-		['File', 'Before', 'After'],
-		...[
-			...changed,
-			...(unchangedFiles === 'show' ? unchanged : []),
-		].map(data => [
-			data.link,
-			data.baseSize ? c(dist_default()(data.baseSize)) : '—',
-			data.headSize ? (
-				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(dist_default()(data.headSize))
-			) : '—',
-		]),
-		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
-			c(dist_default()(baseTotalSize)),
-			sup(totalDelta) + c(dist_default()(headTotalSize)),
-		],
-	], {
-		align: ['', 'r', 'r'],
-	});
-
-	let unchangedTable = '';
-	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
-		unchangedTable = markdown_table_default()([
-			['File', 'Size'],
-			...unchanged.map(data => [
-				data.link,
-				c(dist_default()(data.baseSize)),
-			]),
-		], {
-			align: ['', 'r'],
-		});
-
-		unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
-	}
-
-	let hiddenTable = '';
-	if (hidden.length > 0) {
-		hiddenTable = markdown_table_default()([
-			['File', 'Before', 'After'],
-			...hidden.map(data => [
-				data.link,
-				data.baseSize ? c(dist_default()(data.baseSize)) : '—',
-				data.headSize ? (
-					(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(dist_default()(data.headSize))
-				) : '—',
-			]),
-		], {
-			align: ['', 'r', 'r'],
-		});
-
-		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
-	}
-
-	return (lib_default())`
-	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
-
-	**Tarball size** ${c(dist_default()(baseSizeData.tarballSize))} → ${sup(delta(baseSizeData.tarballSize, headSizeData.tarballSize)) + c(dist_default()(headSizeData.tarballSize))}
-
-	${table}
-
-	${unchangedTable}
-
-	${hiddenTable}
-
-	${commentSignature}
-	`;
-}
-
-/* harmony default export */ const generate_comment = (generateComment);
-
-// EXTERNAL MODULE: ./node_modules/.pnpm/@actions/exec@1.0.4/node_modules/@actions/exec/lib/exec.js
-var exec = __webpack_require__(3437);
-// CONCATENATED MODULE: ./src/utils/exec.js
-
-
-async function exec_exec(commandLine, options) {
-	let stdout = '';
-	let stderr = '';
-
-	const startTime = Date.now();
-	const exitCode = await (0,exec.exec)(commandLine, null, {
-		...options,
-		silent: true,
-		listeners: {
-			stdout(data) {
-				stdout += data.toString();
-			},
-			stderr(data) {
-				stderr += data.toString();
-			},
-		},
-	});
-	const duration = Date.now() - startTime;
+	const [unchanged, changed] = lodash_es_partition(allFiles, file => (file.diff.size.delta === 0));
 
 	return {
-		exitCode,
-		duration,
-		stdout,
-		stderr,
+		head,
+		base,
+		diff: {
+			...calculateDiff(head, base),
+			tarballSize: calculateDiffBy(head, base, 'tarballSize'),
+		},
+		files: {
+			changed,
+			unchanged,
+			hidden,
+		},
 	};
 }
 
-/* harmony default export */ const utils_exec = (exec_exec);
+/* harmony default export */ const compare_packages = (comparePackages);
 
 // CONCATENATED MODULE: ./src/utils/upsert-comment.js
 
@@ -11703,6 +11735,8 @@ async function upsertComment({
 	body,
 }) {
 	(0,core.startGroup)('Comment on PR');
+
+	body += `\n\n${commentSignature}`;
 
 	const octokit = (0,github.getOctokit)(token);
 
@@ -11735,6 +11769,7 @@ async function upsertComment({
 /* harmony default export */ const upsert_comment = (upsertComment);
 
 // CONCATENATED MODULE: ./src/index.js
+
 
 
 
@@ -11851,9 +11886,9 @@ async function buildRef({
 	});
 	core.debug(JSON.stringify(result, null, 4));
 
-	const sizeData = JSON.parse(result.stdout);
+	const pkgData = JSON.parse(result.stdout);
 
-	await Promise.all(sizeData.files.map(async file => {
+	await Promise.all(pkgData.files.map(async file => {
 		file.isTracked = await isFileTracked('.' + file.path);
 	}));
 
@@ -11862,7 +11897,7 @@ async function buildRef({
 	const {stdout: cleanList} = await utils_exec('git clean -dfx'); // Deletes untracked & ignored files
 	core.debug(cleanList);
 
-	return sizeData;
+	return pkgData;
 }
 
 (async () => {
@@ -11878,33 +11913,42 @@ async function buildRef({
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
 	core.startGroup('Build HEAD');
-	const headSizeData = await buildRef({
+	const headPkgData = await buildRef({
 		buildCommand,
 	});
-	headSizeData.ref = pr.head;
+	headPkgData.ref = pr.head;
 	core.endGroup();
 
 	const {ref: baseRef} = pr.base;
-	let baseSizeData;
+	let basePkgData;
 	if (await isBaseDiffFromHead(baseRef)) {
 		core.info('HEAD is different from BASE. Triggering build.');
 		core.startGroup('Build BASE');
-		baseSizeData = await buildRef({
+		basePkgData = await buildRef({
 			ref: baseRef,
 			buildCommand,
 		});
-		baseSizeData.ref = pr.base;
+		basePkgData.ref = pr.base;
 		core.endGroup();
 	} else {
 		core.info('HEAD is identical to BASE. No need to build.');
-		baseSizeData = {
-			...headSizeData,
+		basePkgData = {
+			...headPkgData,
 			ref: pr.base,
 		};
 	}
 
-	core.setOutput('headSizeData', headSizeData);
-	core.setOutput('baseSizeData', baseSizeData);
+	const pkgComparison = compare_packages(headPkgData, basePkgData, {
+		sortBy,
+		sortOrder,
+		hideFiles,
+	});
+
+	core.setOutput('headPkgData', headPkgData);
+	core.setOutput('basePkgData', basePkgData);
+	core.setOutput('pkgComparison', pkgComparison);
+
+	console.log('pkgComparison', JSON.stringify(pkgComparison, null, 4));
 
 	if (commentReport !== 'false') {
 		await upsert_comment({
@@ -11912,14 +11956,11 @@ async function buildRef({
 			commentSignature: COMMENT_SIGNATURE,
 			repo: github.context.repo,
 			prNumber: pr.number,
-			body: generate_comment({
-				commentSignature: COMMENT_SIGNATURE,
+			body: templates({
 				unchangedFiles,
-				hideFiles,
 				sortBy,
 				sortOrder,
-				baseSizeData,
-				headSizeData,
+				pkgComparison,
 			}),
 		});
 	}
@@ -12146,7 +12187,7 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(3595);
+/******/ 	return __webpack_require__(4114);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

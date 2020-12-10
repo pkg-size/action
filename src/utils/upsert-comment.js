@@ -10,6 +10,8 @@ async function upsertComment({
 }) {
 	startGroup('Comment on PR');
 
+	body += `\n\n${commentSignature}`;
+
 	const octokit = getOctokit(token);
 
 	info('Getting list of comments');
