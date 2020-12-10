@@ -11003,5 +11003,5 @@ async function buildRef({
 	}
 })().catch(error => {
 	core.setFailed(error.message);
-	core.warn(error.stack);
+	core.warning(error.stack);
 });
