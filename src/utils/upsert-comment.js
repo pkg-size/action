@@ -10,7 +10,7 @@ async function upsertComment({
 }) {
 	startGroup('Comment on PR');
 
-	body += `\n${commentSignature}`;
+	body += `\n\n${commentSignature}`;
 
 	const octokit = getOctokit(token);
 

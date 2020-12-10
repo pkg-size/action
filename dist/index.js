@@ -11736,7 +11736,7 @@ async function upsertComment({
 }) {
 	(0,core.startGroup)('Comment on PR');
 
-	body += `\n${commentSignature}`;
+	body += `\n\n${commentSignature}`;
 
 	const octokit = (0,github.getOctokit)(token);
 
