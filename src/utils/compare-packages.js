@@ -88,7 +88,10 @@ function comparePackages(headPkg, basePkg, {
 	return {
 		head,
 		base,
-		diff: calculateDiff(head, base),
+		diff: {
+			...calculateDiff(head, base),
+			tarballSize: calculateDiffBy(head, base, 'tarballSize'),
+		},
 		files: {
 			changed,
 			unchanged,

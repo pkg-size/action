@@ -48,8 +48,8 @@ import {c, sub, sup, link} from './utils/markdown';
 // };
 
 const directionSymbol = (value) => {
-	if (value > 0) { return '↓'; }
-	if (value < 0) { return '↑'; }
+	if (value < 0) { return '↓'; }
+	if (value > 0) { return '↑'; }
 	return '';
 };
 
@@ -62,6 +62,7 @@ function generateComment({
 	pkgComparison,
 }) {
 	const { changed, unchanged } = pkgComparison.files;
+	const totalDelta = formatSize(pkgComparison.diff.size);
 
 	const table = markdownTable([
 		['File', 'Before', 'After'],
@@ -78,17 +79,57 @@ function generateComment({
 		[
 			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
 			c(byteSize(pkgComparison.base.size)),
-			sup(formatSize(pkgComparison.diff.size)) + c(byteSize(pkgComparison.head.size)),
+			sup(totalDelta) + c(byteSize(pkgComparison.head.size)),
 		],
 	], {
 		align: ['', 'r', 'r'],
 	});
 
-	return table;
+	let unchangedTable = '';
+	// if (unchangedFiles === 'collapse' && unchanged.length > 0) {
+	// 	unchangedTable = markdownTable([
+	// 		['File', 'Size'],
+	// 		...unchanged.map(data => [
+	// 			data.link,
+	// 			c(byteSize(data.baseSize)),
+	// 		]),
+	// 	], {
+	// 		align: ['', 'r'],
+	// 	});
 
-	return JSON.stringify(pkgComparison, null, 4);
+	// 	unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
+	// }
 
-	return '';
+	let hiddenTable = '';
+	// if (hidden.length > 0) {
+	// 	hiddenTable = markdownTable([
+	// 		['File', 'Before', 'After'],
+	// 		...hidden.map(data => [
+	// 			data.link,
+	// 			data.baseSize ? c(byteSize(data.baseSize)) : '—',
+	// 			data.headSize ? (
+	// 				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
+	// 			) : '—',
+	// 		]),
+	// 	], {
+	// 		align: ['', 'r', 'r'],
+	// 	});
+
+	// 	hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
+	// }
+
+	return outdent`
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
+
+	**Tarball size** ${c(byteSize(pkgComparison.base.tarballSize))} → ${sup(formatSize(pkgComparison.diff.tarballSize)) + c(byteSize(pkgComparison.head.tarballSize))}
+
+	${table}
+
+	${unchangedTable}
+
+	${hiddenTable}
+	`;
+
 	// const fileMap = {};
 	// const headTotalSize = processPkgFiles(fileMap, 'headSize', headPkgData);
 	// const baseTotalSize = processPkgFiles(fileMap, 'baseSize', basePkgData);

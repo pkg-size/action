@@ -7897,6 +7897,8 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 
 // EXTERNAL MODULE: ./node_modules/.pnpm/outdent@0.7.1/node_modules/outdent/lib/index.js
 var lib = __webpack_require__(2980);
+var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
+
 // CONCATENATED MODULE: ./src/utils/markdown.js
 const c = string => `\`${string}\``;
 const markdown_link = (text, href) => `[${text}](${href})`;
@@ -7954,8 +7956,8 @@ const sup = string => `<sup>${string}</sup>`;
 // };
 
 const directionSymbol = (value) => {
-	if (value > 0) { return '↓'; }
-	if (value < 0) { return '↑'; }
+	if (value < 0) { return '↓'; }
+	if (value > 0) { return '↑'; }
 	return '';
 };
 
@@ -7968,6 +7970,7 @@ function generateComment({
 	pkgComparison,
 }) {
 	const { changed, unchanged } = pkgComparison.files;
+	const totalDelta = formatSize(pkgComparison.diff.size);
 
 	const table = markdown_table_default()([
 		['File', 'Before', 'After'],
@@ -7984,17 +7987,57 @@ function generateComment({
 		[
 			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
 			c(dist_default()(pkgComparison.base.size)),
-			sup(formatSize(pkgComparison.diff.size)) + c(dist_default()(pkgComparison.head.size)),
+			sup(totalDelta) + c(dist_default()(pkgComparison.head.size)),
 		],
 	], {
 		align: ['', 'r', 'r'],
 	});
 
-	return table;
+	let unchangedTable = '';
+	// if (unchangedFiles === 'collapse' && unchanged.length > 0) {
+	// 	unchangedTable = markdownTable([
+	// 		['File', 'Size'],
+	// 		...unchanged.map(data => [
+	// 			data.link,
+	// 			c(byteSize(data.baseSize)),
+	// 		]),
+	// 	], {
+	// 		align: ['', 'r'],
+	// 	});
 
-	return JSON.stringify(pkgComparison, null, 4);
+	// 	unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
+	// }
 
-	return '';
+	let hiddenTable = '';
+	// if (hidden.length > 0) {
+	// 	hiddenTable = markdownTable([
+	// 		['File', 'Before', 'After'],
+	// 		...hidden.map(data => [
+	// 			data.link,
+	// 			data.baseSize ? c(byteSize(data.baseSize)) : '—',
+	// 			data.headSize ? (
+	// 				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
+	// 			) : '—',
+	// 		]),
+	// 	], {
+	// 		align: ['', 'r', 'r'],
+	// 	});
+
+	// 	hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
+	// }
+
+	return (lib_default())`
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
+
+	**Tarball size** ${c(dist_default()(pkgComparison.base.tarballSize))} → ${sup(formatSize(pkgComparison.diff.tarballSize)) + c(dist_default()(pkgComparison.head.tarballSize))}
+
+	${table}
+
+	${unchangedTable}
+
+	${hiddenTable}
+	`;
+
 	// const fileMap = {};
 	// const headTotalSize = processPkgFiles(fileMap, 'headSize', headPkgData);
 	// const baseTotalSize = processPkgFiles(fileMap, 'baseSize', basePkgData);
@@ -11786,7 +11829,10 @@ function comparePackages(headPkg, basePkg, {
 	return {
 		head,
 		base,
-		diff: calculateDiff(head, base),
+		diff: {
+			...calculateDiff(head, base),
+			tarballSize: calculateDiffBy(head, base, 'tarballSize'),
+		},
 		files: {
 			changed,
 			unchanged,
