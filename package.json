@@ -22,7 +22,6 @@
 		"dist"
 	],
 	"scripts": {
-		"_build": "ncc build -s src/index.js && :",
 		"build": "rollup -c && :",
 		"lint": "xo"
 	},
@@ -46,7 +45,6 @@
 		"@actions/io": "^1.0.2",
 		"@rollup/plugin-commonjs": "^17.0.0",
 		"@rollup/plugin-node-resolve": "^11.0.0",
-		"@vercel/ncc": "^0.25.1",
 		"builtin-modules": "^3.1.0",
 		"byte-size": "^7.0.0",
 		"glob-to-regexp": "^0.4.1",
@@ -56,8 +54,6 @@
 		"markdown-table": "^2.0.0",
 		"outdent": "^0.7.1",
 		"rollup": "^2.34.2",
-		"rollup-plugin-filesize": "^9.1.0",
-		"rollup-plugin-terser": "^7.0.2",
 		"xo": "^0.35.0"
 	}
 }
