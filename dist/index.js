@@ -10759,7 +10759,7 @@ function comparePackages(headPkg, basePkg, {
 		[hidden, allFiles] = partition(allFiles, file => hideFilesPtrn.test(file.path));
 	}
 
-	const [unchanged, changed] = partition(allFiles, file => (file.diff.size.delta === 0));
+	const [unchanged, changed] = partition(allFiles, file => (file.diff && file.diff.size.delta === 0));
 
 	return {
 		head,
@@ -11003,6 +11003,5 @@ async function buildRef({
 	}
 })().catch(error => {
 	core.setFailed(error.message);
-	core.warning(error);
 	core.warning(error.stack);
 });
