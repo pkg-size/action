@@ -61,7 +61,7 @@ function generateComment({
 	sortOrder,
 	pkgComparison,
 }) {
-	const { changed, unchanged } = pkgComparison.files;
+	const { changed, unchanged, hidden } = pkgComparison.files;
 	const totalDelta = formatSize(pkgComparison.diff.size);
 
 	const table = markdownTable([
