@@ -167,14 +167,14 @@ async function buildRef({
 		};
 	}
 
+	console.log('head', JSON.stringify(headPkgData, null, 4));
+	console.log('base', JSON.stringify(basePkgData, null, 4));
+
 	const pkgComparison = comparePackages(headPkgData, basePkgData, {
 		sortBy,
 		sortOrder,
 		hideFiles,
 	});
-
-	console.log('head', JSON.stringify(headPkgData, null, 4));
-	console.log('base', JSON.stringify(basePkgData, null, 4));
 
 	core.setOutput('headPkgData', headPkgData);
 	core.setOutput('basePkgData', basePkgData);
@@ -197,5 +197,6 @@ async function buildRef({
 		});
 	}
 })().catch(error => {
+	console.log('caught error');
 	core.setFailed(error.message);
 });
