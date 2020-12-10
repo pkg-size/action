@@ -7994,37 +7994,37 @@ function generateComment({
 	});
 
 	let unchangedTable = '';
-	// if (unchangedFiles === 'collapse' && unchanged.length > 0) {
-	// 	unchangedTable = markdownTable([
-	// 		['File', 'Size'],
-	// 		...unchanged.map(data => [
-	// 			data.link,
-	// 			c(byteSize(data.baseSize)),
-	// 		]),
-	// 	], {
-	// 		align: ['', 'r'],
-	// 	});
+	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
+		unchangedTable = markdown_table_default()([
+			['File', 'Size'],
+			...unchanged.map(file => [
+				file.link,
+				c(dist_default()(file.base.size)),
+			]),
+		], {
+			align: ['', 'r'],
+		});
 
-	// 	unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
-	// }
+		unchangedTable = `<details><summary>Unchanged files</summary>\n\n${unchangedTable}\n</details>`;
+	}
 
 	let hiddenTable = '';
-	// if (hidden.length > 0) {
-	// 	hiddenTable = markdownTable([
-	// 		['File', 'Before', 'After'],
-	// 		...hidden.map(data => [
-	// 			data.link,
-	// 			data.baseSize ? c(byteSize(data.baseSize)) : '—',
-	// 			data.headSize ? (
-	// 				(data.baseSize ? sup(delta(data.baseSize, data.headSize)) : '') + c(byteSize(data.headSize))
-	// 			) : '—',
-	// 		]),
-	// 	], {
-	// 		align: ['', 'r', 'r'],
-	// 	});
+	if (hidden.length > 0) {
+		hiddenTable = markdown_table_default()([
+			['File', 'Before', 'After'],
+			...hidden.map(file => [
+				file.link,
+				file.base.size ? c(dist_default()(file.base.size)) : '—',
+				file.head.size ? (
+					(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(dist_default()(file.head.size))
+				) : '—',
+			]),
+		], {
+			align: ['', 'r', 'r'],
+		});
 
-	// 	hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
-	// }
+		hiddenTable = `<details><summary>Hidden files</summary>\n\n${hiddenTable}\n</details>`;
+	}
 
 	return (lib_default())`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
