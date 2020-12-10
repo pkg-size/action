@@ -7895,8 +7895,12 @@ var markdown_table_default = /*#__PURE__*/__webpack_require__.n(markdown_table);
 var lib = __webpack_require__(2980);
 var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/@vercel/ncc@0.25.1/node_modules/@vercel/ncc/dist/ncc/@@notfound.js?./utils/markdown
-var markdown = __webpack_require__(4742);
+// CONCATENATED MODULE: ./src/utils/markdown.js
+const c = string => `\`${string}\``;
+const markdown_link = (text, href) => `[${text}](${href})`;
+const sub = string => `<sub>${string}</sub>`;
+const sup = string => `<sup>${string}</sup>`;
+
 // CONCATENATED MODULE: ./src/templates/index.js
 
 
@@ -7931,15 +7935,15 @@ function generateComment({
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(file => [
 			file.link,
-			file.base.size ? (0,markdown.c)(dist_default()(file.base.size)) : '—',
+			file.base.size ? c(dist_default()(file.base.size)) : '—',
 			file.head.size ? (
-				(file.base.size ? (0,markdown.sup)(formatSize(file.diff.size)) : '') + (0,markdown.c)(dist_default()(file.head.size))
+				(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(dist_default()(file.head.size))
 			) : '—',
 		]),
 		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : (0,markdown.sub)('_(Includes all files)_')),
-			(0,markdown.c)(dist_default()(pkgComparison.base.size)),
-			(0,markdown.sup)(totalDelta) + (0,markdown.c)(dist_default()(pkgComparison.head.size)),
+			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
+			c(dist_default()(pkgComparison.base.size)),
+			sup(totalDelta) + c(dist_default()(pkgComparison.head.size)),
 		],
 	], {
 		align: ['', 'r', 'r'],
@@ -7951,7 +7955,7 @@ function generateComment({
 			['File', 'Size'],
 			...unchanged.map(file => [
 				file.link,
-				(0,markdown.c)(dist_default()(file.base.size)),
+				c(dist_default()(file.base.size)),
 			]),
 		], {
 			align: ['', 'r'],
@@ -7966,9 +7970,9 @@ function generateComment({
 			['File', 'Before', 'After'],
 			...hidden.map(file => [
 				file.link,
-				file.base.size ? (0,markdown.c)(dist_default()(file.base.size)) : '—',
+				file.base.size ? c(dist_default()(file.base.size)) : '—',
 				file.head.size ? (
-					(file.base.size ? (0,markdown.sup)(formatSize(file.diff.size)) : '') + (0,markdown.c)(dist_default()(file.head.size))
+					(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(dist_default()(file.head.size))
 				) : '—',
 			]),
 		], {
@@ -7981,7 +7985,7 @@ function generateComment({
 	return (lib_default())`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
 
-	**Tarball size** ${(0,markdown.c)(dist_default()(pkgComparison.base.tarballSize))} → ${(0,markdown.sup)(formatSize(pkgComparison.diff.tarballSize)) + (0,markdown.c)(dist_default()(pkgComparison.head.tarballSize))}
+	**Tarball size** ${c(dist_default()(pkgComparison.base.tarballSize))} → ${sup(formatSize(pkgComparison.diff.tarballSize)) + c(dist_default()(pkgComparison.head.tarballSize))}
 
 	${table}
 
@@ -8026,12 +8030,6 @@ async function exec_exec(commandLine, options) {
 }
 
 /* harmony default export */ const utils_exec = (exec_exec);
-
-// CONCATENATED MODULE: ./src/utils/markdown.js
-const c = string => `\`${string}\``;
-const markdown_link = (text, href) => `[${text}](${href})`;
-const sub = string => `<sub>${string}</sub>`;
-const sup = string => `<sup>${string}</sup>`;
 
 // EXTERNAL MODULE: ./node_modules/.pnpm/glob-to-regexp@0.4.1/node_modules/glob-to-regexp/index.js
 var glob_to_regexp = __webpack_require__(5017);
@@ -11969,14 +11967,6 @@ async function buildRef({
 })().catch(error => {
 	core.setFailed(error.message);
 });
-
-
-/***/ }),
-
-/***/ 4742:
-/***/ ((module) => {
-
-module.exports = eval("require")("./utils/markdown");
 
 
 /***/ }),

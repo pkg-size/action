@@ -1,7 +1,7 @@
 import byteSize from 'byte-size';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
-import {c, sub, sup} from './utils/markdown';
+import {c, sub, sup} from '../utils/markdown';
 
 const directionSymbol = value => {
 	if (value < 0) {
