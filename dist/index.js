@@ -7951,7 +7951,7 @@ function generateComment({
 	pkgComparison,
 }) {
 
-	console.log(JSON.stringify(pkgComparison, null, 4));
+	return JSON.stringify(pkgComparison, null, 4);
 
 	return '';
 	// const fileMap = {};
