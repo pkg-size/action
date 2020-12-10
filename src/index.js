@@ -167,6 +167,9 @@ async function buildRef({
 		};
 	}
 
+	console.log('head', JSON.stringify(headPkgData, null, 4));
+	console.log('base', JSON.stringify(basePkgData, null, 4));
+
 	const pkgComparison = comparePackages(headPkgData, basePkgData, {
 		sortBy,
 		sortOrder,
@@ -195,4 +198,5 @@ async function buildRef({
 	}
 })().catch(error => {
 	core.setFailed(error.message);
+	core.warning(error.stack);
 });

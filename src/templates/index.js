@@ -31,8 +31,8 @@ function generateComment({
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(file => [
 			file.link,
-			file.base.size ? c(byteSize(file.base.size)) : '—',
-			file.head.size ? (
+			file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
+			file.head && file.head.size ? (
 				(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
 			) : '—',
 		]),
@@ -66,8 +66,8 @@ function generateComment({
 			['File', 'Before', 'After'],
 			...hidden.map(file => [
 				file.link,
-				file.base.size ? c(byteSize(file.base.size)) : '—',
-				file.head.size ? (
+				file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
+				file.head && file.head.size ? (
 					(file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
 				) : '—',
 			]),
