@@ -10690,7 +10690,7 @@ function calculateDiffBy(head, base, property) {
 	const delta = head[property] - base[property];
 	return {
 		delta,
-		percent: percent(delta / head[property]),
+		percent: percent(delta / base[property]),
 	};
 }
 
