@@ -60,6 +60,8 @@ async function isFileTracked(filePath) {
 	return exitCode === 0;
 }
 
+let pkgSizeInstalled = false;
+
 async function buildRef({
 	ref,
 	buildCommand,
@@ -109,16 +111,11 @@ async function buildRef({
 		}
 	}
 
-	console.time('global install pkg-size');
-	const out = await exec('npm install -g pkg-size', {
-		ignoreReturnCode: true,
-	});
-	console.timeEnd('global install pkg-size');
-	console.log(JSON.stringify(out, null, 4));
-
-	// const {stdout} = await exec('yarn global bin');
-	// core.addPath(stdout.trim());
-	// console.log(JSON.stringify(stdout.trim(), null, 4));
+	if (!pkgSizeInstalled) {
+		await exec('yarn global add pkg-size');
+		core.addPath((await exec('yarn global bin')).stdout.trim());
+		pkgSizeInstalled = true;
+	}
 
 	core.info('Getting package size');
 	console.time('pkg-size');
