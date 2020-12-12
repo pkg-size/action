@@ -110,19 +110,19 @@ async function buildRef({
 	}
 
 	console.time('global install pkg-size');
-	await exec('yarn global add pkg-size');
+	await exec('npm install -g pkg-size');
 	console.timeEnd('global install pkg-size');
 
-	const {stdout} = await exec('yarn global bin');
-	core.addPath(stdout.trim());
-	console.log(JSON.stringify(stdout.trim(), null, 4));
+	// const {stdout} = await exec('yarn global bin');
+	// core.addPath(stdout.trim());
+	// console.log(JSON.stringify(stdout.trim(), null, 4));
 
 	core.info('Getting package size');
-	console.time('npx pkg-size');
+	console.time('pkg-size');
 	const result = await exec('pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
-	console.timeEnd('npx pkg-size');
+	console.timeEnd('pkg-size');
 	core.debug(JSON.stringify(result, null, 4));
 
 	const pkgData = JSON.parse(result.stdout);
