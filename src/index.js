@@ -41,14 +41,18 @@ async function npmCi({cwd} = {}) {
 		return await exec('npm ci', {cwd});
 	}
 
-	if (fs.existsSync('pnpm-lock.yaml')) {
-		core.info('Installing dependencies with pnpm');
-		return await exec('npx pnpm i --frozen-lockfile', {cwd});
-	}
-
 	if (fs.existsSync('yarn.lock')) {
 		core.info('Installing dependencies with yarn');
-		return await exec('npx yarn install --frozen-lockfile', {cwd});
+
+		// yarn is installed on GitHub Actions by default
+		return await exec('yarn install --frozen-lockfile', {cwd});
+	}
+
+	if (fs.existsSync('pnpm-lock.yaml')) {
+		core.info('Installing dependencies with pnpm');
+
+		// pnpm is not installed on GitHub Actions by default
+		return await exec('npx pnpm i --frozen-lockfile', {cwd});
 	}
 
 	core.info('No lock file detected. Installing dependencies with npm');
@@ -139,12 +143,6 @@ async function buildRef({
 }
 
 (async () => {
-	const yarnOut = await exec('yarn --version', {ignoreReturnCode: true});
-	console.log('yarnOut', JSON.stringify(yarnOut, null, 4));
-
-	const pnpmOut = await exec('pnpm --version', {ignoreReturnCode: true});
-	console.log('pnpmOut', JSON.stringify(pnpmOut, null, 4));
-
 	const {GITHUB_TOKEN} = process.env;
 	assert(GITHUB_TOKEN, 'Environment variable "GITHUB_TOKEN" not set. Required for accessing and reporting on the PR.');
 
