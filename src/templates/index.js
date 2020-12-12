@@ -1,7 +1,7 @@
 import byteSize from 'byte-size';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
-import {c, sub, sup} from '../utils/markdown';
+import {c, sub, sup, strong} from '../utils/markdown';
 
 const directionSymbol = value => {
 	if (value < 0) {
@@ -37,9 +37,14 @@ function generateComment({
 			) : '—',
 		]),
 		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
+			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
 			c(byteSize(pkgComparison.base.size)),
 			sup(totalDelta) + c(byteSize(pkgComparison.head.size)),
+		],
+		[
+			strong('Tarball size'),
+			c(byteSize(pkgComparison.base.tarballSize)),
+			sup(formatSize(pkgComparison.diff.tarballSize)) + c(byteSize(pkgComparison.head.tarballSize)),
 		],
 	], {
 		align: ['', 'r', 'r'],
@@ -80,8 +85,6 @@ function generateComment({
 
 	return outdent`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
-
-	**Tarball size** ${c(byteSize(pkgComparison.base.tarballSize))} → ${sup(formatSize(pkgComparison.diff.tarballSize)) + c(byteSize(pkgComparison.head.tarballSize))}
 
 	${table}
 
