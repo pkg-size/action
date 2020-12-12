@@ -10869,6 +10869,8 @@ async function isFileTracked(filePath) {
 	return exitCode === 0;
 }
 
+let pkgSizeInstalled = false;
+
 async function buildRef({
 	ref,
 	buildCommand,
@@ -10918,8 +10920,15 @@ async function buildRef({
 		}
 	}
 
+	if (!pkgSizeInstalled) {
+		core.info('Installing pkg-size globally');
+		await exec$2('yarn global add pkg-size');
+		core.addPath((await exec$2('yarn global bin')).stdout.trim());
+		pkgSizeInstalled = true;
+	}
+
 	core.info('Getting package size');
-	const result = await exec$2('npx pkg-size --json', {cwd}).catch(error => {
+	const result = await exec$2('pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
 	core.debug(JSON.stringify(result, null, 4));
