@@ -139,6 +139,12 @@ async function buildRef({
 }
 
 (async () => {
+	const yarnOut = await exec('yarn --version', {ignoreReturnCode: true});
+	console.log('yarnOut', JSON.stringify(yarnOut, null, 4));
+
+	const pnpmOut = await exec('pnpm --version', {ignoreReturnCode: true});
+	console.log('pnpmOut', JSON.stringify(pnpmOut, null, 4));
+
 	const {GITHUB_TOKEN} = process.env;
 	assert(GITHUB_TOKEN, 'Environment variable "GITHUB_TOKEN" not set. Required for accessing and reporting on the PR.');
 
