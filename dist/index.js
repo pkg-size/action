@@ -6778,6 +6778,7 @@ const c$1 = string => `\`${string}\``;
 const link = (text, href) => `[${text}](${href})`;
 const sub = string => `<sub>${string}</sub>`;
 const sup = string => `<sup>${string}</sup>`;
+const strong = string => `**${string}**`;
 
 const directionSymbol = value => {
 	if (value < 0) {
@@ -6813,9 +6814,14 @@ function generateComment({
 			) : '—',
 		]),
 		[
-			'**Total** ' + (unchangedFiles === 'show' ? '' : sub('_(Includes all files)_')),
+			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
 			c$1(dist(pkgComparison.base.size)),
 			sup(totalDelta) + c$1(dist(pkgComparison.head.size)),
+		],
+		[
+			strong('Tarball size'),
+			c$1(dist(pkgComparison.base.tarballSize)),
+			sup(formatSize(pkgComparison.diff.tarballSize)) + c$1(dist(pkgComparison.head.tarballSize)),
 		],
 	], {
 		align: ['', 'r', 'r'],
@@ -6856,8 +6862,6 @@ function generateComment({
 
 	return defaultOutdent`
 	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
-
-	**Tarball size** ${c$1(dist(pkgComparison.base.tarballSize))} → ${sup(formatSize(pkgComparison.diff.tarballSize)) + c$1(dist(pkgComparison.head.tarballSize))}
 
 	${table}
 
