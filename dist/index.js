@@ -10919,9 +10919,11 @@ async function buildRef({
 	}
 
 	core.info('Getting package size');
+	console.time('npx pkg-size');
 	const result = await exec$2('npx pkg-size --json', {cwd}).catch(error => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
+	console.timeEnd('npx pkg-size');
 	core.debug(JSON.stringify(result, null, 4));
 
 	const pkgData = JSON.parse(result.stdout);
