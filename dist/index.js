@@ -10919,8 +10919,11 @@ async function buildRef({
 	}
 
 	console.time('global install pkg-size');
-	await exec$2('npm install -g pkg-size');
+	const out = await exec$2('npm install -g pkg-size', {
+		ignoreReturnCode: true,
+	});
 	console.timeEnd('global install pkg-size');
+	console.log(JSON.stringify(out, null, 4));
 
 	// const {stdout} = await exec('yarn global bin');
 	// core.addPath(stdout.trim());
