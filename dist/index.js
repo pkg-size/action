@@ -10922,9 +10922,9 @@ async function buildRef({
 	await exec$2('yarn global add pkg-size');
 	console.timeEnd('global install pkg-size');
 
-	const a = await exec$2('yarn global bin');
-	console.log(JSON.stringify(a, null, 4));
-	// core.addPath('');
+	const {stdout} = await exec$2('yarn global bin');
+	core.addPath(stdout.trim());
+	console.log(JSON.stringify(stdout.trim(), null, 4));
 
 	core.info('Getting package size');
 	console.time('npx pkg-size');
