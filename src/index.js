@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import {context} from '@actions/github';
 import {rmRF} from '@actions/io';
-// import cache from '@actions/cache';
+import cache from '@actions/cache';
 import crypto from 'crypto';
 import assert from 'assert';
 import fs from 'fs';
@@ -72,7 +72,10 @@ async function npmCi({cwd} = {}) {
 
 	console.log(JSON.stringify(packageManager, null, 4));
 
-	console.log(await getHash(packageManager.lockFilePath));
+	const packageLockHash = await getHash(packageManager.lockFilePath);
+
+	const cached = await cache.saveCache(['node_modules'], packageLockHash);
+	console.log('cached', JSON.stringify(cached, null, 4));
 
 	core.info(`Installing dependencies with ${packageManager.command}`);
 	return await exec(packageManager.command, {cwd});

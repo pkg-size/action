@@ -1,11 +1,13 @@
 import commonjs from '@rollup/plugin-commonjs';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
+import json from '@rollup/plugin-json';
 import builtins from 'builtin-modules';
 
 const rollupConfig = {
 	input: 'src/index.js',
 	plugins: [
 		commonjs(),
+		json(),
 		nodeResolve({
 			preferBuiltins: false,
 		}),
