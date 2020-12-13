@@ -12,7 +12,10 @@ const rollupConfig = {
 			preferBuiltins: false,
 		}),
 	],
-	external: builtins,
+	external: [
+		...builtins,
+		'@actions/cache',
+	],
 	output: {
 		format: 'cjs',
 		file: 'dist/index.js',
