@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import {context} from '@actions/github';
 import {rmRF} from '@actions/io';
+// import cache from '@actions/cache';
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
@@ -30,11 +31,38 @@ async function isBaseDiffFromHead(baseRef) {
 	return exitCode !== 0;
 }
 
+const lockFiles = {
+	'package-lock.json': 'npm ci',
+	'yarn.lock': 'yarn install --frozen-lockfile',
+	'pnpm-lock.yaml': 'npx pnpm i --frozen-lockfile',
+};
+
+async function findLockFile(directory) {
+	for (const lockFile in lockFiles) { // eslint-disable-line guard-for-in
+		const lockFilePath = path.join(directory, lockFile);
+		if (fs.existsSync(lockFilePath)) {
+			return {
+				lockFilePath,
+				command: lockFiles[lockFile],
+			};
+		}
+	}
+
+	return {
+		lockFilePath: undefined,
+		command: 'npm i',
+	};
+}
+
 async function npmCi({cwd} = {}) {
 	if (fs.existsSync('node_modules')) {
 		core.info('Cleaning node_modules');
 		await rmRF(path.join(cwd, 'node_modules'));
 	}
+
+	const packageManager = findLockFile(cwd);
+
+	console.log(JSON.stringify(packageManager, null, 4));
 
 	if (fs.existsSync('package-lock.json')) {
 		core.info('Installing dependencies with npm');

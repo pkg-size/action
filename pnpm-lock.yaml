@@ -1,5 +1,5 @@
 devDependencies:
-  '@actions/cache': 1.0.4
+  '@actions/cache': 1.0.5
   '@actions/core': 1.2.6
   '@actions/exec': 1.0.4
   '@actions/github': 4.0.0
@@ -18,7 +18,7 @@ devDependencies:
   xo: 0.35.0
 lockfileVersion: 5.2
 packages:
-  /@actions/cache/1.0.4:
+  /@actions/cache/1.0.5:
     dependencies:
       '@actions/core': 1.2.6
       '@actions/exec': 1.0.4
@@ -31,7 +31,7 @@ packages:
       uuid: 3.4.0
     dev: true
     resolution:
-      integrity: sha512-1grYfbu8P6JDDHc40eOI5tQDRcAxMwq5HBWhaCqEg9o/ixDRZfwPHlQvQAop2ZzFCjF2ns0ENQOIBAH8GNn+zA==
+      integrity: sha512-TcvJOduwsPP27KLmIa5cqXsQYFK2GzILcEpnhvYmhGwi1aYx9XwhKmp6Im8X6DJMBxbvupKPsOntG6f6sSkIPA==
   /@actions/core/1.2.6:
     dev: true
     resolution:
@@ -5366,7 +5366,7 @@ packages:
     resolution:
       integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 specifiers:
-  '@actions/cache': ^1.0.4
+  '@actions/cache': ^1.0.5
   '@actions/core': ^1.2.6
   '@actions/exec': ^1.0.4
   '@actions/github': ^4.0.0
