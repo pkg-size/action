@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 import {context} from '@actions/github';
 import {rmRF} from '@actions/io';
 // import cache from '@actions/cache';
+import crypto from 'crypto';
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
@@ -33,8 +34,8 @@ async function isBaseDiffFromHead(baseRef) {
 
 const lockFiles = {
 	'package-lock.json': 'npm ci',
-	'yarn.lock': 'yarn install --frozen-lockfile',
-	'pnpm-lock.yaml': 'npx pnpm i --frozen-lockfile',
+	'yarn.lock': 'yarn install --frozen-lockfile', // yarn is installed on GitHub Actions by default
+	'pnpm-lock.yaml': 'npx pnpm i --frozen-lockfile', // pnpm is not installed on GitHub Actions by default
 };
 
 function findLockFile(directory) {
@@ -54,6 +55,13 @@ function findLockFile(directory) {
 	};
 }
 
+const getHash = filePath => new Promise(resolve => {
+	const hash = crypto.createHash('md5');
+	fs.createReadStream(filePath)
+		.on('data', data => hash.update(data))
+		.on('end', () => resolve(hash.digest('hex')));
+});
+
 async function npmCi({cwd} = {}) {
 	if (fs.existsSync('node_modules')) {
 		core.info('Cleaning node_modules');
@@ -64,27 +72,32 @@ async function npmCi({cwd} = {}) {
 
 	console.log(JSON.stringify(packageManager, null, 4));
 
-	if (fs.existsSync('package-lock.json')) {
-		core.info('Installing dependencies with npm');
-		return await exec('npm ci', {cwd});
-	}
+	console.log(await getHash(packageManager.lockFilePath));
 
-	if (fs.existsSync('yarn.lock')) {
-		core.info('Installing dependencies with yarn');
+	core.info(`Installing dependencies with ${packageManager.command}`);
+	return await exec(packageManager.command, {cwd});
 
-		// yarn is installed on GitHub Actions by default
-		return await exec('yarn install --frozen-lockfile', {cwd});
-	}
+	// if (fs.existsSync('package-lock.json')) {
+	// 	core.info('Installing dependencies with npm');
+	// 	return await exec('npm ci', {cwd});
+	// }
 
-	if (fs.existsSync('pnpm-lock.yaml')) {
-		core.info('Installing dependencies with pnpm');
+	// if (fs.existsSync('yarn.lock')) {
+	// 	core.info('Installing dependencies with yarn');
 
-		// pnpm is not installed on GitHub Actions by default
-		return await exec('npx pnpm i --frozen-lockfile', {cwd});
-	}
+	// 	// yarn is installed on GitHub Actions by default
+	// 	return await exec('yarn install --frozen-lockfile', {cwd});
+	// }
 
-	core.info('No lock file detected. Installing dependencies with npm');
-	return await exec('npm i', {cwd});
+	// if (fs.existsSync('pnpm-lock.yaml')) {
+	// 	core.info('Installing dependencies with pnpm');
+
+	// 	// pnpm is not installed on GitHub Actions by default
+	// 	return await exec('npx pnpm i --frozen-lockfile', {cwd});
+	// }
+
+	// core.info('No lock file detected. Installing dependencies with npm');
+	// return await exec('npm i', {cwd});
 }
 
 async function isFileTracked(filePath) {
