@@ -37,7 +37,7 @@ const lockFiles = {
 	'pnpm-lock.yaml': 'npx pnpm i --frozen-lockfile',
 };
 
-async function findLockFile(directory) {
+function findLockFile(directory) {
 	for (const lockFile in lockFiles) { // eslint-disable-line guard-for-in
 		const lockFilePath = path.join(directory, lockFile);
 		if (fs.existsSync(lockFilePath)) {
