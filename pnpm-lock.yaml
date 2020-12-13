@@ -1,10 +1,11 @@
 devDependencies:
-  '@actions/cache': 1.0.4
+  '@actions/cache': 1.0.5
   '@actions/core': 1.2.6
   '@actions/exec': 1.0.4
   '@actions/github': 4.0.0
   '@actions/io': 1.0.2
   '@rollup/plugin-commonjs': 17.0.0_rollup@2.34.2
+  '@rollup/plugin-json': 4.1.0_rollup@2.34.2
   '@rollup/plugin-node-resolve': 11.0.0_rollup@2.34.2
   builtin-modules: 3.1.0
   byte-size: 7.0.0
@@ -18,7 +19,7 @@ devDependencies:
   xo: 0.35.0
 lockfileVersion: 5.2
 packages:
-  /@actions/cache/1.0.4:
+  /@actions/cache/1.0.5:
     dependencies:
       '@actions/core': 1.2.6
       '@actions/exec': 1.0.4
@@ -31,7 +32,7 @@ packages:
       uuid: 3.4.0
     dev: true
     resolution:
-      integrity: sha512-1grYfbu8P6JDDHc40eOI5tQDRcAxMwq5HBWhaCqEg9o/ixDRZfwPHlQvQAop2ZzFCjF2ns0ENQOIBAH8GNn+zA==
+      integrity: sha512-TcvJOduwsPP27KLmIa5cqXsQYFK2GzILcEpnhvYmhGwi1aYx9XwhKmp6Im8X6DJMBxbvupKPsOntG6f6sSkIPA==
   /@actions/core/1.2.6:
     dev: true
     resolution:
@@ -455,6 +456,15 @@ packages:
       rollup: ^2.30.0
     resolution:
       integrity: sha512-/omBIJG1nHQc+bgkYDuLpb/V08QyutP9amOrJRUSlYJZP+b/68gM//D8sxJe3Yry2QnYIr3QjR3x4AlxJEN3GA==
+  /@rollup/plugin-json/4.1.0_rollup@2.34.2:
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.34.2
+      rollup: 2.34.2
+    dev: true
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0
+    resolution:
+      integrity: sha512-yfLbTdNS6amI/2OpmbiBoW12vngr5NW2jCJVZSBEz+H5KfUJZ2M7sDjk0U6GOOdCWFVScShte29o9NezJ53TPw==
   /@rollup/plugin-node-resolve/11.0.0_rollup@2.34.2:
     dependencies:
       '@rollup/pluginutils': 3.1.0_rollup@2.34.2
@@ -5366,12 +5376,13 @@ packages:
     resolution:
       integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 specifiers:
-  '@actions/cache': ^1.0.4
+  '@actions/cache': ^1.0.5
   '@actions/core': ^1.2.6
   '@actions/exec': ^1.0.4
   '@actions/github': ^4.0.0
   '@actions/io': ^1.0.2
   '@rollup/plugin-commonjs': ^17.0.0
+  '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^11.0.0
   builtin-modules: ^3.1.0
   byte-size: ^7.0.0
