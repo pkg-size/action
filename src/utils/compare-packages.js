@@ -1,8 +1,8 @@
 import globToRegExp from 'glob-to-regexp';
-import {partition, round} from 'lodash-es';
-import {c, link} from './markdown';
+import { partition, round } from 'lodash-es';
+import { c, link } from './markdown.js';
 
-const percent = fraction => {
+const percent = (fraction) => {
 	if (fraction < 0.001) { // 0.09% and lower
 		fraction = round(fraction, 4);
 	} else if (fraction < 0.01) { // 0.9% and lower
@@ -33,23 +33,23 @@ function calculateDiff(head, base) {
 	};
 }
 
-function processPkgFiles(fileMap, type, pkgData) {
+function processPackageFiles(fileMap, type, packageData) {
 	const data = {
 		size: 0,
 		sizeGzip: 0,
 		sizeBrotli: 0,
-		tarballSize: pkgData.tarballSize,
-		files: pkgData.files,
+		tarballSize: packageData.tarballSize,
+		files: packageData.files,
 	};
 
-	pkgData.files.forEach(file => {
+	packageData.files.forEach((file) => {
 		if (!fileMap[file.path]) {
 			fileMap[file.path] = {
 				path: file.path,
 				link: (
-					file.isTracked ?
-						link(c(file.path), pkgData.ref.repo.html_url + '/blob/' + pkgData.ref.ref + file.path) :
-						c(file.path)
+					file.isTracked
+						? link(c(file.path), `${packageData.ref.repo.html_url}/blob/${packageData.ref.ref}${file.path}`)
+						: c(file.path)
 				),
 			};
 		}
@@ -68,14 +68,14 @@ function processPkgFiles(fileMap, type, pkgData) {
 	return data;
 }
 
-function comparePackages(headPkg, basePkg, {
+function comparePackages(headPackage, basePackage, {
 	sortBy,
 	sortOrder,
 	hideFiles,
 } = {}) {
 	const fileMap = {};
-	const head = processPkgFiles(fileMap, 'head', headPkg);
-	const base = processPkgFiles(fileMap, 'base', basePkg);
+	const head = processPackageFiles(fileMap, 'head', headPackage);
+	const base = processPackageFiles(fileMap, 'base', basePackage);
 
 	let allFiles = Object.values(fileMap);
 
@@ -86,7 +86,7 @@ function comparePackages(headPkg, basePkg, {
 
 	let hidden = [];
 	if (hideFiles) {
-		const hideFilesPtrn = globToRegExp(hideFiles, {extended: true});
+		const hideFilesPtrn = globToRegExp(hideFiles, { extended: true });
 		[hidden, allFiles] = partition(allFiles, file => hideFilesPtrn.test(file.path));
 	}
 

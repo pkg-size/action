@@ -1,5 +1,5 @@
-import {endGroup, info, startGroup} from '@actions/core';
-import {getOctokit} from '@actions/github';
+import { endGroup, info, startGroup } from '@actions/core';
+import { getOctokit } from '@actions/github';
 
 async function upsertComment({
 	token,
@@ -15,7 +15,7 @@ async function upsertComment({
 	const octokit = getOctokit(token);
 
 	info('Getting list of comments');
-	const {data: comments} = await octokit.issues.listComments({
+	const { data: comments } = await octokit.issues.listComments({
 		...repo,
 		issue_number: prNumber, // eslint-disable-line camelcase
 	});

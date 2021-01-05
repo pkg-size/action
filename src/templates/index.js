@@ -1,9 +1,11 @@
 import byteSize from 'byte-size';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
-import {c, sub, sup, strong} from '../utils/markdown';
+import {
+	c, sub, sup, strong,
+} from '../utils/markdown.js';
 
-const directionSymbol = value => {
+const directionSymbol = (value) => {
 	if (value < 0) {
 		return '↓';
 	}
@@ -15,13 +17,13 @@ const directionSymbol = value => {
 	return '';
 };
 
-const formatSize = ({delta, percent}) => delta ? (percent + directionSymbol(delta)) : '';
+const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
 
 function generateComment({
 	unchangedFiles,
 	pkgComparison,
 }) {
-	const {changed, unchanged, hidden} = pkgComparison.files;
+	const { changed, unchanged, hidden } = pkgComparison.files;
 	const totalDelta = formatSize(pkgComparison.diff.size);
 
 	const table = markdownTable([
@@ -32,9 +34,11 @@ function generateComment({
 		].map(file => [
 			file.link,
 			file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
-			file.head && file.head.size ? (
-				(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
-			) : '—',
+			file.head && file.head.size
+				? (
+					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
+				)
+				: '—',
 		]),
 		[
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
@@ -72,9 +76,11 @@ function generateComment({
 			...hidden.map(file => [
 				file.link,
 				file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
-				file.head && file.head.size ? (
-					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
-				) : '—',
+				file.head && file.head.size
+					? (
+						(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
+					)
+					: '—',
 			]),
 		], {
 			align: ['', 'r', 'r'],
