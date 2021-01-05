@@ -35,8 +35,9 @@ async function npmCi({ cwd } = {}) {
 		installCommand = 'npm i';
 	}
 
-	const { exitCode, stderr } = await exec(installCommand, options);
+	const { exitCode, stdout, stderr } = await exec(installCommand, options);
 	if (exitCode > 0) {
+		console.log(stdout);
 		throw new Error(stderr);
 	}
 }
