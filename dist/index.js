@@ -10875,8 +10875,7 @@ async function npmCi({ cwd } = {}) {
 
 	const { exitCode, stdout, stderr } = await exec$2(installCommand, options);
 	if (exitCode > 0) {
-		console.log(stdout);
-		throw new Error(stderr);
+		throw new Error(`${stderr}\n${stdout}`);
 	}
 }
 
