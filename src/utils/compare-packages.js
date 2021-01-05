@@ -33,22 +33,22 @@ function calculateDiff(head, base) {
 	};
 }
 
-function processPackageFiles(fileMap, type, packageData) {
+function processPkgFiles(fileMap, type, pkgData) {
 	const data = {
 		size: 0,
 		sizeGzip: 0,
 		sizeBrotli: 0,
-		tarballSize: packageData.tarballSize,
-		files: packageData.files,
+		tarballSize: pkgData.tarballSize,
+		files: pkgData.files,
 	};
 
-	packageData.files.forEach((file) => {
+	pkgData.files.forEach((file) => {
 		if (!fileMap[file.path]) {
 			fileMap[file.path] = {
 				path: file.path,
 				link: (
 					file.isTracked
-						? link(c(file.path), `${packageData.ref.repo.html_url}/blob/${packageData.ref.ref}${file.path}`)
+						? link(c(file.path), `${pkgData.ref.repo.html_url}/blob/${pkgData.ref.ref}${file.path}`)
 						: c(file.path)
 				),
 			};
@@ -68,14 +68,14 @@ function processPackageFiles(fileMap, type, packageData) {
 	return data;
 }
 
-function comparePackages(headPackage, basePackage, {
+function comparePackages(headPkg, basePkg, {
 	sortBy,
 	sortOrder,
 	hideFiles,
 } = {}) {
 	const fileMap = {};
-	const head = processPackageFiles(fileMap, 'head', headPackage);
-	const base = processPackageFiles(fileMap, 'base', basePackage);
+	const head = processPkgFiles(fileMap, 'head', headPkg);
+	const base = processPkgFiles(fileMap, 'base', basePkg);
 
 	let allFiles = Object.values(fileMap);
 

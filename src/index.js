@@ -19,9 +19,9 @@ async function isFileTracked(filePath) {
 	return exitCode === 0;
 }
 
-let packageSizeInstalled = false;
+let pkgSizeInstalled = false;
 
-async function buildReference({
+async function buildRef({
 	ref,
 	buildCommand,
 }) {
@@ -45,14 +45,14 @@ async function buildReference({
 
 	if (buildCommand !== 'false') {
 		if (!buildCommand) {
-			let packageJson;
+			let pkgJson;
 			try {
-				packageJson = JSON.parse(fs.readFileSync('./package.json'));
+				pkgJson = JSON.parse(fs.readFileSync('./package.json'));
 			} catch (error) {
 				core.warning('Error reading package.json', error);
 			}
 
-			if (packageJson && packageJson.scripts && packageJson.scripts.build) {
+			if (pkgJson && pkgJson.scripts && pkgJson.scripts.build) {
 				core.info('Build script found in package.json');
 				buildCommand = 'npm run build';
 			}
@@ -70,11 +70,11 @@ async function buildReference({
 		}
 	}
 
-	if (!packageSizeInstalled) {
+	if (!pkgSizeInstalled) {
 		core.info('Installing pkg-size globally');
 		await exec('yarn global add pkg-size');
 		core.addPath((await exec('yarn global bin')).stdout.trim());
-		packageSizeInstalled = true;
+		pkgSizeInstalled = true;
 	}
 
 	core.info('Getting package size');
@@ -83,9 +83,9 @@ async function buildReference({
 	});
 	core.debug(JSON.stringify(result, null, 4));
 
-	const packageData = JSON.parse(result.stdout);
+	const pkgData = JSON.parse(result.stdout);
 
-	await Promise.all(packageData.files.map(async (file) => {
+	await Promise.all(pkgData.files.map(async (file) => {
 		file.isTracked = await isFileTracked(`.${file.path}`);
 	}));
 
@@ -94,7 +94,7 @@ async function buildReference({
 	const { stdout: cleanList } = await exec('git clean -dfx'); // Deletes untracked & ignored files
 	core.debug(cleanList);
 
-	return packageData;
+	return pkgData;
 }
 
 (async () => {
@@ -110,40 +110,40 @@ async function buildReference({
 	const sortOrder = core.getInput('sort-order') || 'desc';
 
 	core.startGroup('Build HEAD');
-	const headPackageData = await buildReference({
+	const headPkgData = await buildRef({
 		buildCommand,
 	});
-	headPackageData.ref = pr.head;
+	headPkgData.ref = pr.head;
 	core.endGroup();
 
-	const { ref: baseReference } = pr.base;
-	let basePackageData;
-	if (await isBaseDiffFromHead(baseReference)) {
+	const { ref: baseRef } = pr.base;
+	let basePkgData;
+	if (await isBaseDiffFromHead(baseRef)) {
 		core.info('HEAD is different from BASE. Triggering build.');
 		core.startGroup('Build BASE');
-		basePackageData = await buildReference({
-			ref: baseReference,
+		basePkgData = await buildRef({
+			ref: baseRef,
 			buildCommand,
 		});
-		basePackageData.ref = pr.base;
+		basePkgData.ref = pr.base;
 		core.endGroup();
 	} else {
 		core.info('HEAD is identical to BASE. No need to build.');
-		basePackageData = {
-			...headPackageData,
+		basePkgData = {
+			...headPkgData,
 			ref: pr.base,
 		};
 	}
 
-	const packageComparison = comparePackages(headPackageData, basePackageData, {
+	const pkgComparison = comparePackages(headPkgData, basePkgData, {
 		sortBy,
 		sortOrder,
 		hideFiles,
 	});
 
-	core.setOutput('headPkgData', headPackageData);
-	core.setOutput('basePkgData', basePackageData);
-	core.setOutput('pkgComparison', packageComparison);
+	core.setOutput('headPkgData', headPkgData);
+	core.setOutput('basePkgData', basePkgData);
+	core.setOutput('pkgComparison', pkgComparison);
 
 	if (commentReport !== 'false') {
 		await upsertComment({
@@ -155,7 +155,7 @@ async function buildReference({
 				unchangedFiles,
 				sortBy,
 				sortOrder,
-				pkgComparison: packageComparison,
+				pkgComparison,
 			}),
 		});
 	}

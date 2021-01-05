@@ -58,6 +58,14 @@
 		"rollup": "^2.34.2"
 	},
 	"eslintConfig": {
-		"extends": "@pvtnbr/eslint-config-base"
+		"extends": "@pvtnbr/eslint-config-base",
+		"rules": {
+			"unicorn/prevent-abbreviations": ["error", {
+				"replacements": {
+					"pkg": false,
+					"ref": false
+				}
+			}]
+		}
 	}
 }
