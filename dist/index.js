@@ -10848,27 +10848,35 @@ async function npmCi({ cwd } = {}) {
 		await rmRF_1(path__default['default'].join(cwd, 'node_modules'));
 	}
 
+	const options = {
+		cwd,
+		ignoreReturnCode: true,
+	};
+
+	let installCommand = '';
+
 	if (fs__default['default'].existsSync('package-lock.json')) {
 		core.info('Installing dependencies with npm');
-		return await exec$2('npm ci', { cwd });
-	}
-
-	if (fs__default['default'].existsSync('yarn.lock')) {
+		installCommand = 'npm ci';
+	} else if (fs__default['default'].existsSync('yarn.lock')) {
 		core.info('Installing dependencies with yarn');
 
 		// yarn is installed on GitHub Actions by default
-		return await exec$2('yarn install --frozen-lockfile', { cwd });
-	}
-
-	if (fs__default['default'].existsSync('pnpm-lock.yaml')) {
+		installCommand = 'yarn install --frozen-lockfile';
+	} else if (fs__default['default'].existsSync('pnpm-lock.yaml')) {
 		core.info('Installing dependencies with pnpm');
 
 		// pnpm is not installed on GitHub Actions by default
-		return await exec$2('npx pnpm i --frozen-lockfile', { cwd });
+		installCommand = 'npx pnpm i --frozen-lockfile';
+	} else {
+		core.info('No lock file detected. Installing dependencies with npm');
+		installCommand = 'npm i';
 	}
 
-	core.info('No lock file detected. Installing dependencies with npm');
-	return await exec$2('npm i', { cwd });
+	const { exitCode, stderr } = await exec$2(installCommand, options);
+	if (exitCode > 0) {
+		throw new Error(stderr);
+	}
 }
 
 // import {createTempDirectory} from '@actions/cache/lib/internal/cacheUtils';
