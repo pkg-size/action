@@ -17,7 +17,7 @@ async function upsertComment({
 	info('Getting list of comments');
 	const { data: comments } = await octokit.issues.listComments({
 		...repo,
-		issue_number: prNumber, // eslint-disable-line camelcase
+		issue_number: prNumber,
 	});
 
 	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
@@ -25,14 +25,14 @@ async function upsertComment({
 		info(`Updating previous comment ID ${hasPreviousComment.id}`);
 		await octokit.issues.updateComment({
 			...repo,
-			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
+			comment_id: hasPreviousComment.id,
 			body,
 		});
 	} else {
 		info('Posting new comment');
 		await octokit.issues.createComment({
 			...repo,
-			issue_number: prNumber, // eslint-disable-line camelcase
+			issue_number: prNumber,
 			body,
 		});
 	}

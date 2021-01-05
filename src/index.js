@@ -2,7 +2,7 @@ import assert from 'assert';
 import fs from 'fs';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
-import generateComment from './templates.js';
+import generateComment from './templates/index.js';
 import exec from './utils/exec.js';
 import { sub } from './utils/markdown.js';
 import comparePackages from './utils/compare-packages.js';

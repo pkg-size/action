@@ -1,5 +1,13 @@
-export const c = string => `\`${string}\``;
-export const link = (text, href) => `[${text}](${href})`;
-export const sub = string => `<sub>${string}</sub>`;
-export const sup = string => `<sup>${string}</sup>`;
-export const strong = string => `**${string}**`;
+const c = string => `\`${string}\``;
+const link = (text, href) => `[${text}](${href})`;
+const sub = string => `<sub>${string}</sub>`;
+const sup = string => `<sup>${string}</sup>`;
+const strong = string => `**${string}**`;
+
+export {
+	c,
+	link,
+	sub,
+	sup,
+	strong,
+};

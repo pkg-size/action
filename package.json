@@ -32,7 +32,7 @@
 	},
 	"lint-staged": {
 		"src/**/*.js": [
-			"xo --fix",
+			"eslint",
 			"npm run build",
 			"git add dist"
 		]
@@ -43,7 +43,7 @@
 		"@actions/exec": "^1.0.4",
 		"@actions/github": "^4.0.0",
 		"@actions/io": "^1.0.2",
-		"@pvtnbr/eslint-config-base": "^0.1.6",
+		"@pvtnbr/eslint-config-base": "^0.1.7",
 		"@rollup/plugin-commonjs": "^17.0.0",
 		"@rollup/plugin-node-resolve": "^11.0.0",
 		"builtin-modules": "^3.1.0",
@@ -55,8 +55,7 @@
 		"lodash-es": "^4.17.15",
 		"markdown-table": "^2.0.0",
 		"outdent": "^0.7.1",
-		"rollup": "^2.34.2",
-		"xo": "^0.35.0"
+		"rollup": "^2.34.2"
 	},
 	"eslintConfig": {
 		"extends": "@pvtnbr/eslint-config-base"

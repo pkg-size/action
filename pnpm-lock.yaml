@@ -4,7 +4,7 @@ devDependencies:
   '@actions/exec': 1.0.4
   '@actions/github': 4.0.0
   '@actions/io': 1.0.2
-  '@pvtnbr/eslint-config-base': 0.1.6_eslint@7.17.0
+  '@pvtnbr/eslint-config-base': 0.1.7_eslint@7.17.0
   '@rollup/plugin-commonjs': 17.0.0_rollup@2.34.2
   '@rollup/plugin-node-resolve': 11.0.0_rollup@2.34.2
   builtin-modules: 3.1.0
@@ -440,7 +440,7 @@ packages:
       node: '>=8.0.0'
     resolution:
       integrity: sha512-5bHhlTBBq82ti3qPT15TRxkYTFPPQWbnkkQkmHPtqiS1XcTB69cEKd3Jm7Cfi/vkPoyxapmePE9tyA7EzLt8SQ==
-  /@pvtnbr/eslint-config-base/0.1.6_eslint@7.17.0:
+  /@pvtnbr/eslint-config-base/0.1.7_eslint@7.17.0:
     dependencies:
       confusing-browser-globals: 1.0.10
       eslint: 7.17.0
@@ -454,7 +454,7 @@ packages:
     peerDependencies:
       eslint: ^7.15.0
     resolution:
-      integrity: sha512-PHyo17RarVlUr/fdPhwWSOXgR6U8rg8xs/bK3oqTdfhtZCTIq3U4pddgtmtyDOw7op6i9O4YA1qsAfGt2c9GIA==
+      integrity: sha512-d1XUKCr3pPtLVg2gpkaG4mm5u1zTwx3H/wOdwdPis8BB6rU7FkJGdwKCSBVMP+i5lZDvM2jjPCV7pMdf2LwL2w==
   /@rollup/plugin-commonjs/17.0.0_rollup@2.34.2:
     dependencies:
       '@rollup/pluginutils': 3.1.0_rollup@2.34.2
@@ -5581,7 +5581,7 @@ specifiers:
   '@actions/exec': ^1.0.4
   '@actions/github': ^4.0.0
   '@actions/io': ^1.0.2
-  '@pvtnbr/eslint-config-base': ^0.1.6
+  '@pvtnbr/eslint-config-base': ^0.1.7
   '@rollup/plugin-commonjs': ^17.0.0
   '@rollup/plugin-node-resolve': ^11.0.0
   builtin-modules: ^3.1.0

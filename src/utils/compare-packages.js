@@ -90,7 +90,10 @@ function comparePackages(headPackage, basePackage, {
 		[hidden, allFiles] = partition(allFiles, file => hideFilesPtrn.test(file.path));
 	}
 
-	const [unchanged, changed] = partition(allFiles, file => (file.diff && file.diff.size.delta === 0));
+	const [unchanged, changed] = partition(
+		allFiles,
+		file => (file.diff && file.diff.size.delta === 0),
+	);
 
 	return {
 		head,
