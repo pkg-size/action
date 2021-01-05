@@ -1,4 +1,4 @@
-import exec from './exec';
+import exec from './exec.js';
 
 /*
  * Compares files between current ref and the base ref (not commits)
@@ -12,7 +12,7 @@ async function isBaseDiffFromHead(baseRef) {
 		throw new Error(`Failed to git fetch ${baseRef} ${error.message}`);
 	}
 
-	const {exitCode} = await exec(`git diff --quiet origin/${baseRef}`, {ignoreReturnCode: true});
+	const { exitCode } = await exec(`git diff --quiet origin/${baseRef}`, { ignoreReturnCode: true });
 	return exitCode !== 0;
 }
 

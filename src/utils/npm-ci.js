@@ -1,36 +1,44 @@
 import fs from 'fs';
 import path from 'path';
-import {rmRF} from '@actions/io';
+import { rmRF } from '@actions/io';
 import * as core from '@actions/core';
-import exec from './exec';
+import exec from './exec.js';
 
-async function npmCi({cwd} = {}) {
+async function npmCi({ cwd } = {}) {
 	if (fs.existsSync('node_modules')) {
 		core.info('Cleaning node_modules');
 		await rmRF(path.join(cwd, 'node_modules'));
 	}
 
+	const options = {
+		cwd,
+		ignoreReturnCode: true,
+	};
+
+	let installCommand = '';
+
 	if (fs.existsSync('package-lock.json')) {
 		core.info('Installing dependencies with npm');
-		return await exec('npm ci', {cwd});
-	}
-
-	if (fs.existsSync('yarn.lock')) {
+		installCommand = 'npm ci';
+	} else if (fs.existsSync('yarn.lock')) {
 		core.info('Installing dependencies with yarn');
 
 		// yarn is installed on GitHub Actions by default
-		return await exec('yarn install --frozen-lockfile', {cwd});
-	}
-
-	if (fs.existsSync('pnpm-lock.yaml')) {
+		installCommand = 'yarn install --frozen-lockfile';
+	} else if (fs.existsSync('pnpm-lock.yaml')) {
 		core.info('Installing dependencies with pnpm');
 
 		// pnpm is not installed on GitHub Actions by default
-		return await exec('npx pnpm i --frozen-lockfile', {cwd});
+		installCommand = 'npx pnpm i --frozen-lockfile';
+	} else {
+		core.info('No lock file detected. Installing dependencies with npm');
+		installCommand = 'npm i';
 	}
 
-	core.info('No lock file detected. Installing dependencies with npm');
-	return await exec('npm i', {cwd});
+	const { exitCode, stdout, stderr } = await exec(installCommand, options);
+	if (exitCode > 0) {
+		throw new Error(`${stderr}\n${stdout}`);
+	}
 }
 
 export default npmCi;

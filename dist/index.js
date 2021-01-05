@@ -1,14 +1,14 @@
 'use strict';
 
-var require$$0 = require('os');
+var assert_1 = require('assert');
 var fs$1 = require('fs');
+var require$$0 = require('os');
 var path$1 = require('path');
 var http = require('http');
 var https = require('https');
 require('net');
 var tls = require('tls');
 var events$1 = require('events');
-var assert_1 = require('assert');
 var util = require('util');
 var Stream = require('stream');
 var Url = require('url');
@@ -17,14 +17,14 @@ var childProcess = require('child_process');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
+var assert_1__default = /*#__PURE__*/_interopDefaultLegacy(assert_1);
 var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs$1);
+var require$$0__default = /*#__PURE__*/_interopDefaultLegacy(require$$0);
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path$1);
 var http__default = /*#__PURE__*/_interopDefaultLegacy(http);
 var https__default = /*#__PURE__*/_interopDefaultLegacy(https);
 var tls__default = /*#__PURE__*/_interopDefaultLegacy(tls);
 var events__default = /*#__PURE__*/_interopDefaultLegacy(events$1);
-var assert_1__default = /*#__PURE__*/_interopDefaultLegacy(assert_1);
 var util__default = /*#__PURE__*/_interopDefaultLegacy(util);
 var Stream__default = /*#__PURE__*/_interopDefaultLegacy(Stream);
 var Url__default = /*#__PURE__*/_interopDefaultLegacy(Url);
@@ -6285,7 +6285,7 @@ const sub = string => `<sub>${string}</sub>`;
 const sup = string => `<sup>${string}</sup>`;
 const strong = string => `**${string}**`;
 
-const directionSymbol = value => {
+const directionSymbol = (value) => {
 	if (value < 0) {
 		return '↓';
 	}
@@ -6297,13 +6297,13 @@ const directionSymbol = value => {
 	return '';
 };
 
-const formatSize = ({delta, percent}) => delta ? (percent + directionSymbol(delta)) : '';
+const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
 
 function generateComment({
 	unchangedFiles,
 	pkgComparison,
 }) {
-	const {changed, unchanged, hidden} = pkgComparison.files;
+	const { changed, unchanged, hidden } = pkgComparison.files;
 	const totalDelta = formatSize(pkgComparison.diff.size);
 
 	const table = markdownTable_1([
@@ -6314,9 +6314,11 @@ function generateComment({
 		].map(file => [
 			file.link,
 			file.base && file.base.size ? c$1(dist(file.base.size)) : '—',
-			file.head && file.head.size ? (
-				(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
-			) : '—',
+			file.head && file.head.size
+				? (
+					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
+				)
+				: '—',
 		]),
 		[
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
@@ -6354,9 +6356,11 @@ function generateComment({
 			...hidden.map(file => [
 				file.link,
 				file.base && file.base.size ? c$1(dist(file.base.size)) : '—',
-				file.head && file.head.size ? (
-					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
-				) : '—',
+				file.head && file.head.size
+					? (
+						(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c$1(dist(file.head.size))
+					)
+					: '—',
 			]),
 		], {
 			align: ['', 'r', 'r'],
@@ -10675,7 +10679,7 @@ var partition = createAggregator(function(result, value, key) {
  */
 var round = createRound('round');
 
-const percent = fraction => {
+const percent = (fraction) => {
 	if (fraction < 0.001) { // 0.09% and lower
 		fraction = round(fraction, 4);
 	} else if (fraction < 0.01) { // 0.9% and lower
@@ -10715,14 +10719,14 @@ function processPkgFiles(fileMap, type, pkgData) {
 		files: pkgData.files,
 	};
 
-	pkgData.files.forEach(file => {
+	pkgData.files.forEach((file) => {
 		if (!fileMap[file.path]) {
 			fileMap[file.path] = {
 				path: file.path,
 				link: (
-					file.isTracked ?
-						link(c$1(file.path), pkgData.ref.repo.html_url + '/blob/' + pkgData.ref.ref + file.path) :
-						c$1(file.path)
+					file.isTracked
+						? link(c$1(file.path), `${pkgData.ref.repo.html_url}/blob/${pkgData.ref.ref}${file.path}`)
+						: c$1(file.path)
 				),
 			};
 		}
@@ -10759,11 +10763,14 @@ function comparePackages(headPkg, basePkg, {
 
 	let hidden = [];
 	if (hideFiles) {
-		const hideFilesPtrn = globToRegexp(hideFiles, {extended: true});
+		const hideFilesPtrn = globToRegexp(hideFiles, { extended: true });
 		[hidden, allFiles] = partition(allFiles, file => hideFilesPtrn.test(file.path));
 	}
 
-	const [unchanged, changed] = partition(allFiles, file => (file.diff && file.diff.size.delta === 0));
+	const [unchanged, changed] = partition(
+		allFiles,
+		file => (file.diff && file.diff.size.delta === 0),
+	);
 
 	return {
 		head,
@@ -10794,9 +10801,9 @@ async function upsertComment({
 	const octokit = github.getOctokit(token);
 
 	core.info('Getting list of comments');
-	const {data: comments} = await octokit.issues.listComments({
+	const { data: comments } = await octokit.issues.listComments({
 		...repo,
-		issue_number: prNumber, // eslint-disable-line camelcase
+		issue_number: prNumber,
 	});
 
 	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
@@ -10804,14 +10811,14 @@ async function upsertComment({
 		core.info(`Updating previous comment ID ${hasPreviousComment.id}`);
 		await octokit.issues.updateComment({
 			...repo,
-			comment_id: hasPreviousComment.id, // eslint-disable-line camelcase
+			comment_id: hasPreviousComment.id,
 			body,
 		});
 	} else {
 		core.info('Posting new comment');
 		await octokit.issues.createComment({
 			...repo,
-			issue_number: prNumber, // eslint-disable-line camelcase
+			issue_number: prNumber,
 			body,
 		});
 	}
@@ -10831,37 +10838,45 @@ async function isBaseDiffFromHead(baseRef) {
 		throw new Error(`Failed to git fetch ${baseRef} ${error.message}`);
 	}
 
-	const {exitCode} = await exec$2(`git diff --quiet origin/${baseRef}`, {ignoreReturnCode: true});
+	const { exitCode } = await exec$2(`git diff --quiet origin/${baseRef}`, { ignoreReturnCode: true });
 	return exitCode !== 0;
 }
 
-async function npmCi({cwd} = {}) {
+async function npmCi({ cwd } = {}) {
 	if (fs__default['default'].existsSync('node_modules')) {
 		core.info('Cleaning node_modules');
 		await rmRF_1(path__default['default'].join(cwd, 'node_modules'));
 	}
 
+	const options = {
+		cwd,
+		ignoreReturnCode: true,
+	};
+
+	let installCommand = '';
+
 	if (fs__default['default'].existsSync('package-lock.json')) {
 		core.info('Installing dependencies with npm');
-		return await exec$2('npm ci', {cwd});
-	}
-
-	if (fs__default['default'].existsSync('yarn.lock')) {
+		installCommand = 'npm ci';
+	} else if (fs__default['default'].existsSync('yarn.lock')) {
 		core.info('Installing dependencies with yarn');
 
 		// yarn is installed on GitHub Actions by default
-		return await exec$2('yarn install --frozen-lockfile', {cwd});
-	}
-
-	if (fs__default['default'].existsSync('pnpm-lock.yaml')) {
+		installCommand = 'yarn install --frozen-lockfile';
+	} else if (fs__default['default'].existsSync('pnpm-lock.yaml')) {
 		core.info('Installing dependencies with pnpm');
 
 		// pnpm is not installed on GitHub Actions by default
-		return await exec$2('npx pnpm i --frozen-lockfile', {cwd});
+		installCommand = 'npx pnpm i --frozen-lockfile';
+	} else {
+		core.info('No lock file detected. Installing dependencies with npm');
+		installCommand = 'npm i';
 	}
 
-	core.info('No lock file detected. Installing dependencies with npm');
-	return await exec$2('npm i', {cwd});
+	const { exitCode, stdout, stderr } = await exec$2(installCommand, options);
+	if (exitCode > 0) {
+		throw new Error(`${stderr}\n${stdout}`);
+	}
 }
 
 // import {createTempDirectory} from '@actions/cache/lib/internal/cacheUtils';
@@ -10869,7 +10884,7 @@ async function npmCi({cwd} = {}) {
 const COMMENT_SIGNATURE = sub('🤖 This report was automatically generated by [pkg-size-action](https://github.com/privatenumber/pkg-size-action/)');
 
 async function isFileTracked(filePath) {
-	const {exitCode} = await exec$2(`git ls-files --error-unmatch ${filePath}`, {ignoreReturnCode: true});
+	const { exitCode } = await exec$2(`git ls-files --error-unmatch ${filePath}`, { ignoreReturnCode: true });
 	return exitCode === 0;
 }
 
@@ -10913,12 +10928,12 @@ async function buildRef({
 		}
 
 		if (buildCommand) {
-			await npmCi({cwd}).catch(error => {
+			await npmCi({ cwd }).catch((error) => {
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 
 			core.info(`Running build command: ${buildCommand}`);
-			await exec$2(buildCommand, {cwd}).catch(error => {
+			await exec$2(buildCommand, { cwd }).catch((error) => {
 				throw new Error(`Failed to run build command: ${buildCommand}\n${error.message}`);
 			});
 		}
@@ -10932,30 +10947,30 @@ async function buildRef({
 	}
 
 	core.info('Getting package size');
-	const result = await exec$2('pkg-size --json', {cwd}).catch(error => {
+	const result = await exec$2('pkg-size --json', { cwd }).catch((error) => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});
 	core.debug(JSON.stringify(result, null, 4));
 
 	const pkgData = JSON.parse(result.stdout);
 
-	await Promise.all(pkgData.files.map(async file => {
-		file.isTracked = await isFileTracked('.' + file.path);
+	await Promise.all(pkgData.files.map(async (file) => {
+		file.isTracked = await isFileTracked(`.${file.path}`);
 	}));
 
 	core.info('Cleaning up');
 	await exec$2('git reset --hard'); // Reverts changed files
-	const {stdout: cleanList} = await exec$2('git clean -dfx'); // Deletes untracked & ignored files
+	const { stdout: cleanList } = await exec$2('git clean -dfx'); // Deletes untracked & ignored files
 	core.debug(cleanList);
 
 	return pkgData;
 }
 
 (async () => {
-	const {GITHUB_TOKEN} = process.env;
+	const { GITHUB_TOKEN } = process.env;
 	assert_1__default['default'](GITHUB_TOKEN, 'Environment variable "GITHUB_TOKEN" not set. Required for accessing and reporting on the PR.');
 
-	const {pull_request: pr} = github.context.payload;
+	const { pull_request: pr } = github.context.payload;
 	const buildCommand = core.getInput('build-command');
 	const commentReport = core.getInput('comment-report');
 	const unchangedFiles = core.getInput('unchanged-files') || 'collapse';
@@ -10970,7 +10985,7 @@ async function buildRef({
 	headPkgData.ref = pr.head;
 	core.endGroup();
 
-	const {ref: baseRef} = pr.base;
+	const { ref: baseRef } = pr.base;
 	let basePkgData;
 	if (await isBaseDiffFromHead(baseRef)) {
 		core.info('HEAD is different from BASE. Triggering build.');
@@ -11013,7 +11028,7 @@ async function buildRef({
 			}),
 		});
 	}
-})().catch(error => {
+})().catch((error) => {
 	core.setFailed(error.message);
 	core.warning(error.stack);
 });

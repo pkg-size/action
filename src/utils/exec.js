@@ -1,4 +1,4 @@
-import {exec as _exec} from '@actions/exec';
+import { exec as _exec } from '@actions/exec';
 
 async function exec(commandLine, options) {
 	let stdout = '';
