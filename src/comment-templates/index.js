@@ -3,7 +3,7 @@ import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import {
 	c, sub, sup, strong,
-} from '../utils/markdown.js';
+} from '../lib/markdown.js';
 
 const directionSymbol = (value) => {
 	if (value < 0) {
