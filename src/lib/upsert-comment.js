@@ -1,5 +1,5 @@
-import { endGroup, info, startGroup } from '@actions/core';
 import { getOctokit } from '@actions/github';
+import * as log from './log.js';
 
 async function upsertComment({
 	token,
@@ -8,13 +8,13 @@ async function upsertComment({
 	prNumber,
 	body,
 }) {
-	startGroup('Comment on PR');
+	log.startGroup('Comment on PR');
 
 	body += `\n\n${commentSignature}`;
 
 	const octokit = getOctokit(token);
 
-	info('Getting list of comments');
+	log.info('Getting list of comments');
 	const { data: comments } = await octokit.issues.listComments({
 		...repo,
 		issue_number: prNumber,
@@ -22,14 +22,14 @@ async function upsertComment({
 
 	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
 	if (hasPreviousComment) {
-		info(`Updating previous comment ID ${hasPreviousComment.id}`);
+		log.info(`Updating previous comment ID ${hasPreviousComment.id}`);
 		await octokit.issues.updateComment({
 			...repo,
 			comment_id: hasPreviousComment.id,
 			body,
 		});
 	} else {
-		info('Posting new comment');
+		log.info('Posting new comment');
 		await octokit.issues.createComment({
 			...repo,
 			issue_number: prNumber,
@@ -37,7 +37,7 @@ async function upsertComment({
 		});
 	}
 
-	endGroup();
+	log.endGroup();
 }
 
 export default upsertComment;
