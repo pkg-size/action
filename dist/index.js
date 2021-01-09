@@ -10907,7 +10907,7 @@ async function buildRef({
 		// await exec(`git --work-tree="${temporaryDir}" checkout -f origin/${ref} -- .`);
 
 		// cwd = temporaryDir;
-		// log('Changed working directory', cwd);
+		// log.info('Changed working directory', cwd);
 	}
 
 	if (buildCommand !== 'false') {
