@@ -18,7 +18,7 @@ inputs:
   hide-files:
     description: 'Glob pattern to hide files with'
   display-size:
-    description: 'What size to display. Comma delimited list for multiple: uncompressed (default), gzip, brotli:''
+    description: 'What size to display. Comma delimited list for multiple: uncompressed (default), gzip, brotli:'
 runs:
   using: 'node12'
   main: 'dist/index.js'
