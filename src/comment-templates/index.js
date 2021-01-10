@@ -125,13 +125,21 @@ function generateComment({
 	let hiddenTable = '';
 	if (hidden.length > 0) {
 		hiddenTable = markdownTable([
-			['File', 'Before', 'After'],
+			['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
 			...hidden.map(file => [
 				file.link,
-				file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
+				file.base && file.base.size
+					? (
+						displaySizes
+							.map(({ property }) => c(byteSize(file.base[property])))
+							.join(' / ')
+					)
+					: '—',
 				file.head && file.head.size
 					? (
-						(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
+						displaySizes
+							.map(({ property }) => (file.base && file.base[property] ? sup(formatSize(file.diff[property])) : '') + c(byteSize(file.head[property])))
+							.join(' / ')
 					)
 					: '—',
 			]),
