@@ -17,7 +17,7 @@ const directionSymbol = (value) => {
 	return '';
 };
 
-const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
+const formatDelta = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
 
 const supportedSizes = {
 	uncompressed: {
@@ -70,7 +70,7 @@ function generateComment({
 			file.head && file.head.size
 				? listSizes(
 					displaySizes,
-					p => (file.base && file.base[p] ? sup(formatSize(file.diff[p])) : '') + c(byteSize(file.head[p])),
+					p => (file.base && file.base[p] ? sup(formatDelta(file.diff[p])) : '') + c(byteSize(file.head[p])),
 				)
 				: '—',
 		]),
@@ -78,7 +78,7 @@ function generateComment({
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
 			listSizes(displaySizes, p => c(byteSize(pkgComparisonData.base[p]))),
 			listSizes(displaySizes, p => (
-				sup(formatSize(pkgComparisonData.diff[p]))
+				sup(formatDelta(pkgComparisonData.diff[p]))
 				+ c(byteSize(pkgComparisonData.head[p]))
 			)),
 		],
@@ -86,7 +86,7 @@ function generateComment({
 			strong('Tarball size'),
 			c(byteSize(pkgComparisonData.base.tarballSize)),
 			(
-				sup(formatSize(pkgComparisonData.diff.tarballSize))
+				sup(formatDelta(pkgComparisonData.diff.tarballSize))
 				+ c(byteSize(pkgComparisonData.head.tarballSize))
 			),
 		],
@@ -121,7 +121,7 @@ function generateComment({
 				file.head && file.head.size
 					? listSizes(
 						displaySizes,
-						p => (file.base && file.base[p] ? sup(formatSize(file.diff[p])) : '') + c(byteSize(file.head[p])),
+						p => (file.base && file.base[p] ? sup(formatDelta(file.diff[p])) : '') + c(byteSize(file.head[p])),
 					)
 					: '—',
 			]),
@@ -133,7 +133,7 @@ function generateComment({
 	}
 
 	return outdent`
-	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${formatSize(pkgComparisonData.diff.size) || 'No changes'}</kbd>
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${formatDelta(pkgComparisonData.diff.size) || 'No changes'}</kbd>
 
 	${table}
 
