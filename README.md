@@ -140,3 +140,5 @@ jobs:
 - `sort-by` Which property to sort by: delta (size difference), headSize, baseSize, path
 - `sort-order` Sort order: desc, asc
 - `hide-files` Glob pattern to hide files with
+- `display-size` Which size to show: uncompressed, gzip, brotli
+
