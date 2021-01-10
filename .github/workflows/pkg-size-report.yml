@@ -18,6 +18,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           hide-files: '*.js.map'
-          gzip: true
-          brotli: true
-
+          display-size: uncompressed, gzip, brotli
