@@ -22,10 +22,12 @@ const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(d
 function generateComment({
 	unchangedFiles,
 	pkgComparisonData,
+	displaySize,
 }) {
 	const { changed, unchanged, hidden } = pkgComparisonData.files;
 	const totalDelta = formatSize(pkgComparisonData.diff.size);
 
+	console.log('test', displaySize);
 	const table = markdownTable([
 		['File', 'Before', 'After'],
 		...[
