@@ -7,9 +7,9 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
 <sub>If you like this project, please star it & [follow me](https://github.com/privatenumber) to see what other cool projects I'm working on! ❤️</sub>
 
 ## 🙋‍♂️ Why?
-- **Auto-detect distribution assets** Only tracks distribution files by using the same logic as `npm publish`!
-- **Supports npm, yarn, and pnpm** Auto CI/frozen-lock installs across module installers!
-- **Fully customizable report comment** Configure the default template or bring your own!
+- 🎩 **Auto-detect distribution assets** Only tracks distribution files by using the same logic as `npm publish`!
+- 🙌 **Supports npm, yarn, and pnpm** Auto CI/frozen-lock installs across module installers!
+- 🔥 **Fully customizable report comment** Configure the default template or bring your own!
 
 ## 🚦 Quick Setup
 1. Create the following file in your repo: `.github/workflows/package-size-report.yml`:
@@ -19,7 +19,7 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
 
     on:
       pull_request:
-        branches: [ master, develop ] # Add other branches you want size checks on
+        branches: [ master, develop ] # ⬅ Add other branches you want size checks on
 
     jobs:
       pkg-size-report:
@@ -36,17 +36,17 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     ```
 
-2. Try making a PR! You'll see a comment on your PR reporting the difference package size. This comment will be updated as you make changes to your PR.
+2. Try making a PR against one of the designated branches! You'll see a comment on your PR reporting the difference package size. This comment will be automatically updated as you push changes to your PR.
 
 ## 👨🏻‍🏫 Examples
 
 <details>
-  <summary><strong>Set a build command to produce distribution assets</strong></summary>
+  <summary><strong>Set a custom build command to produce distribution assets</strong></summary>
   <br>
 
-By default, pkg-size-action detects whether a "npm run build" script exists. If not, it assumes your repo doesn't have a build step and won't even install dependencies (disable this auto-check behavior by passing in `false`).
+By default, pkg-size-action detects whether `npm run build` works. If not, it assumes your repo doesn't have a build step and won't even install dependencies.
 
-If your repo has a different build script, specify one via `build-command`.
+If your repo has a different build script, specify one via `build-command`. Disable producing a build by passing in `false`.
 
 ```yaml
 name: Package Size Report
@@ -69,7 +69,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          build-command: npm run prod-build # Set a different build script here
+          build-command: npm run prod-build # ⬅ Set a different build script here
 ```
 </details>
 
@@ -129,16 +129,55 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          unchanged-files: show # Make unchanged files appear in the same table
+          unchanged-files: show # ⬅ Make unchanged files appear in the same table
 ```
 </details>
 
 ## ⚙️ Options
-- `build-command` Command to build the package with. (Default: auto-detects `npm run build`)
-- `comment-report` Whether to comment the build size report on the PR or not: true, false
-- `unchanged-files` Whether to show unchanged files: show, collapse, hide
-- `sort-by` Which property to sort by: delta (size difference), headSize, baseSize, path
-- `sort-order` Sort order: desc, asc
-- `hide-files` Glob pattern to hide files with
-- `display-size` Which size to show: uncompressed, gzip, brotli
 
+### build-command
+Default: `npm run build` if exists in `package.json`
+
+Command to build the package and produce distribution files with. Pass in `false` to disable attempting to produce a build.
+
+### comment-report
+Default: `true`
+
+Possible values: `true`, `false`
+
+Whether to comment the build size report on the PR or not.
+
+### display-size
+Default: `uncompressed`
+
+Possible values: `uncompressed`, `gzip`, `brotli`
+
+Which size to show. Pass in a comma-separated list for multiple.
+
+### unchanged-files
+Default: `collapse`
+
+Possible values: `show`, `collapse`, `hide`
+
+Whether to show unchanged files.
+
+### sort-by
+Default: `delta`
+
+Possible values: `delta`, `headSize`, `baseSize`, `path`
+
+Which property to sort the files list by. `delta` is the size difference.
+
+### sort-order
+Default: `desc`
+
+Possible values: `desc`, `asc`
+
+Files list sort order.
+
+### hide-files
+Glob pattern to hide files. For example, if you want to hide source-maps:
+
+```yml
+hide-files: '*.{js,css}.map'
+```
