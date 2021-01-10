@@ -6299,6 +6299,12 @@ const directionSymbol = (value) => {
 
 const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
 
+const supportedSizes = {
+	uncompressed: 'Size',
+	gzip: 'Gzip',
+	brotli: 'Brotli',
+};
+
 function generateComment({
 	unchangedFiles,
 	pkgComparisonData,
@@ -6306,10 +6312,17 @@ function generateComment({
 }) {
 	const { changed, unchanged, hidden } = pkgComparisonData.files;
 	const totalDelta = formatSize(pkgComparisonData.diff.size);
+	// eslint-disable-next-line no-prototype-builtins
+	const displaySizes = displaySize.split(',').map(s => s.trim()).filter(s => supportedSizes.hasOwnProperty(s));
 
-	console.log('test', displaySize);
+	console.log(displaySizes);
+	let sizeLabel = '';
+	if (displaySizes.length > 1 || displaySizes[0] !== 'uncompressed') {
+		sizeLabel = ` (${displaySizes.map(s => supportedSizes[s]).join(' / ')})`;
+	}
+
 	const table = markdownTable_1([
-		['File', 'Before', 'After'],
+		['File', `Before${sizeLabel}`, `After${sizeLabel}`],
 		...[
 			...changed,
 			...(unchangedFiles === 'show' ? unchanged : []),
