@@ -6320,19 +6320,21 @@ function generateComment({
 	displaySize,
 }) {
 	const { changed, unchanged, hidden } = pkgComparisonData.files;
-	const totalDelta = formatSize(pkgComparisonData.diff.size);
-	// eslint-disable-next-line no-prototype-builtins
-	const displaySizes = displaySize.split(',').map(s => s.trim()).filter(s => supportedSizes.hasOwnProperty(s));
+	const displaySizes = displaySize
+		.split(',')
+		.map(s => s.trim())
+		.filter(s => supportedSizes.hasOwnProperty(s)) // eslint-disable-line no-prototype-builtins
+		.map(s => supportedSizes[s]);
 
-	let sizeLabel = '';
-	if (displaySizes.length > 1 || displaySizes[0] !== 'uncompressed') {
-		sizeLabel = ` (${displaySizes.map(s => supportedSizes[s].label).join(' / ')})`;
+	let sizeHeadingLabel = '';
+	if (displaySizes.length > 1 || displaySizes[0].property !== 'size') {
+		sizeHeadingLabel = ` (${displaySizes.map(s => s.label).join(' / ')})`;
 	}
 
 	console.log(JSON.stringify(changed, null, 4));
 
 	const table = markdownTable_1([
-		['File', `Before${sizeLabel}`, `After${sizeLabel}`],
+		['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
 		...[
 			...changed,
 			...(unchangedFiles === 'show' ? unchanged : []),
@@ -6341,7 +6343,6 @@ function generateComment({
 			file.base && file.base.size
 				? (
 					displaySizes
-						.map(s => supportedSizes[s].property)
 						.map(property => c$1(dist(file.base[property])))
 						.join(' / ')
 				)
@@ -6349,7 +6350,6 @@ function generateComment({
 			file.head && file.head.size
 				? (
 					displaySizes
-						.map(s => supportedSizes[s].property)
 						.map(property => (file.base && file.base[property] ? sup(formatSize(file.diff[property])) : '') + c$1(dist(file.head[property])))
 						.join(' / ')
 				)
@@ -6359,13 +6359,11 @@ function generateComment({
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
 			(
 				displaySizes
-					.map(s => supportedSizes[s].property)
 					.map(property => c$1(dist(pkgComparisonData.base[property])))
 					.join(' / ')
 			),
 			(
 				displaySizes
-					.map(s => supportedSizes[s].property)
 					.map(property => (
 						sup(formatSize(pkgComparisonData.diff[property]))
 						+ c$1(dist(pkgComparisonData.head[property]))
@@ -6421,7 +6419,7 @@ function generateComment({
 	}
 
 	return defaultOutdent`
-	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${formatSize(pkgComparisonData.diff.size) || 'No changes'}</kbd>
 
 	${table}
 
