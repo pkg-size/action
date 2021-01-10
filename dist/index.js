@@ -6338,7 +6338,7 @@ function generateComment({
 			file.link,
 			file.base && file.base.size
 				? (
-					displaySizes.map(s => c$1(dist(file.base[s.property]))).join(' / ')
+					displaySizes.map(s => c$1(dist(file.base[supportedSizes[s].property]))).join(' / ')
 				)
 				: '—',
 			file.head && file.head.size
