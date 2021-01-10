@@ -21,10 +21,10 @@ const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(d
 
 function generateComment({
 	unchangedFiles,
-	pkgComparison,
+	pkgComparisonData,
 }) {
-	const { changed, unchanged, hidden } = pkgComparison.files;
-	const totalDelta = formatSize(pkgComparison.diff.size);
+	const { changed, unchanged, hidden } = pkgComparisonData.files;
+	const totalDelta = formatSize(pkgComparisonData.diff.size);
 
 	const table = markdownTable([
 		['File', 'Before', 'After'],
@@ -42,13 +42,16 @@ function generateComment({
 		]),
 		[
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
-			c(byteSize(pkgComparison.base.size)),
-			sup(totalDelta) + c(byteSize(pkgComparison.head.size)),
+			c(byteSize(pkgComparisonData.base.size)),
+			sup(totalDelta) + c(byteSize(pkgComparisonData.head.size)),
 		],
 		[
 			strong('Tarball size'),
-			c(byteSize(pkgComparison.base.tarballSize)),
-			sup(formatSize(pkgComparison.diff.tarballSize)) + c(byteSize(pkgComparison.head.tarballSize)),
+			c(byteSize(pkgComparisonData.base.tarballSize)),
+			(
+				sup(formatSize(pkgComparisonData.diff.tarballSize))
+				+ c(byteSize(pkgComparisonData.head.tarballSize))
+			),
 		],
 	], {
 		align: ['', 'r', 'r'],
