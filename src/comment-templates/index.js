@@ -34,11 +34,9 @@ const supportedSizes = {
 	},
 };
 
-function listSizes(displaySizes, callback) {
-	return displaySizes
-		.map(({ property }) => callback(property))
-		.join(' / ');
-}
+const listSizes = (displaySizes, callback) => displaySizes
+	.map(({ property }) => callback(property))
+	.join(' / ');
 
 function generateComment({
 	unchangedFiles,
@@ -78,19 +76,11 @@ function generateComment({
 		]),
 		[
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
-			(
-				displaySizes
-					.map(({ property }) => c(byteSize(pkgComparisonData.base[property])))
-					.join(' / ')
-			),
-			(
-				displaySizes
-					.map(({ property }) => (
-						sup(formatSize(pkgComparisonData.diff[property]))
-						+ c(byteSize(pkgComparisonData.head[property]))
-					))
-					.join(' / ')
-			),
+			listSizes(displaySizes, p => c(byteSize(pkgComparisonData.base[p]))),
+			listSizes(displaySizes, p => (
+				sup(formatSize(pkgComparisonData.diff[p]))
+				+ c(byteSize(pkgComparisonData.head[p]))
+			)),
 		],
 		[
 			strong('Tarball size'),
@@ -110,11 +100,7 @@ function generateComment({
 			['File', `Size${sizeHeadingLabel}`],
 			...unchanged.map(file => [
 				file.link,
-				(
-					displaySizes
-						.map(({ property }) => c(byteSize(file.base[property])))
-						.join(' / ')
-				),
+				listSizes(displaySizes, p => c(byteSize(file.base[p]))),
 			]),
 		], {
 			align: ['', 'r'],
@@ -130,17 +116,12 @@ function generateComment({
 			...hidden.map(file => [
 				file.link,
 				file.base && file.base.size
-					? (
-						displaySizes
-							.map(({ property }) => c(byteSize(file.base[property])))
-							.join(' / ')
-					)
+					? listSizes(displaySizes, p => c(byteSize(file.base[p])))
 					: '—',
 				file.head && file.head.size
-					? (
-						displaySizes
-							.map(({ property }) => (file.base && file.base[property] ? sup(formatSize(file.diff[property])) : '') + c(byteSize(file.head[property])))
-							.join(' / ')
+					? listSizes(
+						displaySizes,
+						p => (file.base && file.base[p] ? sup(formatSize(file.diff[p])) : '') + c(byteSize(file.head[p])),
 					)
 					: '—',
 			]),
