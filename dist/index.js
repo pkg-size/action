@@ -6343,14 +6343,14 @@ function generateComment({
 			file.base && file.base.size
 				? (
 					displaySizes
-						.map(property => c$1(dist(file.base[property])))
+						.map(({ property }) => c$1(dist(file.base[property])))
 						.join(' / ')
 				)
 				: '—',
 			file.head && file.head.size
 				? (
 					displaySizes
-						.map(property => (file.base && file.base[property] ? sup(formatSize(file.diff[property])) : '') + c$1(dist(file.head[property])))
+						.map(({ property }) => (file.base && file.base[property] ? sup(formatSize(file.diff[property])) : '') + c$1(dist(file.head[property])))
 						.join(' / ')
 				)
 				: '—',
@@ -6359,12 +6359,12 @@ function generateComment({
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
 			(
 				displaySizes
-					.map(property => c$1(dist(pkgComparisonData.base[property])))
+					.map(({ property }) => c$1(dist(pkgComparisonData.base[property])))
 					.join(' / ')
 			),
 			(
 				displaySizes
-					.map(property => (
+					.map(({ property }) => (
 						sup(formatSize(pkgComparisonData.diff[property]))
 						+ c$1(dist(pkgComparisonData.head[property]))
 					))
