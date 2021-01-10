@@ -6329,6 +6329,8 @@ function generateComment({
 		sizeLabel = ` (${displaySizes.map(s => supportedSizes[s].label).join(' / ')})`;
 	}
 
+	console.log(JSON.stringify(changed, null, 4));
+
 	const table = markdownTable_1([
 		['File', `Before${sizeLabel}`, `After${sizeLabel}`],
 		...[
