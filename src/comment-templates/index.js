@@ -77,7 +77,12 @@ function generateComment({
 		]),
 		[
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
-			c(byteSize(pkgComparisonData.base.size)),
+			(
+				displaySizes
+					.map(s => supportedSizes[s].property)
+					.map(property => c(byteSize(pkgComparisonData.base[property])))
+					.join(' / ')
+			),
 			sup(totalDelta) + c(byteSize(pkgComparisonData.head.size)),
 		],
 		[
