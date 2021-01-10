@@ -20,9 +20,18 @@ const directionSymbol = (value) => {
 const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
 
 const supportedSizes = {
-	uncompressed: 'Size',
-	gzip: 'Gzip',
-	brotli: 'Brotli',
+	uncompressed: {
+		label: 'Size',
+		property: 'size',
+	},
+	gzip: {
+		label: 'Gzip',
+		property: 'gzip',
+	},
+	brotli: {
+		label: 'Brotli',
+		property: 'brotli',
+	},
 };
 
 function generateComment({
@@ -35,10 +44,9 @@ function generateComment({
 	// eslint-disable-next-line no-prototype-builtins
 	const displaySizes = displaySize.split(',').map(s => s.trim()).filter(s => supportedSizes.hasOwnProperty(s));
 
-	console.log(displaySizes);
 	let sizeLabel = '';
 	if (displaySizes.length > 1 || displaySizes[0] !== 'uncompressed') {
-		sizeLabel = ` (${displaySizes.map(s => supportedSizes[s]).join(' / ')})`;
+		sizeLabel = ` (${displaySizes.map(s => supportedSizes[s].label).join(' / ')})`;
 	}
 
 	const table = markdownTable([
@@ -48,7 +56,11 @@ function generateComment({
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(file => [
 			file.link,
-			file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
+			file.base && file.base.size
+				? (
+					displaySizes.map(s => c(byteSize(file.base[s.property]))).join(' / ')
+				)
+				: '—',
 			file.head && file.head.size
 				? (
 					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
