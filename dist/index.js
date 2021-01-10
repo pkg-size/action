@@ -6306,11 +6306,11 @@ const supportedSizes = {
 	},
 	gzip: {
 		label: 'Gzip',
-		property: 'gzip',
+		property: 'sizeGzip',
 	},
 	brotli: {
 		label: 'Brotli',
-		property: 'brotli',
+		property: 'sizeBrotli',
 	},
 };
 
