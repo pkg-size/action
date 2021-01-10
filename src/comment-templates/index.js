@@ -106,10 +106,14 @@ function generateComment({
 	let unchangedTable = '';
 	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
 		unchangedTable = markdownTable([
-			['File', 'Size'],
+			['File', `Size${sizeHeadingLabel}`],
 			...unchanged.map(file => [
 				file.link,
-				c(byteSize(file.base.size)),
+				(
+					displaySizes
+						.map(({ property }) => c(byteSize(file.base[property])))
+						.join(' / ')
+				),
 			]),
 		], {
 			align: ['', 'r'],

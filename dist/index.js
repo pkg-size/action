@@ -6386,10 +6386,14 @@ function generateComment({
 	let unchangedTable = '';
 	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
 		unchangedTable = markdownTable_1([
-			['File', 'Size'],
+			['File', `Size${sizeHeadingLabel}`],
 			...unchanged.map(file => [
 				file.link,
-				c$1(dist(file.base.size)),
+				(
+					displaySizes
+						.map(({ property }) => c$1(dist(file.base[property])))
+						.join(' / ')
+				),
 			]),
 		], {
 			align: ['', 'r'],
