@@ -6363,7 +6363,15 @@ function generateComment({
 					.map(property => c$1(dist(pkgComparisonData.base[property])))
 					.join(' / ')
 			),
-			sup(totalDelta) + c$1(dist(pkgComparisonData.head.size)),
+			(
+				displaySizes
+					.map(s => supportedSizes[s].property)
+					.map(property => (
+						sup(formatSize(pkgComparisonData.diff[property]))
+						+ c$1(dist(pkgComparisonData.head[property]))
+					))
+					.join(' / ')
+			),
 		],
 		[
 			strong('Tarball size'),
