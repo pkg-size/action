@@ -1,4 +1,4 @@
-# pkg-size-action
+# 📊 pkg-size-action
 
 Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
 
@@ -7,10 +7,9 @@ Report npm package size changes on your pull-requests using [pkg-size](https://g
 <sub>If you like this project, please star it & [follow me](https://github.com/privatenumber) to see what other cool projects I'm working on! ❤️</sub>
 
 ## 🙋‍♂️ Why?
-- **Auto-detect distribution assets** Uses the same logic as `npm publish` to determine published files!
-- **Fully customizable**
-- **Supports npm, yarn, and pnpm** 
-
+- **Auto-detect distribution assets** Only tracks distribution files by using the same logic as `npm publish`!
+- **Supports npm, yarn, and pnpm** Auto CI/frozen-lock installs across module installers!
+- **Fully customizable report comment** Configure the default template or bring your own!
 
 ## 🚦 Quick Setup
 1. Create the following file in your repo: `.github/workflows/package-size-report.yml`:
