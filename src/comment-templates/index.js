@@ -17,39 +17,76 @@ const directionSymbol = (value) => {
 	return '';
 };
 
-const formatSize = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
+const formatDelta = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
+
+const supportedSizes = {
+	uncompressed: {
+		label: 'Size',
+		property: 'size',
+	},
+	gzip: {
+		label: 'Gzip',
+		property: 'sizeGzip',
+	},
+	brotli: {
+		label: 'Brotli',
+		property: 'sizeBrotli',
+	},
+};
+
+const listSizes = (displaySizes, callback) => displaySizes
+	.map(({ property }) => callback(property))
+	.join(' / ');
 
 function generateComment({
 	unchangedFiles,
 	pkgComparisonData,
+	displaySize,
 }) {
 	const { changed, unchanged, hidden } = pkgComparisonData.files;
-	const totalDelta = formatSize(pkgComparisonData.diff.size);
+	const displaySizes = displaySize
+		.split(',')
+		.map(s => s.trim())
+		.filter(s => supportedSizes.hasOwnProperty(s)) // eslint-disable-line no-prototype-builtins
+		.map(s => supportedSizes[s]);
+
+	let sizeHeadingLabel = '';
+	if (displaySizes.length > 1 || displaySizes[0].property !== 'size') {
+		sizeHeadingLabel = ` (${displaySizes.map(s => s.label).join(' / ')})`;
+	}
+
+	console.log(JSON.stringify(changed, null, 4));
 
 	const table = markdownTable([
-		['File', 'Before', 'After'],
+		['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
 		...[
 			...changed,
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(file => [
 			file.link,
-			file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
+			file.base && file.base.size
+				? listSizes(displaySizes, p => c(byteSize(file.base[p])))
+				: '—',
 			file.head && file.head.size
-				? (
-					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
+				? listSizes(
+					displaySizes,
+					p => (file.base && file.base[p] ? sup(formatDelta(file.diff[p])) : '') + c(byteSize(file.head[p])),
 				)
 				: '—',
 		]),
 		[
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
-			c(byteSize(pkgComparisonData.base.size)),
-			sup(totalDelta) + c(byteSize(pkgComparisonData.head.size)),
+			listSizes(displaySizes, p => c(byteSize(pkgComparisonData.base[p]))),
+			listSizes(displaySizes, p => (
+				sup(formatDelta(pkgComparisonData.diff[p]))
+				+ c(byteSize(pkgComparisonData.head[p]))
+			)),
 		],
 		[
 			strong('Tarball size'),
 			c(byteSize(pkgComparisonData.base.tarballSize)),
 			(
-				sup(formatSize(pkgComparisonData.diff.tarballSize))
+				sup(formatDelta(pkgComparisonData.diff.tarballSize))
 				+ c(byteSize(pkgComparisonData.head.tarballSize))
 			),
 		],
@@ -60,10 +97,10 @@ function generateComment({
 	let unchangedTable = '';
 	if (unchangedFiles === 'collapse' && unchanged.length > 0) {
 		unchangedTable = markdownTable([
-			['File', 'Size'],
+			['File', `Size${sizeHeadingLabel}`],
 			...unchanged.map(file => [
 				file.link,
-				c(byteSize(file.base.size)),
+				listSizes(displaySizes, p => c(byteSize(file.base[p]))),
 			]),
 		], {
 			align: ['', 'r'],
@@ -75,13 +112,16 @@ function generateComment({
 	let hiddenTable = '';
 	if (hidden.length > 0) {
 		hiddenTable = markdownTable([
-			['File', 'Before', 'After'],
+			['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
 			...hidden.map(file => [
 				file.link,
-				file.base && file.base.size ? c(byteSize(file.base.size)) : '—',
+				file.base && file.base.size
+					? listSizes(displaySizes, p => c(byteSize(file.base[p])))
+					: '—',
 				file.head && file.head.size
-					? (
-						(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
+					? listSizes(
+						displaySizes,
+						p => (file.base && file.base[p] ? sup(formatDelta(file.diff[p])) : '') + c(byteSize(file.head[p])),
 					)
 					: '—',
 			]),
@@ -93,7 +133,7 @@ function generateComment({
 	}
 
 	return outdent`
-	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${totalDelta || 'No changes'}</kbd>
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${formatDelta(pkgComparisonData.diff.size) || 'No changes'}</kbd>
 
 	${table}
 
