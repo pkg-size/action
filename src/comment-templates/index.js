@@ -60,12 +60,18 @@ function generateComment({
 			file.link,
 			file.base && file.base.size
 				? (
-					displaySizes.map(s => c(byteSize(file.base[supportedSizes[s].property]))).join(' / ')
+					displaySizes
+						.map(s => supportedSizes[s].property)
+						.map(property => c(byteSize(file.base[property])))
+						.join(' / ')
 				)
 				: '—',
 			file.head && file.head.size
 				? (
-					(file.base && file.base.size ? sup(formatSize(file.diff.size)) : '') + c(byteSize(file.head.size))
+					displaySizes
+						.map(s => supportedSizes[s].property)
+						.map(property => (file.base && file.base[property] ? sup(formatSize(file.diff[property])) : '') + c(byteSize(file.head[property])))
+						.join(' / ')
 				)
 				: '—',
 		]),
