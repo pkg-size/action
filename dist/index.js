@@ -6314,6 +6314,12 @@ const supportedSizes = {
 	},
 };
 
+function listSizes(displaySizes, callback) {
+	return displaySizes
+		.map(({ property }) => callback(property))
+		.join(' / ');
+}
+
 function generateComment({
 	unchangedFiles,
 	pkgComparisonData,
@@ -6341,17 +6347,12 @@ function generateComment({
 		].map(file => [
 			file.link,
 			file.base && file.base.size
-				? (
-					displaySizes
-						.map(({ property }) => c$1(dist(file.base[property])))
-						.join(' / ')
-				)
+				? listSizes(displaySizes, p => c$1(dist(file.base[p])))
 				: '—',
 			file.head && file.head.size
-				? (
-					displaySizes
-						.map(({ property }) => (file.base && file.base[property] ? sup(formatSize(file.diff[property])) : '') + c$1(dist(file.head[property])))
-						.join(' / ')
+				? listSizes(
+					displaySizes,
+					p => (file.base && file.base[p] ? sup(formatSize(file.diff[p])) : '') + c$1(dist(file.head[p])),
 				)
 				: '—',
 		]),
