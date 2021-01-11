@@ -55,8 +55,6 @@ function generateComment({
 		sizeHeadingLabel = ` (${displaySizes.map(s => s.label).join(' / ')})`;
 	}
 
-	console.log(JSON.stringify(changed, null, 4));
-
 	const table = markdownTable([
 		['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
 		...[
