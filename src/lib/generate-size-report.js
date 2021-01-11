@@ -28,6 +28,7 @@ async function generateSizeReport({
 		if (commentReport !== 'false') {
 			return headOnlyReportTemplate({
 				headPkgData,
+				hideFiles,
 			});
 		}
 	}
