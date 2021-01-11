@@ -17,6 +17,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          hide-files: '*.js.map'
-          mode: 'head-only'
           hide-files: '*.md'
+          mode: 'head-only'
