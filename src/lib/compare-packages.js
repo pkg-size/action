@@ -1,6 +1,5 @@
 import globToRegExp from 'glob-to-regexp';
 import { partition, round } from 'lodash-es';
-import { c, link } from './markdown.js';
 
 const percent = (fraction) => {
 	if (fraction < 0.001) { // 0.09% and lower
@@ -46,11 +45,7 @@ function processPkgFiles(fileMap, type, pkgData) {
 		if (!fileMap[file.path]) {
 			fileMap[file.path] = {
 				path: file.path,
-				link: (
-					file.isTracked
-						? link(c(file.path), `${pkgData.ref.repo.html_url}/blob/${pkgData.ref.ref}${file.path}`)
-						: c(file.path)
-				),
+				label: file.label,
 			};
 		}
 

@@ -61,7 +61,7 @@ function generateComment({
 			...changed,
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(file => [
-			file.link,
+			file.label,
 			file.base && file.base.size
 				? listSizes(displaySizes, p => c(byteSize(file.base[p])))
 				: '—',
@@ -97,7 +97,7 @@ function generateComment({
 		unchangedTable = markdownTable([
 			['File', `Size${sizeHeadingLabel}`],
 			...unchanged.map(file => [
-				file.link,
+				file.label,
 				listSizes(displaySizes, p => c(byteSize(file.base[p]))),
 			]),
 		], {
@@ -112,7 +112,7 @@ function generateComment({
 		hiddenTable = markdownTable([
 			['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
 			...hidden.map(file => [
-				file.link,
+				file.label,
 				file.base && file.base.size
 					? listSizes(displaySizes, p => c(byteSize(file.base[p])))
 					: '—',

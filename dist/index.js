@@ -120,11 +120,11 @@ function F(e, t, r) {
 
 var D = F;
 
-function $(e, t = "") {
+function q(e, t = "") {
     F(e, {}, t);
 }
 
-var q = $;
+var $ = q;
 
 const L = "::";
 
@@ -171,7 +171,7 @@ function z(e) {
 
 var H = Object.defineProperty({
     issueCommand: D,
-    issue: q
+    issue: $
 }, "__esModule", {
     value: true
 });
@@ -1349,15 +1349,15 @@ var Fe = Ue;
 
 var De = Ue;
 
-var $e = Ue.Singular;
+var qe = Ue.Singular;
 
-var qe = Ue.Collection;
+var $e = Ue.Collection;
 
 Fe.Hook = De;
 
-Fe.Singular = $e;
+Fe.Singular = qe;
 
-Fe.Collection = qe;
+Fe.Collection = $e;
 
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
@@ -2261,13 +2261,13 @@ class Ut {
         return this[xt];
     }
     keys() {
-        return $t(this, "key");
+        return qt(this, "key");
     }
     values() {
-        return $t(this, "value");
+        return qt(this, "value");
     }
     [Symbol.iterator]() {
-        return $t(this, "key+value");
+        return qt(this, "key+value");
     }
 }
 
@@ -2324,8 +2324,8 @@ function Ft(e) {
 
 const Dt = Symbol("internal");
 
-function $t(e, t) {
-    const r = Object.create(qt);
+function qt(e, t) {
+    const r = Object.create($t);
     r[Dt] = {
         target: e,
         kind: t,
@@ -2334,9 +2334,9 @@ function $t(e, t) {
     return r;
 }
 
-const qt = Object.setPrototypeOf({
+const $t = Object.setPrototypeOf({
     next() {
-        if (!this || Object.getPrototypeOf(this) !== qt) {
+        if (!this || Object.getPrototypeOf(this) !== $t) {
             throw new TypeError("Value of `this` is not a HeadersIterator");
         }
         var e = this[Dt];
@@ -2357,7 +2357,7 @@ const qt = Object.setPrototypeOf({
     }
 }, Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));
 
-Object.defineProperty(qt, Symbol.toStringTag, {
+Object.defineProperty($t, Symbol.toStringTag, {
     value: "HeadersIterator",
     writable: false,
     enumerable: false,
@@ -3172,7 +3172,7 @@ const Ar = "3.2.4";
 
 class Gr {
     constructor(e = {}) {
-        const t = new qe;
+        const t = new $e;
         const r = {
             baseUrl: hr.endpoint.DEFAULTS.baseUrl,
             headers: {},
@@ -4363,9 +4363,9 @@ var Dr = Object.freeze({
     restEndpointMethods: Fr
 });
 
-const $r = "2.6.2";
+const qr = "2.6.2";
 
-function qr(e) {
+function $r(e) {
     const t = "total_count" in e.data && !("url" in e.data);
     if (!t) return e;
     const r = e.data.incomplete_results;
@@ -4404,7 +4404,7 @@ function Lr(e, t, r) {
                     url: a,
                     headers: i
                 });
-                const t = qr(e);
+                const t = $r(e);
                 a = ((t.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
                 return {
                     value: t
@@ -4451,7 +4451,7 @@ function Hr(e) {
     };
 }
 
-Hr.VERSION = $r;
+Hr.VERSION = qr;
 
 var Mr = Object.freeze({
     __proto__: null,
@@ -5112,7 +5112,7 @@ var Fo = /(?:\r\n|\r|\n)([ \t]*)(?:[^ \t\r\n]|$)/;
 
 var Do = /^[ \t]*[\r\n][ \t\r\n]*$/;
 
-function $o(e, t, r) {
+function qo(e, t, r) {
     var o = 0;
     var s = e[0].match(Fo);
     if (s) {
@@ -5144,7 +5144,7 @@ function $o(e, t, r) {
     return d;
 }
 
-function qo(e, t) {
+function $o(e, t) {
     var r = "";
     for (var o = 0, s = e.length; o < s; o++) {
         r += e[o];
@@ -5173,13 +5173,13 @@ function Bo(e) {
             var c = u ? r : t;
             var l = c.get(a);
             if (!l) {
-                l = $o(a, u, e);
+                l = qo(a, u, e);
                 c.set(a, l);
             }
             if (n.length === 0) {
                 return l[0];
             }
-            var p = qo(l, u ? n.slice(1) : n);
+            var p = $o(l, u ? n.slice(1) : n);
             return p;
         } else {
             return Bo(jo(jo({}, e), s || {}));
@@ -5187,7 +5187,7 @@ function Bo(e) {
     }
     var s = jo(o, {
         string: function(t) {
-            return $o([ t ], false, e)[0];
+            return qo([ t ], false, e)[0];
         }
     });
     return s;
@@ -5245,19 +5245,19 @@ function Wo({unchangedFiles: e, pkgComparisonData: t, displaySize: r}) {
     if (i.length > 1 || i[0].property !== "size") {
         a = ` (${i.map((e => e.label)).join(" / ")})`;
     }
-    const u = ao([ [ "File", `Before${a}`, `After${a}` ], ...[ ...o, ...e === "show" ? s : [] ].map((e => [ e.link, e.base && e.base.size ? No(i, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? No(i, (t => (e.base && e.base[t] ? Xr(Ho(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])), [ `${eo("Total")} ${e === "show" ? "" : Qr("_(Includes all files)_")}`, No(i, (e => Yr(ro(t.base[e])))), No(i, (e => Xr(Ho(t.diff[e])) + Yr(ro(t.head[e])))) ], [ eo("Tarball size"), Yr(ro(t.base.tarballSize)), Xr(Ho(t.diff.tarballSize)) + Yr(ro(t.head.tarballSize)) ] ], {
+    const u = ao([ [ "File", `Before${a}`, `After${a}` ], ...[ ...o, ...e === "show" ? s : [] ].map((e => [ e.label, e.base && e.base.size ? No(i, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? No(i, (t => (e.base && e.base[t] ? Xr(Ho(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])), [ `${eo("Total")} ${e === "show" ? "" : Qr("_(Includes all files)_")}`, No(i, (e => Yr(ro(t.base[e])))), No(i, (e => Xr(Ho(t.diff[e])) + Yr(ro(t.head[e])))) ], [ eo("Tarball size"), Yr(ro(t.base.tarballSize)), Xr(Ho(t.diff.tarballSize)) + Yr(ro(t.head.tarballSize)) ] ], {
         align: [ "", "r", "r" ]
     });
     let c = "";
     if (e === "collapse" && s.length > 0) {
-        c = ao([ [ "File", `Size${a}` ], ...s.map((e => [ e.link, No(i, (t => Yr(ro(e.base[t])))) ])) ], {
+        c = ao([ [ "File", `Size${a}` ], ...s.map((e => [ e.label, No(i, (t => Yr(ro(e.base[t])))) ])) ], {
             align: [ "", "r" ]
         });
         c = `<details><summary>Unchanged files</summary>\n\n${c}\n</details>`;
     }
     let l = "";
     if (n.length > 0) {
-        l = ao([ [ "File", `Before${a}`, `After${a}` ], ...n.map((e => [ e.link, e.base && e.base.size ? No(i, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? No(i, (t => (e.base && e.base[t] ? Xr(Ho(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])) ], {
+        l = ao([ [ "File", `Before${a}`, `After${a}` ], ...n.map((e => [ e.label, e.base && e.base.size ? No(i, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? No(i, (t => (e.base && e.base[t] ? Xr(Ho(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])) ], {
             align: [ "", "r", "r" ]
         });
         l = `<details><summary>Hidden files</summary>\n\n${l}\n</details>`;
@@ -5274,7 +5274,16 @@ function Wo({unchangedFiles: e, pkgComparisonData: t, displaySize: r}) {
 }
 
 function Vo({headPkgData: e}) {
-    return JSON.stringify(e, null, 4);
+    const t = ao([ [ "File", "Size" ], ...e.files.map((e => [ e.label, Yr(ro(e.size)) ])) ], {
+        align: [ "", "r" ]
+    });
+    return Io`
+	### 📊 Package size report
+
+	${t}
+
+	${JSON.stringify(e, null, 4)}
+	`;
 }
 
 var Jo = function(e, t) {
@@ -5521,7 +5530,7 @@ function Rs(e) {
 
 var xs = "[object AsyncFunction]", Us = "[object Function]", Fs = "[object GeneratorFunction]", Ds = "[object Proxy]";
 
-function $s(e) {
+function qs(e) {
     if (!vs(e)) {
         return false;
     }
@@ -5529,10 +5538,10 @@ function $s(e) {
     return t == Us || t == Fs || t == xs || t == Ds;
 }
 
-var qs = Zo["__core-js_shared__"];
+var $s = Zo["__core-js_shared__"];
 
 var Ls = function() {
-    var e = /[^.]+$/.exec(qs && qs.keys && qs.keys.IE_PROTO || "");
+    var e = /[^.]+$/.exec($s && $s.keys && $s.keys.IE_PROTO || "");
     return e ? "Symbol(src)_1." + e : "";
 }();
 
@@ -5572,7 +5581,7 @@ function Zs(e) {
     if (!vs(e) || Bs(e)) {
         return false;
     }
-    var t = $s(e) ? Ys : Ns;
+    var t = qs(e) ? Ys : Ns;
     return t.test(Hs(e));
 }
 
@@ -5608,7 +5617,7 @@ function an(e) {
 }
 
 function un(e) {
-    return e != null && an(e.length) && !$s(e);
+    return e != null && an(e.length) && !qs(e);
 }
 
 var cn = Object.prototype;
@@ -5660,15 +5669,15 @@ var _n = En ? En.isBuffer : undefined;
 
 var On = _n || wn;
 
-var Pn = "[object Arguments]", kn = "[object Array]", Sn = "[object Boolean]", An = "[object Date]", Gn = "[object Error]", Cn = "[object Function]", jn = "[object Map]", Rn = "[object Number]", xn = "[object Object]", Un = "[object RegExp]", Fn = "[object Set]", Dn = "[object String]", $n = "[object WeakMap]";
+var Pn = "[object Arguments]", kn = "[object Array]", Sn = "[object Boolean]", An = "[object Date]", Gn = "[object Error]", Cn = "[object Function]", jn = "[object Map]", Rn = "[object Number]", xn = "[object Object]", Un = "[object RegExp]", Fn = "[object Set]", Dn = "[object String]", qn = "[object WeakMap]";
 
-var qn = "[object ArrayBuffer]", Ln = "[object DataView]", Bn = "[object Float32Array]", In = "[object Float64Array]", zn = "[object Int8Array]", Hn = "[object Int16Array]", Mn = "[object Int32Array]", Nn = "[object Uint8Array]", Wn = "[object Uint8ClampedArray]", Vn = "[object Uint16Array]", Jn = "[object Uint32Array]";
+var $n = "[object ArrayBuffer]", Ln = "[object DataView]", Bn = "[object Float32Array]", In = "[object Float64Array]", zn = "[object Int8Array]", Hn = "[object Int16Array]", Mn = "[object Int32Array]", Nn = "[object Uint8Array]", Wn = "[object Uint8ClampedArray]", Vn = "[object Uint16Array]", Jn = "[object Uint32Array]";
 
 var Kn = {};
 
 Kn[Bn] = Kn[In] = Kn[zn] = Kn[Hn] = Kn[Mn] = Kn[Nn] = Kn[Wn] = Kn[Vn] = Kn[Jn] = true;
 
-Kn[Pn] = Kn[kn] = Kn[qn] = Kn[Sn] = Kn[Ln] = Kn[An] = Kn[Gn] = Kn[Cn] = Kn[jn] = Kn[Rn] = Kn[xn] = Kn[Un] = Kn[Fn] = Kn[Dn] = Kn[$n] = false;
+Kn[Pn] = Kn[kn] = Kn[$n] = Kn[Sn] = Kn[Ln] = Kn[An] = Kn[Gn] = Kn[Cn] = Kn[jn] = Kn[Rn] = Kn[xn] = Kn[Un] = Kn[Fn] = Kn[Dn] = Kn[qn] = false;
 
 function Yn(e) {
     return ps(e) && an(e.length) && !!Kn[ls(e)];
@@ -5866,7 +5875,7 @@ function Di(e) {
     return ji(this.__data__, e) > -1;
 }
 
-function $i(e, t) {
+function qi(e, t) {
     var r = this.__data__, o = ji(r, e);
     if (o < 0) {
         ++this.size;
@@ -5877,7 +5886,7 @@ function $i(e, t) {
     return this;
 }
 
-function qi(e) {
+function $i(e) {
     var t = -1, r = e == null ? 0 : e.length;
     this.clear();
     while (++t < r) {
@@ -5886,15 +5895,15 @@ function qi(e) {
     }
 }
 
-qi.prototype.clear = Ci;
+$i.prototype.clear = Ci;
 
-qi.prototype["delete"] = Ui;
+$i.prototype["delete"] = Ui;
 
-qi.prototype.get = Fi;
+$i.prototype.get = Fi;
 
-qi.prototype.has = Di;
+$i.prototype.has = Di;
 
-qi.prototype.set = $i;
+$i.prototype.set = qi;
 
 var Li = Xs(Zo, "Map");
 
@@ -5902,7 +5911,7 @@ function Bi() {
     this.size = 0;
     this.__data__ = {
         hash: new Gi,
-        map: new (Li || qi),
+        map: new (Li || $i),
         string: new Gi
     };
 }
@@ -6066,7 +6075,7 @@ function la(e) {
 }
 
 function pa() {
-    this.__data__ = new qi;
+    this.__data__ = new $i;
     this.size = 0;
 }
 
@@ -6088,7 +6097,7 @@ var ha = 200;
 
 function ga(e, t) {
     var r = this.__data__;
-    if (r instanceof qi) {
+    if (r instanceof $i) {
         var o = r.__data__;
         if (!Li || o.length < ha - 1) {
             o.push([ e, t ]);
@@ -6103,7 +6112,7 @@ function ga(e, t) {
 }
 
 function ba(e) {
-    var t = this.__data__ = new qi(e);
+    var t = this.__data__ = new $i(e);
     this.size = t.size;
 }
 
@@ -6167,7 +6176,7 @@ var Ga = "[object Map]", Ca = "[object Object]", ja = "[object Promise]", Ra = "
 
 var Ua = "[object DataView]";
 
-var Fa = Hs(ka), Da = Hs(Li), $a = Hs(Sa), qa = Hs(Aa), La = Hs(en);
+var Fa = Hs(ka), Da = Hs(Li), qa = Hs(Sa), $a = Hs(Aa), La = Hs(en);
 
 var Ba = ls;
 
@@ -6182,10 +6191,10 @@ if (ka && Ba(new ka(new ArrayBuffer(1))) != Ua || Li && Ba(new Li) != Ga || Sa &
               case Da:
                 return Ga;
 
-              case $a:
+              case qa:
                 return ja;
 
-              case qa:
+              case $a:
                 return Ra;
 
               case La:
@@ -6547,11 +6556,11 @@ function Du(e, t, r) {
     return !!s && an(s) && on(i, s) && (hs(e) || bn(e));
 }
 
-function $u(e, t) {
+function qu(e, t) {
     return e != null && Du(e, t, Fu);
 }
 
-var qu = 1, Lu = 2;
+var $u = 1, Lu = 2;
 
 function Bu(e, t) {
     if (gi(e) && ju(t)) {
@@ -6559,7 +6568,7 @@ function Bu(e, t) {
     }
     return function(r) {
         var o = ia(r, e);
-        return o === undefined && o === t ? $u(r, e) : Su(t, o, qu | Lu);
+        return o === undefined && o === t ? qu(r, e) : Su(t, o, $u | Lu);
     };
 }
 
@@ -6700,20 +6709,20 @@ function sc(e, t, r) {
         tarballSize: r.tarballSize,
         files: r.files
     };
-    r.files.forEach((s => {
-        if (!e[s.path]) {
-            e[s.path] = {
-                path: s.path,
-                link: s.isTracked ? Zr(Yr(s.path), `${r.ref.repo.html_url}/blob/${r.ref.ref}${s.path}`) : Yr(s.path)
+    r.files.forEach((r => {
+        if (!e[r.path]) {
+            e[r.path] = {
+                path: r.path,
+                label: r.label
             };
         }
-        const n = e[s.path];
-        n[t] = s;
-        o.size += s.size;
-        o.sizeGzip += s.sizeGzip;
-        o.sizeBrotli += s.sizeBrotli;
-        if (n.head && n.base) {
-            n.diff = oc(n.head, n.base);
+        const s = e[r.path];
+        s[t] = r;
+        o.size += r.size;
+        o.sizeGzip += r.sizeGzip;
+        o.sizeBrotli += r.sizeBrotli;
+        if (s.head && s.base) {
+            s.diff = oc(s.head, s.base);
         }
     }));
     return o;
@@ -7601,14 +7610,14 @@ class Dc extends kc.EventEmitter {
     }
 }
 
-var $c = Object.defineProperty({
+var qc = Object.defineProperty({
     ToolRunner: xc,
     argStringToArray: Fc
 }, "__esModule", {
     value: true
 });
 
-var qc = S && S.__awaiter || function(e, t, r, o) {
+var $c = S && S.__awaiter || function(e, t, r, o) {
     function s(e) {
         return e instanceof r ? e : new r((function(t) {
             t(e);
@@ -7644,10 +7653,10 @@ var Lc = S && S.__importStar || function(e) {
     return t;
 };
 
-const Bc = Lc($c);
+const Bc = Lc(qc);
 
 function Ic(e, t, r) {
-    return qc(this, void 0, void 0, (function*() {
+    return $c(this, void 0, void 0, (function*() {
         const o = Bc.argStringToArray(e);
         if (o.length === 0) {
             throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
@@ -7785,7 +7794,6 @@ async function Jc({checkoutRef: e, refData: t, buildCommand: r}) {
     Y.debug(JSON.stringify(s, null, 4));
     const n = JSON.parse(s.stdout);
     n.ref = t;
-    console.log(JSON.stringify(t, null, 4));
     await Promise.all(n.files.map((async e => {
         const r = await Wc(`.${e.path}`);
         e.isTracked = r;

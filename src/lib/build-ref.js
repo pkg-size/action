@@ -75,7 +75,6 @@ async function buildRef({
 
 	pkgData.ref = refData;
 
-	console.log(JSON.stringify(refData, null, 4));
 	await Promise.all(pkgData.files.map(async (file) => {
 		const isTracked = await isFileTracked(`.${file.path}`);
 		file.isTracked = isTracked;
