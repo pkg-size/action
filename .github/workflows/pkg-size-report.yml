@@ -18,4 +18,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           hide-files: '*.js.map'
-          mode: 'head-only'
+          mode: 'comparison'
