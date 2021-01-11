@@ -7785,10 +7785,11 @@ async function Jc({checkoutRef: e, refData: t, buildCommand: r}) {
     Y.debug(JSON.stringify(s, null, 4));
     const n = JSON.parse(s.stdout);
     n.ref = t;
+    console.log(JSON.stringify(t, null, 4));
     await Promise.all(n.files.map((async e => {
         const r = await Wc(`.${e.path}`);
         e.isTracked = r;
-        e.label = r ? Zr(Yr(e.path), `${t.ref.repo.html_url}/blob/${t.ref.ref}${e.path}`) : Yr(e.path);
+        e.label = r ? Zr(Yr(e.path), `${t.repo.html_url}/blob/${t.ref}${e.path}`) : Yr(e.path);
     })));
     Y.info("Cleaning up");
     await Hc("git reset --hard");

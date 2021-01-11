@@ -75,12 +75,13 @@ async function buildRef({
 
 	pkgData.ref = refData;
 
+	console.log(JSON.stringify(refData, null, 4));
 	await Promise.all(pkgData.files.map(async (file) => {
 		const isTracked = await isFileTracked(`.${file.path}`);
 		file.isTracked = isTracked;
 		file.label = (
 			isTracked
-				? link(c(file.path), `${refData.ref.repo.html_url}/blob/${refData.ref.ref}${file.path}`)
+				? link(c(file.path), `${refData.repo.html_url}/blob/${refData.ref}${file.path}`)
 				: c(file.path)
 		);
 	}));
