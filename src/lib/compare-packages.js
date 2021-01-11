@@ -34,9 +34,9 @@ function calculateDiff(head, base) {
 
 function processPkgFiles(fileMap, type, pkgData) {
 	const data = {
-		size: 0,
-		sizeGzip: 0,
-		sizeBrotli: 0,
+		size: pkgData.size,
+		sizeGzip: pkgData.sizeGzip,
+		sizeBrotli: pkgData.sizeBrotli,
 		tarballSize: pkgData.tarballSize,
 		files: pkgData.files,
 	};
@@ -51,9 +51,6 @@ function processPkgFiles(fileMap, type, pkgData) {
 
 		const entry = fileMap[file.path];
 		entry[type] = file;
-		data.size += file.size;
-		data.sizeGzip += file.sizeGzip;
-		data.sizeBrotli += file.sizeBrotli;
 
 		if (entry.head && entry.base) {
 			entry.diff = calculateDiff(entry.head, entry.base);

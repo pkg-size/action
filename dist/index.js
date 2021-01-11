@@ -5274,13 +5274,16 @@ function Wo({unchangedFiles: e, pkgComparisonData: t, displaySize: r}) {
 }
 
 function Vo({headPkgData: e}) {
-    const t = ao([ [ "File", "Size" ], ...e.files.map((e => [ e.label, Yr(ro(e.size)) ])) ], {
+    const t = 0;
+    const r = ao([ [ "File", "Size" ], ...e.files.map((e => [ e.label, Yr(ro(e.size)) ])), [ eo("Total"), Yr(ro(t)) ], [ eo("Tarball size"), Yr(ro(e.tarballSize)) ] ], {
         align: [ "", "r" ]
     });
     return Io`
 	### 📊 Package size report
 
-	${t}
+	${r}
+
+	Hidden files
 
 	${JSON.stringify(e, null, 4)}
 	`;
@@ -6703,9 +6706,9 @@ function oc(e, t) {
 
 function sc(e, t, r) {
     const o = {
-        size: 0,
-        sizeGzip: 0,
-        sizeBrotli: 0,
+        size: r.size,
+        sizeGzip: r.sizeGzip,
+        sizeBrotli: r.sizeBrotli,
         tarballSize: r.tarballSize,
         files: r.files
     };
@@ -6716,13 +6719,10 @@ function sc(e, t, r) {
                 label: r.label
             };
         }
-        const s = e[r.path];
-        s[t] = r;
-        o.size += r.size;
-        o.sizeGzip += r.sizeGzip;
-        o.sizeBrotli += r.sizeBrotli;
-        if (s.head && s.base) {
-            s.diff = oc(s.head, s.base);
+        const o = e[r.path];
+        o[t] = r;
+        if (o.head && o.base) {
+            o.diff = oc(o.head, o.base);
         }
     }));
     return o;
@@ -7792,9 +7792,17 @@ async function Jc({checkoutRef: e, refData: t, buildCommand: r}) {
         throw new Error(`Failed to determine package size: ${e.message}`);
     }));
     Y.debug(JSON.stringify(s, null, 4));
-    const n = JSON.parse(s.stdout);
-    n.ref = t;
+    const n = {
+        ...JSON.parse(s.stdout),
+        ref: t,
+        size: 0,
+        sizeGzip: 0,
+        sizeBrotli: 0
+    };
     await Promise.all(n.files.map((async e => {
+        n.size += e.size;
+        n.sizeGzip += e.sizeGzip;
+        n.sizeBrotli += e.sizeBrotli;
         const r = await Wc(`.${e.path}`);
         e.isTracked = r;
         e.label = r ? Zr(Yr(e.path), `${t.repo.html_url}/blob/${t.ref}${e.path}`) : Yr(e.path);

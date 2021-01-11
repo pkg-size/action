@@ -71,11 +71,19 @@ async function buildRef({
 	});
 	log.debug(JSON.stringify(result, null, 4));
 
-	const pkgData = JSON.parse(result.stdout);
-
-	pkgData.ref = refData;
+	const pkgData = {
+		...JSON.parse(result.stdout),
+		ref: refData,
+		size: 0,
+		sizeGzip: 0,
+		sizeBrotli: 0,
+	};
 
 	await Promise.all(pkgData.files.map(async (file) => {
+		pkgData.size += file.size;
+		pkgData.sizeGzip += file.sizeGzip;
+		pkgData.sizeBrotli += file.sizeBrotli;
+
 		const isTracked = await isFileTracked(`.${file.path}`);
 		file.isTracked = isTracked;
 		file.label = (
