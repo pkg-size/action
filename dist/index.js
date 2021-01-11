@@ -5274,14 +5274,13 @@ function Wo({unchangedFiles: e, pkgComparisonData: t, displaySize: r}) {
 }
 
 function Vo({headPkgData: e}) {
-    const t = 0;
-    const r = ao([ [ "File", "Size" ], ...e.files.map((e => [ e.label, Yr(ro(e.size)) ])), [ eo("Total"), Yr(ro(t)) ], [ eo("Tarball size"), Yr(ro(e.tarballSize)) ] ], {
+    const t = ao([ [ "File", "Size" ], ...e.files.map((e => [ e.label, Yr(ro(e.size)) ])), [ eo("Total"), Yr(ro(e.size)) ], [ eo("Tarball size"), Yr(ro(e.tarballSize)) ] ], {
         align: [ "", "r" ]
     });
     return Io`
 	### 📊 Package size report
 
-	${r}
+	${t}
 
 	Hidden files
 
@@ -6705,13 +6704,6 @@ function oc(e, t) {
 }
 
 function sc(e, t, r) {
-    const o = {
-        size: r.size,
-        sizeGzip: r.sizeGzip,
-        sizeBrotli: r.sizeBrotli,
-        tarballSize: r.tarballSize,
-        files: r.files
-    };
     r.files.forEach((r => {
         if (!e[r.path]) {
             e[r.path] = {
@@ -6725,37 +6717,36 @@ function sc(e, t, r) {
             o.diff = oc(o.head, o.base);
         }
     }));
-    return o;
 }
 
 function nc(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
     const n = {};
-    const i = sc(n, "head", e);
-    const a = sc(n, "base", t);
-    let u = Object.values(n);
-    u.sort(((e, t) => t[r] - e[r] || e.path.localeCompare(t.path)));
+    sc(n, "head", e);
+    sc(n, "base", t);
+    let i = Object.values(n);
+    i.sort(((e, t) => t[r] - e[r] || e.path.localeCompare(t.path)));
     if (o === "asc") {
-        u.reverse();
+        i.reverse();
     }
-    let c = [];
+    let a = [];
     if (s) {
         const e = Jo(s, {
             extended: true
         });
-        [c, u] = Xu(u, (t => e.test(t.path)));
+        [a, i] = Xu(i, (t => e.test(t.path)));
     }
-    const [l, p] = Xu(u, (e => e.diff && e.diff.size.delta === 0));
+    const [u, c] = Xu(i, (e => e.diff && e.diff.size.delta === 0));
     return {
-        head: i,
-        base: a,
+        head: e,
+        base: t,
         diff: {
-            ...oc(i, a),
-            tarballSize: rc(i, a, "tarballSize")
+            ...oc(e, t),
+            tarballSize: rc(e, t, "tarballSize")
         },
         files: {
-            changed: p,
-            unchanged: l,
-            hidden: c
+            changed: c,
+            unchanged: u,
+            hidden: a
         }
     };
 }

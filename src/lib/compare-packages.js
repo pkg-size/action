@@ -33,14 +33,6 @@ function calculateDiff(head, base) {
 }
 
 function processPkgFiles(fileMap, type, pkgData) {
-	const data = {
-		size: pkgData.size,
-		sizeGzip: pkgData.sizeGzip,
-		sizeBrotli: pkgData.sizeBrotli,
-		tarballSize: pkgData.tarballSize,
-		files: pkgData.files,
-	};
-
 	pkgData.files.forEach((file) => {
 		if (!fileMap[file.path]) {
 			fileMap[file.path] = {
@@ -56,18 +48,16 @@ function processPkgFiles(fileMap, type, pkgData) {
 			entry.diff = calculateDiff(entry.head, entry.base);
 		}
 	});
-
-	return data;
 }
 
-function comparePackages(headPkg, basePkg, {
+function comparePackages(head, base, {
 	sortBy,
 	sortOrder,
 	hideFiles,
 } = {}) {
 	const fileMap = {};
-	const head = processPkgFiles(fileMap, 'head', headPkg);
-	const base = processPkgFiles(fileMap, 'base', basePkg);
+	processPkgFiles(fileMap, 'head', head);
+	processPkgFiles(fileMap, 'base', base);
 
 	let allFiles = Object.values(fileMap);
 

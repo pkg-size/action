@@ -6,7 +6,6 @@ import { c, strong } from '../lib/markdown.js';
 function headOnly({
 	headPkgData,
 }) {
-	const totalSize = 0;
 	const table = markdownTable([
 		['File', 'Size'],
 		...headPkgData.files.map(file => [
@@ -15,7 +14,7 @@ function headOnly({
 		]),
 		[
 			strong('Total'),
-			c(byteSize(totalSize)),
+			c(byteSize(headPkgData.size)),
 		],
 		[
 			strong('Tarball size'),
