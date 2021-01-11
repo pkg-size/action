@@ -5246,7 +5246,7 @@ function No({unchangedFiles: e, pkgComparisonData: t, displaySize: r}) {
 }
 
 function Wo({headPkgData: e}) {
-    return "test";
+    return JSON.stringify(e, null, 4);
 }
 
 var Vo = function(e, t) {
