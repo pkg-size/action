@@ -120,11 +120,11 @@ function F(e, t, r) {
 
 var D = F;
 
-function q(e, t = "") {
+function $(e, t = "") {
     F(e, {}, t);
 }
 
-var $ = q;
+var q = $;
 
 const L = "::";
 
@@ -171,7 +171,7 @@ function z(e) {
 
 var H = Object.defineProperty({
     issueCommand: D,
-    issue: $
+    issue: q
 }, "__esModule", {
     value: true
 });
@@ -1349,15 +1349,15 @@ var Fe = Ue;
 
 var De = Ue;
 
-var qe = Ue.Singular;
+var $e = Ue.Singular;
 
-var $e = Ue.Collection;
+var qe = Ue.Collection;
 
 Fe.Hook = De;
 
-Fe.Singular = qe;
+Fe.Singular = $e;
 
-Fe.Collection = $e;
+Fe.Collection = qe;
 
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
@@ -2261,13 +2261,13 @@ class Ut {
         return this[xt];
     }
     keys() {
-        return qt(this, "key");
+        return $t(this, "key");
     }
     values() {
-        return qt(this, "value");
+        return $t(this, "value");
     }
     [Symbol.iterator]() {
-        return qt(this, "key+value");
+        return $t(this, "key+value");
     }
 }
 
@@ -2324,8 +2324,8 @@ function Ft(e) {
 
 const Dt = Symbol("internal");
 
-function qt(e, t) {
-    const r = Object.create($t);
+function $t(e, t) {
+    const r = Object.create(qt);
     r[Dt] = {
         target: e,
         kind: t,
@@ -2334,9 +2334,9 @@ function qt(e, t) {
     return r;
 }
 
-const $t = Object.setPrototypeOf({
+const qt = Object.setPrototypeOf({
     next() {
-        if (!this || Object.getPrototypeOf(this) !== $t) {
+        if (!this || Object.getPrototypeOf(this) !== qt) {
             throw new TypeError("Value of `this` is not a HeadersIterator");
         }
         var e = this[Dt];
@@ -2357,7 +2357,7 @@ const $t = Object.setPrototypeOf({
     }
 }, Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));
 
-Object.defineProperty($t, Symbol.toStringTag, {
+Object.defineProperty(qt, Symbol.toStringTag, {
     value: "HeadersIterator",
     writable: false,
     enumerable: false,
@@ -3172,7 +3172,7 @@ const Ar = "3.2.4";
 
 class Gr {
     constructor(e = {}) {
-        const t = new $e;
+        const t = new qe;
         const r = {
             baseUrl: hr.endpoint.DEFAULTS.baseUrl,
             headers: {},
@@ -4363,9 +4363,9 @@ var Dr = Object.freeze({
     restEndpointMethods: Fr
 });
 
-const qr = "2.6.2";
+const $r = "2.6.2";
 
-function $r(e) {
+function qr(e) {
     const t = "total_count" in e.data && !("url" in e.data);
     if (!t) return e;
     const r = e.data.incomplete_results;
@@ -4404,7 +4404,7 @@ function Lr(e, t, r) {
                     url: a,
                     headers: i
                 });
-                const t = $r(e);
+                const t = qr(e);
                 a = ((t.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
                 return {
                     value: t
@@ -4451,7 +4451,7 @@ function Hr(e) {
     };
 }
 
-Hr.VERSION = qr;
+Hr.VERSION = $r;
 
 var Mr = Object.freeze({
     __proto__: null,
@@ -5112,7 +5112,7 @@ var Fo = /(?:\r\n|\r|\n)([ \t]*)(?:[^ \t\r\n]|$)/;
 
 var Do = /^[ \t]*[\r\n][ \t\r\n]*$/;
 
-function qo(e, t, r) {
+function $o(e, t, r) {
     var o = 0;
     var s = e[0].match(Fo);
     if (s) {
@@ -5144,7 +5144,7 @@ function qo(e, t, r) {
     return d;
 }
 
-function $o(e, t) {
+function qo(e, t) {
     var r = "";
     for (var o = 0, s = e.length; o < s; o++) {
         r += e[o];
@@ -5173,13 +5173,13 @@ function Bo(e) {
             var c = u ? r : t;
             var l = c.get(a);
             if (!l) {
-                l = qo(a, u, e);
+                l = $o(a, u, e);
                 c.set(a, l);
             }
             if (n.length === 0) {
                 return l[0];
             }
-            var p = $o(l, u ? n.slice(1) : n);
+            var p = qo(l, u ? n.slice(1) : n);
             return p;
         } else {
             return Bo(jo(jo({}, e), s || {}));
@@ -5187,7 +5187,7 @@ function Bo(e) {
     }
     var s = jo(o, {
         string: function(t) {
-            return qo([ t ], false, e)[0];
+            return $o([ t ], false, e)[0];
         }
     });
     return s;
@@ -5521,7 +5521,7 @@ function Rs(e) {
 
 var xs = "[object AsyncFunction]", Us = "[object Function]", Fs = "[object GeneratorFunction]", Ds = "[object Proxy]";
 
-function qs(e) {
+function $s(e) {
     if (!vs(e)) {
         return false;
     }
@@ -5529,10 +5529,10 @@ function qs(e) {
     return t == Us || t == Fs || t == xs || t == Ds;
 }
 
-var $s = Zo["__core-js_shared__"];
+var qs = Zo["__core-js_shared__"];
 
 var Ls = function() {
-    var e = /[^.]+$/.exec($s && $s.keys && $s.keys.IE_PROTO || "");
+    var e = /[^.]+$/.exec(qs && qs.keys && qs.keys.IE_PROTO || "");
     return e ? "Symbol(src)_1." + e : "";
 }();
 
@@ -5572,7 +5572,7 @@ function Zs(e) {
     if (!vs(e) || Bs(e)) {
         return false;
     }
-    var t = qs(e) ? Ys : Ns;
+    var t = $s(e) ? Ys : Ns;
     return t.test(Hs(e));
 }
 
@@ -5608,7 +5608,7 @@ function an(e) {
 }
 
 function un(e) {
-    return e != null && an(e.length) && !qs(e);
+    return e != null && an(e.length) && !$s(e);
 }
 
 var cn = Object.prototype;
@@ -5660,15 +5660,15 @@ var _n = En ? En.isBuffer : undefined;
 
 var On = _n || wn;
 
-var Pn = "[object Arguments]", kn = "[object Array]", Sn = "[object Boolean]", An = "[object Date]", Gn = "[object Error]", Cn = "[object Function]", jn = "[object Map]", Rn = "[object Number]", xn = "[object Object]", Un = "[object RegExp]", Fn = "[object Set]", Dn = "[object String]", qn = "[object WeakMap]";
+var Pn = "[object Arguments]", kn = "[object Array]", Sn = "[object Boolean]", An = "[object Date]", Gn = "[object Error]", Cn = "[object Function]", jn = "[object Map]", Rn = "[object Number]", xn = "[object Object]", Un = "[object RegExp]", Fn = "[object Set]", Dn = "[object String]", $n = "[object WeakMap]";
 
-var $n = "[object ArrayBuffer]", Ln = "[object DataView]", Bn = "[object Float32Array]", In = "[object Float64Array]", zn = "[object Int8Array]", Hn = "[object Int16Array]", Mn = "[object Int32Array]", Nn = "[object Uint8Array]", Wn = "[object Uint8ClampedArray]", Vn = "[object Uint16Array]", Jn = "[object Uint32Array]";
+var qn = "[object ArrayBuffer]", Ln = "[object DataView]", Bn = "[object Float32Array]", In = "[object Float64Array]", zn = "[object Int8Array]", Hn = "[object Int16Array]", Mn = "[object Int32Array]", Nn = "[object Uint8Array]", Wn = "[object Uint8ClampedArray]", Vn = "[object Uint16Array]", Jn = "[object Uint32Array]";
 
 var Kn = {};
 
 Kn[Bn] = Kn[In] = Kn[zn] = Kn[Hn] = Kn[Mn] = Kn[Nn] = Kn[Wn] = Kn[Vn] = Kn[Jn] = true;
 
-Kn[Pn] = Kn[kn] = Kn[$n] = Kn[Sn] = Kn[Ln] = Kn[An] = Kn[Gn] = Kn[Cn] = Kn[jn] = Kn[Rn] = Kn[xn] = Kn[Un] = Kn[Fn] = Kn[Dn] = Kn[qn] = false;
+Kn[Pn] = Kn[kn] = Kn[qn] = Kn[Sn] = Kn[Ln] = Kn[An] = Kn[Gn] = Kn[Cn] = Kn[jn] = Kn[Rn] = Kn[xn] = Kn[Un] = Kn[Fn] = Kn[Dn] = Kn[$n] = false;
 
 function Yn(e) {
     return ps(e) && an(e.length) && !!Kn[ls(e)];
@@ -5866,7 +5866,7 @@ function Di(e) {
     return ji(this.__data__, e) > -1;
 }
 
-function qi(e, t) {
+function $i(e, t) {
     var r = this.__data__, o = ji(r, e);
     if (o < 0) {
         ++this.size;
@@ -5877,7 +5877,7 @@ function qi(e, t) {
     return this;
 }
 
-function $i(e) {
+function qi(e) {
     var t = -1, r = e == null ? 0 : e.length;
     this.clear();
     while (++t < r) {
@@ -5886,15 +5886,15 @@ function $i(e) {
     }
 }
 
-$i.prototype.clear = Ci;
+qi.prototype.clear = Ci;
 
-$i.prototype["delete"] = Ui;
+qi.prototype["delete"] = Ui;
 
-$i.prototype.get = Fi;
+qi.prototype.get = Fi;
 
-$i.prototype.has = Di;
+qi.prototype.has = Di;
 
-$i.prototype.set = qi;
+qi.prototype.set = $i;
 
 var Li = Xs(Zo, "Map");
 
@@ -5902,7 +5902,7 @@ function Bi() {
     this.size = 0;
     this.__data__ = {
         hash: new Gi,
-        map: new (Li || $i),
+        map: new (Li || qi),
         string: new Gi
     };
 }
@@ -6066,7 +6066,7 @@ function la(e) {
 }
 
 function pa() {
-    this.__data__ = new $i;
+    this.__data__ = new qi;
     this.size = 0;
 }
 
@@ -6088,7 +6088,7 @@ var ha = 200;
 
 function ga(e, t) {
     var r = this.__data__;
-    if (r instanceof $i) {
+    if (r instanceof qi) {
         var o = r.__data__;
         if (!Li || o.length < ha - 1) {
             o.push([ e, t ]);
@@ -6103,7 +6103,7 @@ function ga(e, t) {
 }
 
 function ba(e) {
-    var t = this.__data__ = new $i(e);
+    var t = this.__data__ = new qi(e);
     this.size = t.size;
 }
 
@@ -6167,7 +6167,7 @@ var Ga = "[object Map]", Ca = "[object Object]", ja = "[object Promise]", Ra = "
 
 var Ua = "[object DataView]";
 
-var Fa = Hs(ka), Da = Hs(Li), qa = Hs(Sa), $a = Hs(Aa), La = Hs(en);
+var Fa = Hs(ka), Da = Hs(Li), $a = Hs(Sa), qa = Hs(Aa), La = Hs(en);
 
 var Ba = ls;
 
@@ -6182,10 +6182,10 @@ if (ka && Ba(new ka(new ArrayBuffer(1))) != Ua || Li && Ba(new Li) != Ga || Sa &
               case Da:
                 return Ga;
 
-              case qa:
+              case $a:
                 return ja;
 
-              case $a:
+              case qa:
                 return Ra;
 
               case La:
@@ -6547,11 +6547,11 @@ function Du(e, t, r) {
     return !!s && an(s) && on(i, s) && (hs(e) || bn(e));
 }
 
-function qu(e, t) {
+function $u(e, t) {
     return e != null && Du(e, t, Fu);
 }
 
-var $u = 1, Lu = 2;
+var qu = 1, Lu = 2;
 
 function Bu(e, t) {
     if (gi(e) && ju(t)) {
@@ -6559,7 +6559,7 @@ function Bu(e, t) {
     }
     return function(r) {
         var o = ia(r, e);
-        return o === undefined && o === t ? qu(r, e) : Su(t, o, $u | Lu);
+        return o === undefined && o === t ? $u(r, e) : Su(t, o, qu | Lu);
     };
 }
 
@@ -7601,14 +7601,14 @@ class Dc extends kc.EventEmitter {
     }
 }
 
-var qc = Object.defineProperty({
+var $c = Object.defineProperty({
     ToolRunner: xc,
     argStringToArray: Fc
 }, "__esModule", {
     value: true
 });
 
-var $c = S && S.__awaiter || function(e, t, r, o) {
+var qc = S && S.__awaiter || function(e, t, r, o) {
     function s(e) {
         return e instanceof r ? e : new r((function(t) {
             t(e);
@@ -7644,10 +7644,10 @@ var Lc = S && S.__importStar || function(e) {
     return t;
 };
 
-const Bc = Lc(qc);
+const Bc = Lc($c);
 
 function Ic(e, t, r) {
-    return $c(this, void 0, void 0, (function*() {
+    return qc(this, void 0, void 0, (function*() {
         const o = Bc.argStringToArray(e);
         if (o.length === 0) {
             throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
@@ -7736,15 +7736,15 @@ async function Wc(e) {
 
 let Vc = false;
 
-async function Jc({ref: e, buildCommand: t}) {
-    const r = process.cwd();
-    Y.info(`Current working directory: ${r}`);
+async function Jc({checkoutRef: e, refData: t, buildCommand: r}) {
+    const o = process.cwd();
+    Y.info(`Current working directory: ${o}`);
     if (e) {
         Y.info(`Checking out ref '${e}'`);
         await Hc(`git checkout -f ${e}`);
     }
-    if (t !== "false") {
-        if (!t) {
+    if (r !== "false") {
+        if (!r) {
             let e;
             try {
                 e = JSON.parse(g["default"].readFileSync("./package.json"));
@@ -7753,20 +7753,20 @@ async function Jc({ref: e, buildCommand: t}) {
             }
             if (e && e.scripts && e.scripts.build) {
                 Y.info("Build script found in package.json");
-                t = "npm run build";
+                r = "npm run build";
             }
         }
-        if (t) {
+        if (r) {
             await Nc({
-                cwd: r
+                cwd: o
             }).catch((e => {
                 throw new Error(`Failed to install dependencies:\n${e.message}`);
             }));
-            Y.info(`Running build command: ${t}`);
-            await Hc(t, {
-                cwd: r
+            Y.info(`Running build command: ${r}`);
+            await Hc(r, {
+                cwd: o
             }).catch((e => {
-                throw new Error(`Failed to run build command: ${t}\n${e.message}`);
+                throw new Error(`Failed to run build command: ${r}\n${e.message}`);
             }));
         }
     }
@@ -7777,29 +7777,32 @@ async function Jc({ref: e, buildCommand: t}) {
         Vc = true;
     }
     Y.info("Getting package size");
-    const o = await Hc("pkg-size --json", {
-        cwd: r
+    const s = await Hc("pkg-size --json", {
+        cwd: o
     }).catch((e => {
         throw new Error(`Failed to determine package size: ${e.message}`);
     }));
-    Y.debug(JSON.stringify(o, null, 4));
-    const s = JSON.parse(o.stdout);
-    await Promise.all(s.files.map((async e => {
-        e.isTracked = await Wc(`.${e.path}`);
+    Y.debug(JSON.stringify(s, null, 4));
+    const n = JSON.parse(s.stdout);
+    n.ref = t;
+    await Promise.all(n.files.map((async e => {
+        const r = await Wc(`.${e.path}`);
+        e.isTracked = r;
+        e.label = r ? Zr(Yr(e.path), `${t.ref.repo.html_url}/blob/${t.ref.ref}${e.path}`) : Yr(e.path);
     })));
     Y.info("Cleaning up");
     await Hc("git reset --hard");
-    const {stdout: n} = await Hc("git clean -dfx");
-    Y.debug(n);
-    return s;
+    const {stdout: i} = await Hc("git clean -dfx");
+    Y.debug(i);
+    return n;
 }
 
 async function Kc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedFiles: s, hideFiles: n, sortBy: i, sortOrder: a, displaySize: u}) {
     Y.startGroup("Build HEAD");
     const c = await Jc({
+        refData: e.head,
         buildCommand: t
     });
-    c.ref = e.head;
     Y.setOutput("headPkgData", c);
     Y.endGroup();
     if (o === "head-only") {
@@ -7815,10 +7818,10 @@ async function Kc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
         Y.info("HEAD is different from BASE. Triggering build.");
         Y.startGroup("Build BASE");
         p = await Jc({
-            ref: l,
+            checkoutRef: l,
+            refData: e.base,
             buildCommand: t
         });
-        p.ref = e.base;
         Y.endGroup();
     } else {
         Y.info("HEAD is identical to BASE. Skipping base build.");

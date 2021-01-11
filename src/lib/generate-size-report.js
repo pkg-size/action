@@ -18,9 +18,9 @@ async function generateSizeReport({
 }) {
 	log.startGroup('Build HEAD');
 	const headPkgData = await buildRef({
+		refData: pr.head,
 		buildCommand,
 	});
-	headPkgData.ref = pr.head;
 	setOutput('headPkgData', headPkgData);
 	log.endGroup();
 
@@ -38,10 +38,10 @@ async function generateSizeReport({
 		log.info('HEAD is different from BASE. Triggering build.');
 		log.startGroup('Build BASE');
 		basePkgData = await buildRef({
-			ref: baseRef,
+			checkoutRef: baseRef,
+			refData: pr.base,
 			buildCommand,
 		});
-		basePkgData.ref = pr.base;
 		log.endGroup();
 	} else {
 		log.info('HEAD is identical to BASE. Skipping base build.');
