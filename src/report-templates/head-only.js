@@ -1,9 +1,8 @@
 import byteSize from 'byte-size';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
-import { partition } from 'lodash-es';
-import globToRegExp from 'glob-to-regexp';
 import { c, strong } from '../lib/markdown.js';
+import { partionHidden } from './utils.js';
 
 const listSizes = (displaySizes, callback) => displaySizes
 	.map(({ property }) => callback(property))
@@ -40,12 +39,7 @@ function headOnly({
 		sizeHeadingLabel = ` (${displaySizes.map(s => s.label).join(' / ')})`;
 	}
 
-	let { files } = headPkgData;
-	let hidden = [];
-	if (hideFiles) {
-		const hideFilesPtrn = globToRegExp(hideFiles, { extended: true });
-		[hidden, files] = partition(files, file => hideFilesPtrn.test(file.path));
-	}
+	const [hidden, files] = partionHidden(hideFiles, headPkgData.files);
 
 	const table = markdownTable([
 		['File', `Size${sizeHeadingLabel}`],
