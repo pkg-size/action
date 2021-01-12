@@ -1,6 +1,8 @@
-import globToRegExp from 'glob-to-regexp';
 import { partition, round } from 'lodash-es';
-import { c, link } from './markdown.js';
+import {
+	partionHidden,
+	sortFiles,
+} from '../utils.js';
 
 const percent = (fraction) => {
 	if (fraction < 0.001) { // 0.09% and lower
@@ -34,64 +36,39 @@ function calculateDiff(head, base) {
 }
 
 function processPkgFiles(fileMap, type, pkgData) {
-	const data = {
-		size: 0,
-		sizeGzip: 0,
-		sizeBrotli: 0,
-		tarballSize: pkgData.tarballSize,
-		files: pkgData.files,
-	};
-
 	pkgData.files.forEach((file) => {
 		if (!fileMap[file.path]) {
 			fileMap[file.path] = {
 				path: file.path,
-				link: (
-					file.isTracked
-						? link(c(file.path), `${pkgData.ref.repo.html_url}/blob/${pkgData.ref.ref}${file.path}`)
-						: c(file.path)
-				),
+				label: file.label,
 			};
 		}
 
 		const entry = fileMap[file.path];
 		entry[type] = file;
-		data.size += file.size;
-		data.sizeGzip += file.sizeGzip;
-		data.sizeBrotli += file.sizeBrotli;
 
 		if (entry.head && entry.base) {
 			entry.diff = calculateDiff(entry.head, entry.base);
 		}
 	});
-
-	return data;
 }
 
-function comparePackages(headPkg, basePkg, {
+function comparePackages(head, base, {
 	sortBy,
 	sortOrder,
 	hideFiles,
 } = {}) {
 	const fileMap = {};
-	const head = processPkgFiles(fileMap, 'head', headPkg);
-	const base = processPkgFiles(fileMap, 'base', basePkg);
+	processPkgFiles(fileMap, 'head', head);
+	processPkgFiles(fileMap, 'base', base);
 
-	let allFiles = Object.values(fileMap);
+	const allFiles = Object.values(fileMap);
 
-	allFiles.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
-	if (sortOrder === 'asc') {
-		allFiles.reverse();
-	}
+	sortFiles(allFiles, sortBy, sortOrder);
 
-	let hidden = [];
-	if (hideFiles) {
-		const hideFilesPtrn = globToRegExp(hideFiles, { extended: true });
-		[hidden, allFiles] = partition(allFiles, file => hideFilesPtrn.test(file.path));
-	}
-
+	const [hidden, files] = partionHidden(hideFiles, allFiles);
 	const [unchanged, changed] = partition(
-		allFiles,
+		files,
 		file => (file.diff && file.diff.size.delta === 0),
 	);
 

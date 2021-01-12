@@ -4,21 +4,23 @@ import * as log from './log.js';
 import exec from './exec.js';
 import npmCi from './npm-ci.js';
 import isFileTracked from './is-file-tracked.js';
+import { c, link } from './markdown.js';
 
 let pkgSizeInstalled = false;
 
 async function buildRef({
-	ref,
+	checkoutRef,
+	refData,
 	buildCommand,
 }) {
 	const cwd = process.cwd();
 
 	log.info(`Current working directory: ${cwd}`);
 
-	if (ref) {
+	if (checkoutRef) {
 		// const temporaryDir = await createTempDirectory();
-		log.info(`Checking out ref '${ref}'`);
-		await exec(`git checkout -f ${ref}`);
+		log.info(`Checking out ref '${checkoutRef}'`);
+		await exec(`git checkout -f ${checkoutRef}`);
 		/*
 		 * For parallel builds
 		 * Since this doesn't make it a git repo, installing some deps like husky fails
@@ -69,10 +71,26 @@ async function buildRef({
 	});
 	log.debug(JSON.stringify(result, null, 4));
 
-	const pkgData = JSON.parse(result.stdout);
+	const pkgData = {
+		...JSON.parse(result.stdout),
+		ref: refData,
+		size: 0,
+		sizeGzip: 0,
+		sizeBrotli: 0,
+	};
 
 	await Promise.all(pkgData.files.map(async (file) => {
-		file.isTracked = await isFileTracked(`.${file.path}`);
+		pkgData.size += file.size;
+		pkgData.sizeGzip += file.sizeGzip;
+		pkgData.sizeBrotli += file.sizeBrotli;
+
+		const isTracked = await isFileTracked(`.${file.path}`);
+		file.isTracked = isTracked;
+		file.label = (
+			isTracked
+				? link(c(file.path), `${refData.repo.html_url}/blob/${refData.ref}${file.path}`)
+				: c(file.path)
+		);
 	}));
 
 	log.info('Cleaning up');

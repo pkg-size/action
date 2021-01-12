@@ -1,9 +1,16 @@
+import { setOutput } from '@actions/core';
 import byteSize from 'byte-size';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import {
 	c, sub, sup, strong,
-} from '../lib/markdown.js';
+} from '../../lib/markdown.js';
+import {
+	getSizeLabels,
+	parseDisplaySize,
+	listSizes,
+} from '../utils.js';
+import comparePackages from './compare-packages.js';
 
 const directionSymbol = (value) => {
 	if (value < 0) {
@@ -19,43 +26,26 @@ const directionSymbol = (value) => {
 
 const formatDelta = ({ delta, percent }) => (delta ? (percent + directionSymbol(delta)) : '');
 
-const supportedSizes = {
-	uncompressed: {
-		label: 'Size',
-		property: 'size',
-	},
-	gzip: {
-		label: 'Gzip',
-		property: 'sizeGzip',
-	},
-	brotli: {
-		label: 'Brotli',
-		property: 'sizeBrotli',
-	},
-};
-
-const listSizes = (displaySizes, callback) => displaySizes
-	.map(({ property }) => callback(property))
-	.join(' / ');
-
 function generateComment({
+	headPkgData,
+	basePkgData,
+	sortBy,
+	sortOrder,
+	hideFiles,
 	unchangedFiles,
-	pkgComparisonData,
 	displaySize,
 }) {
+	const pkgComparisonData = comparePackages(headPkgData, basePkgData, {
+		sortBy,
+		sortOrder,
+		hideFiles,
+	});
+
+	setOutput('pkgComparisonData', pkgComparisonData);
+
 	const { changed, unchanged, hidden } = pkgComparisonData.files;
-	const displaySizes = displaySize
-		.split(',')
-		.map(s => s.trim())
-		.filter(s => supportedSizes.hasOwnProperty(s)) // eslint-disable-line no-prototype-builtins
-		.map(s => supportedSizes[s]);
-
-	let sizeHeadingLabel = '';
-	if (displaySizes.length > 1 || displaySizes[0].property !== 'size') {
-		sizeHeadingLabel = ` (${displaySizes.map(s => s.label).join(' / ')})`;
-	}
-
-	console.log(JSON.stringify(changed, null, 4));
+	const displaySizes = parseDisplaySize(displaySize);
+	const sizeHeadingLabel = getSizeLabels(displaySizes);
 
 	const table = markdownTable([
 		['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
@@ -63,7 +53,7 @@ function generateComment({
 			...changed,
 			...(unchangedFiles === 'show' ? unchanged : []),
 		].map(file => [
-			file.link,
+			file.label,
 			file.base && file.base.size
 				? listSizes(displaySizes, p => c(byteSize(file.base[p])))
 				: '—',
@@ -99,7 +89,7 @@ function generateComment({
 		unchangedTable = markdownTable([
 			['File', `Size${sizeHeadingLabel}`],
 			...unchanged.map(file => [
-				file.link,
+				file.label,
 				listSizes(displaySizes, p => c(byteSize(file.base[p]))),
 			]),
 		], {
@@ -114,7 +104,7 @@ function generateComment({
 		hiddenTable = markdownTable([
 			['File', `Before${sizeHeadingLabel}`, `After${sizeHeadingLabel}`],
 			...hidden.map(file => [
-				file.link,
+				file.label,
 				file.base && file.base.size
 					? listSizes(displaySizes, p => c(byteSize(file.base[p])))
 					: '—',

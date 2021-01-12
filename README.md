@@ -147,6 +147,15 @@ Possible values: `true`, `false`
 
 Whether to comment the build size report on the PR or not.
 
+### mode
+Default: `regression`
+
+Possible values: `regression`, `head-only`
+
+Sets the size report mode:
+- `regression`: Builds both `head` and `base` branch and compares difference.
+- `head-only`: Only builds and reports on `head` branch.
+
 ### display-size
 Default: `uncompressed`
 
