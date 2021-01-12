@@ -1,9 +1,11 @@
+import { setOutput } from '@actions/core';
 import byteSize from 'byte-size';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import {
 	c, sub, sup, strong,
-} from '../lib/markdown.js';
+} from '../../lib/markdown.js';
+import comparePackages from './compare-packages.js';
 
 const directionSymbol = (value) => {
 	if (value < 0) {
@@ -39,10 +41,22 @@ const listSizes = (displaySizes, callback) => displaySizes
 	.join(' / ');
 
 function generateComment({
+	headPkgData,
+	basePkgData,
+	sortBy,
+	sortOrder,
+	hideFiles,
 	unchangedFiles,
-	pkgComparisonData,
 	displaySize,
 }) {
+	const pkgComparisonData = comparePackages(headPkgData, basePkgData, {
+		sortBy,
+		sortOrder,
+		hideFiles,
+	});
+
+	setOutput('pkgComparisonData', pkgComparisonData);
+
 	const { changed, unchanged, hidden } = pkgComparisonData.files;
 	const displaySizes = displaySize
 		.split(',')

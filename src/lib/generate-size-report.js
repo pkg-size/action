@@ -1,6 +1,5 @@
 import { setOutput } from '@actions/core';
 import { regressionReportTemplate, headOnlyReportTemplate } from '../report-templates/index.js';
-import comparePackages from './compare-packages.js';
 import isBaseDiffFromHead from './is-base-diff-from-head.js';
 import buildRef from './build-ref.js';
 import * as log from './log.js';
@@ -28,8 +27,10 @@ async function generateSizeReport({
 		if (commentReport !== 'false') {
 			return headOnlyReportTemplate({
 				headPkgData,
-				hideFiles,
 				displaySize,
+				// sortBy,
+				// sortOrder,
+				hideFiles,
 			});
 		}
 	}
@@ -54,18 +55,15 @@ async function generateSizeReport({
 	}
 	setOutput('basePkgData', basePkgData);
 
-	const pkgComparisonData = comparePackages(headPkgData, basePkgData, {
-		sortBy,
-		sortOrder,
-		hideFiles,
-	});
-	setOutput('pkgComparisonData', pkgComparisonData);
-
 	if (commentReport !== 'false') {
 		return regressionReportTemplate({
-			pkgComparisonData,
-			unchangedFiles,
+			headPkgData,
+			basePkgData,
 			displaySize,
+			sortBy,
+			sortOrder,
+			hideFiles,
+			unchangedFiles,
 		});
 	}
 
