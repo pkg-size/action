@@ -1,5 +1,5 @@
 import { setOutput } from '@actions/core';
-import { comparisonReportTemplate, headOnlyReportTemplate } from '../report-templates/index.js';
+import { regressionReportTemplate, headOnlyReportTemplate } from '../report-templates/index.js';
 import comparePackages from './compare-packages.js';
 import isBaseDiffFromHead from './is-base-diff-from-head.js';
 import buildRef from './build-ref.js';
@@ -62,7 +62,7 @@ async function generateSizeReport({
 	setOutput('pkgComparisonData', pkgComparisonData);
 
 	if (commentReport !== 'false') {
-		return comparisonReportTemplate({
+		return regressionReportTemplate({
 			pkgComparisonData,
 			unchangedFiles,
 			displaySize,
