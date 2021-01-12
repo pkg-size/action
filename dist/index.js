@@ -6604,7 +6604,35 @@ function Ku(e, t) {
     return Wu(t, (e => r.test(e.path)));
 }
 
-const Yu = e => {
+function Yu(e) {
+    if (e.length === 1 && e[0].property === "size") {
+        return "";
+    }
+    return ` (${e.map((e => e.label)).join(" / ")})`;
+}
+
+const Zu = {
+    uncompressed: {
+        label: "Size",
+        property: "size"
+    },
+    gzip: {
+        label: "Gzip",
+        property: "sizeGzip"
+    },
+    brotli: {
+        label: "Brotli",
+        property: "sizeBrotli"
+    }
+};
+
+function Qu(e) {
+    return e.split(",").map((e => e.trim())).filter((e => Zu.hasOwnProperty(e))).map((e => Zu[e]));
+}
+
+const Xu = (e, t) => e.map((({property: e}) => t(e))).join(" / ");
+
+const ec = e => {
     if (e < .001) {
         e = Vu(e, 4);
     } else if (e < .01) {
@@ -6618,23 +6646,23 @@ const Yu = e => {
     });
 };
 
-function Zu(e, t, r) {
+function tc(e, t, r) {
     const o = e[r] - t[r];
     return {
         delta: o,
-        percent: Yu(o / t[r])
+        percent: ec(o / t[r])
     };
 }
 
-function Qu(e, t) {
+function rc(e, t) {
     return {
-        size: Zu(e, t, "size"),
-        sizeGzip: Zu(e, t, "sizeGzip"),
-        sizeBrotli: Zu(e, t, "sizeBrotli")
+        size: tc(e, t, "size"),
+        sizeGzip: tc(e, t, "sizeGzip"),
+        sizeBrotli: tc(e, t, "sizeBrotli")
     };
 }
 
-function Xu(e, t, r) {
+function oc(e, t, r) {
     r.files.forEach((r => {
         if (!e[r.path]) {
             e[r.path] = {
@@ -6645,15 +6673,15 @@ function Xu(e, t, r) {
         const o = e[r.path];
         o[t] = r;
         if (o.head && o.base) {
-            o.diff = Qu(o.head, o.base);
+            o.diff = rc(o.head, o.base);
         }
     }));
 }
 
-function ec(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
+function sc(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
     const n = {};
-    Xu(n, "head", e);
-    Xu(n, "base", t);
+    oc(n, "head", e);
+    oc(n, "base", t);
     const i = Object.values(n);
     i.sort(((e, t) => t[r] - e[r] || e.path.localeCompare(t.path)));
     if (o === "asc") {
@@ -6665,8 +6693,8 @@ function ec(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
         head: e,
         base: t,
         diff: {
-            ...Qu(e, t),
-            tarballSize: Zu(e, t, "tarballSize")
+            ...rc(e, t),
+            tarballSize: tc(e, t, "tarballSize")
         },
         files: {
             changed: l,
@@ -6676,7 +6704,7 @@ function ec(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
     };
 }
 
-const tc = e => {
+const nc = e => {
     if (e < 0) {
         return "↓";
     }
@@ -6686,57 +6714,37 @@ const tc = e => {
     return "";
 };
 
-const rc = ({delta: e, percent: t}) => e ? t + tc(e) : "";
+const ic = ({delta: e, percent: t}) => e ? t + nc(e) : "";
 
-const oc = {
-    uncompressed: {
-        label: "Size",
-        property: "size"
-    },
-    gzip: {
-        label: "Gzip",
-        property: "sizeGzip"
-    },
-    brotli: {
-        label: "Brotli",
-        property: "sizeBrotli"
-    }
-};
-
-const sc = (e, t) => e.map((({property: e}) => t(e))).join(" / ");
-
-function nc({headPkgData: e, basePkgData: t, sortBy: r, sortOrder: o, hideFiles: s, unchangedFiles: n, displaySize: i}) {
-    const a = ec(e, t, {
+function ac({headPkgData: e, basePkgData: t, sortBy: r, sortOrder: o, hideFiles: s, unchangedFiles: n, displaySize: i}) {
+    const a = sc(e, t, {
         sortBy: r,
         sortOrder: o,
         hideFiles: s
     });
     Y.setOutput("pkgComparisonData", a);
     const {changed: u, unchanged: c, hidden: l} = a.files;
-    const p = i.split(",").map((e => e.trim())).filter((e => oc.hasOwnProperty(e))).map((e => oc[e]));
-    let d = "";
-    if (p.length > 1 || p[0].property !== "size") {
-        d = ` (${p.map((e => e.label)).join(" / ")})`;
-    }
-    const f = ao([ [ "File", `Before${d}`, `After${d}` ], ...[ ...u, ...n === "show" ? c : [] ].map((e => [ e.label, e.base && e.base.size ? sc(p, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? sc(p, (t => (e.base && e.base[t] ? Xr(rc(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])), [ `${eo("Total")} ${n === "show" ? "" : Qr("_(Includes all files)_")}`, sc(p, (e => Yr(ro(a.base[e])))), sc(p, (e => Xr(rc(a.diff[e])) + Yr(ro(a.head[e])))) ], [ eo("Tarball size"), Yr(ro(a.base.tarballSize)), Xr(rc(a.diff.tarballSize)) + Yr(ro(a.head.tarballSize)) ] ], {
+    const p = Qu(i);
+    const d = Yu(p);
+    const f = ao([ [ "File", `Before${d}`, `After${d}` ], ...[ ...u, ...n === "show" ? c : [] ].map((e => [ e.label, e.base && e.base.size ? Xu(p, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? Xu(p, (t => (e.base && e.base[t] ? Xr(ic(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])), [ `${eo("Total")} ${n === "show" ? "" : Qr("_(Includes all files)_")}`, Xu(p, (e => Yr(ro(a.base[e])))), Xu(p, (e => Xr(ic(a.diff[e])) + Yr(ro(a.head[e])))) ], [ eo("Tarball size"), Yr(ro(a.base.tarballSize)), Xr(ic(a.diff.tarballSize)) + Yr(ro(a.head.tarballSize)) ] ], {
         align: [ "", "r", "r" ]
     });
     let m = "";
     if (n === "collapse" && c.length > 0) {
-        m = ao([ [ "File", `Size${d}` ], ...c.map((e => [ e.label, sc(p, (t => Yr(ro(e.base[t])))) ])) ], {
+        m = ao([ [ "File", `Size${d}` ], ...c.map((e => [ e.label, Xu(p, (t => Yr(ro(e.base[t])))) ])) ], {
             align: [ "", "r" ]
         });
         m = `<details><summary>Unchanged files</summary>\n\n${m}\n</details>`;
     }
     let h = "";
     if (l.length > 0) {
-        h = ao([ [ "File", `Before${d}`, `After${d}` ], ...l.map((e => [ e.label, e.base && e.base.size ? sc(p, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? sc(p, (t => (e.base && e.base[t] ? Xr(rc(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])) ], {
+        h = ao([ [ "File", `Before${d}`, `After${d}` ], ...l.map((e => [ e.label, e.base && e.base.size ? Xu(p, (t => Yr(ro(e.base[t])))) : "—", e.head && e.head.size ? Xu(p, (t => (e.base && e.base[t] ? Xr(ic(e.diff[t])) : "") + Yr(ro(e.head[t])))) : "—" ])) ], {
             align: [ "", "r", "r" ]
         });
         h = `<details><summary>Hidden files</summary>\n\n${h}\n</details>`;
     }
     return Io`
-	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${rc(a.diff.size) || "No changes"}</kbd>
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${ic(a.diff.size) || "No changes"}</kbd>
 
 	${f}
 
@@ -6746,36 +6754,16 @@ function nc({headPkgData: e, basePkgData: t, sortBy: r, sortOrder: o, hideFiles:
 	`;
 }
 
-const ic = (e, t) => e.map((({property: e}) => t(e))).join(" / ");
-
-const ac = {
-    uncompressed: {
-        label: "Size",
-        property: "size"
-    },
-    gzip: {
-        label: "Gzip",
-        property: "sizeGzip"
-    },
-    brotli: {
-        label: "Brotli",
-        property: "sizeBrotli"
-    }
-};
-
 function uc({headPkgData: e, hideFiles: t, displaySize: r}) {
-    const o = r.split(",").map((e => e.trim())).filter((e => ac.hasOwnProperty(e))).map((e => ac[e]));
-    let s = "";
-    if (o.length > 1 || o[0].property !== "size") {
-        s = ` (${o.map((e => e.label)).join(" / ")})`;
-    }
+    const o = Qu(r);
+    const s = Yu(o);
     const [n, i] = Ku(t, e.files);
-    const a = ao([ [ "File", `Size${s}` ], ...i.map((e => [ e.label, ic(o, (t => Yr(ro(e[t])))) ])), [ eo("Total"), ic(o, (t => Yr(ro(e[t])))) ], [ eo("Tarball size"), Yr(ro(e.tarballSize)) ] ], {
+    const a = ao([ [ "File", `Size${s}` ], ...i.map((e => [ e.label, Xu(o, (t => Yr(ro(e[t])))) ])), [ eo("Total"), Xu(o, (t => Yr(ro(e[t])))) ], [ eo("Tarball size"), Yr(ro(e.tarballSize)) ] ], {
         align: [ "", "r" ]
     });
     let u = "";
     if (n.length > 0) {
-        u = ao([ [ "File", `Size${s}` ], ...n.map((e => [ e.label, ic(o, (t => Yr(ro(e[t])))) ])) ], {
+        u = ao([ [ "File", `Size${s}` ], ...n.map((e => [ e.label, Xu(o, (t => Yr(ro(e[t])))) ])) ], {
             align: [ "", "r" ]
         });
         u = `<details><summary>Hidden files</summary>\n\n${u}\n</details>`;
@@ -7880,7 +7868,7 @@ async function Qc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
     }
     Y.setOutput("basePkgData", p);
     if (r !== "false") {
-        return nc({
+        return ac({
             headPkgData: c,
             basePkgData: p,
             displaySize: u,

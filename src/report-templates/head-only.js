@@ -2,43 +2,20 @@ import byteSize from 'byte-size';
 import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import { c, strong } from '../lib/markdown.js';
-import { partionHidden } from './utils.js';
-
-const listSizes = (displaySizes, callback) => displaySizes
-	.map(({ property }) => callback(property))
-	.join(' / ');
-
-const supportedSizes = {
-	uncompressed: {
-		label: 'Size',
-		property: 'size',
-	},
-	gzip: {
-		label: 'Gzip',
-		property: 'sizeGzip',
-	},
-	brotli: {
-		label: 'Brotli',
-		property: 'sizeBrotli',
-	},
-};
+import {
+	partionHidden,
+	getSizeLabels,
+	parseDisplaySize,
+	listSizes,
+} from './utils.js';
 
 function headOnly({
 	headPkgData,
 	hideFiles,
 	displaySize,
 }) {
-	const displaySizes = displaySize
-		.split(',')
-		.map(s => s.trim())
-		.filter(s => supportedSizes.hasOwnProperty(s)) // eslint-disable-line no-prototype-builtins
-		.map(s => supportedSizes[s]);
-
-	let sizeHeadingLabel = '';
-	if (displaySizes.length > 1 || displaySizes[0].property !== 'size') {
-		sizeHeadingLabel = ` (${displaySizes.map(s => s.label).join(' / ')})`;
-	}
-
+	const displaySizes = parseDisplaySize(displaySize);
+	const sizeHeadingLabel = getSizeLabels(displaySizes);
 	const [hidden, files] = partionHidden(hideFiles, headPkgData.files);
 
 	const table = markdownTable([
