@@ -6694,7 +6694,7 @@ function rc({headPkgData: e, hideFiles: t, displaySize: r}) {
     });
     let u = "";
     if (i.length > 0) {
-        u = ao([ [ "File", "Size" ], ...i.map((e => [ e.label, ec(o, (t => Yr(ro(e[t])))) ])) ], {
+        u = ao([ [ "File", `Size${s}` ], ...i.map((e => [ e.label, ec(o, (t => Yr(ro(e[t])))) ])) ], {
             align: [ "", "r" ]
         });
         u = `<details><summary>Hidden files</summary>\n\n${u}\n</details>`;

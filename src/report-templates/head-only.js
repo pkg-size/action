@@ -69,7 +69,7 @@ function headOnly({
 	let hiddenTable = '';
 	if (hidden.length > 0) {
 		hiddenTable = markdownTable([
-			['File', 'Size'],
+			['File', `Size${sizeHeadingLabel}`],
 			...hidden.map(file => [
 				file.label,
 				listSizes(displaySizes, p => c(byteSize(file[p]))),
