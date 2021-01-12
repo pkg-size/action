@@ -10,7 +10,7 @@ inputs:
   comment-report:
     description: 'Whether to comment the build size report on the PR or not: true, false'
   mode:
-    description: 'Report mode: comparison (default), head-only'
+    description: 'Report mode: regression (default), head-only'
   display-size:
     description: 'What size to display. Comma delimited list for multiple: uncompressed (default), gzip, brotli:'
   unchanged-files:
