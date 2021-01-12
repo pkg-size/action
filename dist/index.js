@@ -6683,8 +6683,6 @@ function ec({headPkgData: e, hideFiles: t}) {
 	${s}
 
 	${n}
-
-	${JSON.stringify(e, null, 4)}
 	`;
 }
 

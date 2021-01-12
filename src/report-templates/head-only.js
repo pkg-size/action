@@ -56,8 +56,6 @@ function headOnly({
 	${table}
 
 	${hiddenTable}
-
-	${JSON.stringify(headPkgData, null, 4)}
 	`;
 }
 
