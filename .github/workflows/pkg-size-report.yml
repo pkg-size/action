@@ -19,3 +19,4 @@ jobs:
         with:
           hide-files: '*.md'
           mode: 'head-only'
+          display-size: brotli, uncompressed, gzip

@@ -5,10 +5,41 @@ import { partition } from 'lodash-es';
 import globToRegExp from 'glob-to-regexp';
 import { c, strong } from '../lib/markdown.js';
 
+const listSizes = (displaySizes, callback) => displaySizes
+	.map(({ property }) => callback(property))
+	.join(' / ');
+
+const supportedSizes = {
+	uncompressed: {
+		label: 'Size',
+		property: 'size',
+	},
+	gzip: {
+		label: 'Gzip',
+		property: 'sizeGzip',
+	},
+	brotli: {
+		label: 'Brotli',
+		property: 'sizeBrotli',
+	},
+};
+
 function headOnly({
 	headPkgData,
 	hideFiles,
+	displaySize,
 }) {
+	const displaySizes = displaySize
+		.split(',')
+		.map(s => s.trim())
+		.filter(s => supportedSizes.hasOwnProperty(s)) // eslint-disable-line no-prototype-builtins
+		.map(s => supportedSizes[s]);
+
+	let sizeHeadingLabel = '';
+	if (displaySizes.length > 1 || displaySizes[0].property !== 'size') {
+		sizeHeadingLabel = ` (${displaySizes.map(s => s.label).join(' / ')})`;
+	}
+
 	let { files } = headPkgData;
 	let hidden = [];
 	if (hideFiles) {
@@ -17,14 +48,14 @@ function headOnly({
 	}
 
 	const table = markdownTable([
-		['File', 'Size'],
+		['File', `Size${sizeHeadingLabel}`],
 		...files.map(file => [
 			file.label,
-			c(byteSize(file.size)),
+			listSizes(displaySizes, p => c(byteSize(file[p]))),
 		]),
 		[
 			strong('Total'),
-			c(byteSize(headPkgData.size)),
+			listSizes(displaySizes, p => c(byteSize(headPkgData[p]))),
 		],
 		[
 			strong('Tarball size'),
@@ -41,7 +72,7 @@ function headOnly({
 			['File', 'Size'],
 			...hidden.map(file => [
 				file.label,
-				c(byteSize(file.size)),
+				listSizes(displaySizes, p => c(byteSize(file[p]))),
 			]),
 		], {
 			align: ['', 'r'],

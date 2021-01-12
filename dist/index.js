@@ -6658,35 +6658,57 @@ var Xu = function(e, t) {
     return new RegExp(o, a);
 };
 
-function ec({headPkgData: e, hideFiles: t}) {
-    let {files: r} = e;
-    let o = [];
+const ec = (e, t) => e.map((({property: e}) => t(e))).join(" / ");
+
+const tc = {
+    uncompressed: {
+        label: "Size",
+        property: "size"
+    },
+    gzip: {
+        label: "Gzip",
+        property: "sizeGzip"
+    },
+    brotli: {
+        label: "Brotli",
+        property: "sizeBrotli"
+    }
+};
+
+function rc({headPkgData: e, hideFiles: t, displaySize: r}) {
+    const o = r.split(",").map((e => e.trim())).filter((e => tc.hasOwnProperty(e))).map((e => tc[e]));
+    let s = "";
+    if (o.length > 1 || o[0].property !== "size") {
+        s = ` (${o.map((e => e.label)).join(" / ")})`;
+    }
+    let {files: n} = e;
+    let i = [];
     if (t) {
         const e = Xu(t, {
             extended: true
         });
-        [o, r] = Zu(r, (t => e.test(t.path)));
+        [i, n] = Zu(n, (t => e.test(t.path)));
     }
-    const s = ao([ [ "File", "Size" ], ...r.map((e => [ e.label, Yr(ro(e.size)) ])), [ eo("Total"), Yr(ro(e.size)) ], [ eo("Tarball size"), Yr(ro(e.tarballSize)) ] ], {
+    const a = ao([ [ "File", `Size${s}` ], ...n.map((e => [ e.label, ec(o, (t => Yr(ro(e[t])))) ])), [ eo("Total"), ec(o, (t => Yr(ro(e[t])))) ], [ eo("Tarball size"), Yr(ro(e.tarballSize)) ] ], {
         align: [ "", "r" ]
     });
-    let n = "";
-    if (o.length > 0) {
-        n = ao([ [ "File", "Size" ], ...o.map((e => [ e.label, Yr(ro(e.size)) ])) ], {
+    let u = "";
+    if (i.length > 0) {
+        u = ao([ [ "File", "Size" ], ...i.map((e => [ e.label, ec(o, (t => Yr(ro(e[t])))) ])) ], {
             align: [ "", "r" ]
         });
-        n = `<details><summary>Hidden files</summary>\n\n${n}\n</details>`;
+        u = `<details><summary>Hidden files</summary>\n\n${u}\n</details>`;
     }
     return Io`
 	### 📊 Package size report
 
-	${s}
+	${a}
 
-	${n}
+	${u}
 	`;
 }
 
-const tc = e => {
+const oc = e => {
     if (e < .001) {
         e = Qu(e, 4);
     } else if (e < .01) {
@@ -6700,23 +6722,23 @@ const tc = e => {
     });
 };
 
-function rc(e, t, r) {
+function sc(e, t, r) {
     const o = e[r] - t[r];
     return {
         delta: o,
-        percent: tc(o / t[r])
+        percent: oc(o / t[r])
     };
 }
 
-function oc(e, t) {
+function nc(e, t) {
     return {
-        size: rc(e, t, "size"),
-        sizeGzip: rc(e, t, "sizeGzip"),
-        sizeBrotli: rc(e, t, "sizeBrotli")
+        size: sc(e, t, "size"),
+        sizeGzip: sc(e, t, "sizeGzip"),
+        sizeBrotli: sc(e, t, "sizeBrotli")
     };
 }
 
-function sc(e, t, r) {
+function ic(e, t, r) {
     r.files.forEach((r => {
         if (!e[r.path]) {
             e[r.path] = {
@@ -6727,15 +6749,15 @@ function sc(e, t, r) {
         const o = e[r.path];
         o[t] = r;
         if (o.head && o.base) {
-            o.diff = oc(o.head, o.base);
+            o.diff = nc(o.head, o.base);
         }
     }));
 }
 
-function nc(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
+function ac(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
     const n = {};
-    sc(n, "head", e);
-    sc(n, "base", t);
+    ic(n, "head", e);
+    ic(n, "base", t);
     let i = Object.values(n);
     i.sort(((e, t) => t[r] - e[r] || e.path.localeCompare(t.path)));
     if (o === "asc") {
@@ -6753,8 +6775,8 @@ function nc(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
         head: e,
         base: t,
         diff: {
-            ...oc(e, t),
-            tarballSize: rc(e, t, "tarballSize")
+            ...nc(e, t),
+            tarballSize: sc(e, t, "tarballSize")
         },
         files: {
             changed: c,
@@ -6764,7 +6786,7 @@ function nc(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
     };
 }
 
-var ic = G((function(e, t) {
+var uc = G((function(e, t) {
     var r = S && S.__awaiter || function(e, t, r, o) {
         function s(e) {
             return e instanceof r ? e : new r((function(t) {
@@ -6936,7 +6958,7 @@ var ic = G((function(e, t) {
     }
 }));
 
-var ac = S && S.__awaiter || function(e, t, r, o) {
+var cc = S && S.__awaiter || function(e, t, r, o) {
     function s(e) {
         return e instanceof r ? e : new r((function(t) {
             t(e);
@@ -6964,113 +6986,113 @@ var ac = S && S.__awaiter || function(e, t, r, o) {
     }));
 };
 
-const uc = E["default"].promisify(k["default"].exec);
+const lc = E["default"].promisify(k["default"].exec);
 
-function cc(e, t, r = {}) {
-    return ac(this, void 0, void 0, (function*() {
-        const {force: o, recursive: s} = yc(r);
-        const n = (yield ic.exists(t)) ? yield ic.stat(t) : null;
+function pc(e, t, r = {}) {
+    return cc(this, void 0, void 0, (function*() {
+        const {force: o, recursive: s} = Tc(r);
+        const n = (yield uc.exists(t)) ? yield uc.stat(t) : null;
         if (n && n.isFile() && !o) {
             return;
         }
         const i = n && n.isDirectory() ? b["default"].join(t, b["default"].basename(e)) : t;
-        if (!(yield ic.exists(e))) {
+        if (!(yield uc.exists(e))) {
             throw new Error(`no such file or directory: ${e}`);
         }
-        const a = yield ic.stat(e);
+        const a = yield uc.stat(e);
         if (a.isDirectory()) {
             if (!s) {
                 throw new Error(`Failed to copy. ${e} is a directory, but tried to copy without recursive flag.`);
             } else {
-                yield vc(e, i, 0, o);
+                yield Ec(e, i, 0, o);
             }
         } else {
             if (b["default"].relative(e, i) === "") {
                 throw new Error(`'${i}' and '${e}' are the same file`);
             }
-            yield Tc(e, i, o);
+            yield _c(e, i, o);
         }
-    }));
-}
-
-var lc = cc;
-
-function pc(e, t, r = {}) {
-    return ac(this, void 0, void 0, (function*() {
-        if (yield ic.exists(t)) {
-            let o = true;
-            if (yield ic.isDirectory(t)) {
-                t = b["default"].join(t, b["default"].basename(e));
-                o = yield ic.exists(t);
-            }
-            if (o) {
-                if (r.force == null || r.force) {
-                    yield fc(t);
-                } else {
-                    throw new Error("Destination already exists");
-                }
-            }
-        }
-        yield hc(b["default"].dirname(t));
-        yield ic.rename(e, t);
     }));
 }
 
 var dc = pc;
 
-function fc(e) {
-    return ac(this, void 0, void 0, (function*() {
-        if (ic.IS_WINDOWS) {
-            try {
-                if (yield ic.isDirectory(e, true)) {
-                    yield uc(`rd /s /q "${e}"`);
+function fc(e, t, r = {}) {
+    return cc(this, void 0, void 0, (function*() {
+        if (yield uc.exists(t)) {
+            let o = true;
+            if (yield uc.isDirectory(t)) {
+                t = b["default"].join(t, b["default"].basename(e));
+                o = yield uc.exists(t);
+            }
+            if (o) {
+                if (r.force == null || r.force) {
+                    yield hc(t);
                 } else {
-                    yield uc(`del /f /a "${e}"`);
+                    throw new Error("Destination already exists");
                 }
-            } catch (e) {
-                if (e.code !== "ENOENT") throw e;
-            }
-            try {
-                yield ic.unlink(e);
-            } catch (e) {
-                if (e.code !== "ENOENT") throw e;
-            }
-        } else {
-            let t = false;
-            try {
-                t = yield ic.isDirectory(e);
-            } catch (e) {
-                if (e.code !== "ENOENT") throw e;
-                return;
-            }
-            if (t) {
-                yield uc(`rm -rf "${e}"`);
-            } else {
-                yield ic.unlink(e);
             }
         }
+        yield bc(b["default"].dirname(t));
+        yield uc.rename(e, t);
     }));
 }
 
 var mc = fc;
 
 function hc(e) {
-    return ac(this, void 0, void 0, (function*() {
-        yield ic.mkdirP(e);
+    return cc(this, void 0, void 0, (function*() {
+        if (uc.IS_WINDOWS) {
+            try {
+                if (yield uc.isDirectory(e, true)) {
+                    yield lc(`rd /s /q "${e}"`);
+                } else {
+                    yield lc(`del /f /a "${e}"`);
+                }
+            } catch (e) {
+                if (e.code !== "ENOENT") throw e;
+            }
+            try {
+                yield uc.unlink(e);
+            } catch (e) {
+                if (e.code !== "ENOENT") throw e;
+            }
+        } else {
+            let t = false;
+            try {
+                t = yield uc.isDirectory(e);
+            } catch (e) {
+                if (e.code !== "ENOENT") throw e;
+                return;
+            }
+            if (t) {
+                yield lc(`rm -rf "${e}"`);
+            } else {
+                yield uc.unlink(e);
+            }
+        }
     }));
 }
 
 var gc = hc;
 
-function bc(e, t) {
-    return ac(this, void 0, void 0, (function*() {
+function bc(e) {
+    return cc(this, void 0, void 0, (function*() {
+        yield uc.mkdirP(e);
+    }));
+}
+
+var wc = bc;
+
+function yc(e, t) {
+    return cc(this, void 0, void 0, (function*() {
         if (!e) {
             throw new Error("parameter 'tool' is required");
         }
         if (t) {
-            const t = yield bc(e, false);
+            const t = yield yc(e, false);
             if (!t) {
-                if (ic.IS_WINDOWS) {
+                if (uc.IS_WINDOWS) {
                     throw new Error(`Unable to locate executable file: ${e}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also verify the file has a valid extension for an executable file.`);
                 } else {
                     throw new Error(`Unable to locate executable file: ${e}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also check the file mode to verify the file is executable.`);
@@ -7079,21 +7101,21 @@ function bc(e, t) {
         }
         try {
             const t = [];
-            if (ic.IS_WINDOWS && process.env.PATHEXT) {
+            if (uc.IS_WINDOWS && process.env.PATHEXT) {
                 for (const e of process.env.PATHEXT.split(b["default"].delimiter)) {
                     if (e) {
                         t.push(e);
                     }
                 }
             }
-            if (ic.isRooted(e)) {
-                const r = yield ic.tryGetExecutablePath(e, t);
+            if (uc.isRooted(e)) {
+                const r = yield uc.tryGetExecutablePath(e, t);
                 if (r) {
                     return r;
                 }
                 return "";
             }
-            if (e.includes("/") || ic.IS_WINDOWS && e.includes("\\")) {
+            if (e.includes("/") || uc.IS_WINDOWS && e.includes("\\")) {
                 return "";
             }
             const r = [];
@@ -7105,7 +7127,7 @@ function bc(e, t) {
                 }
             }
             for (const o of r) {
-                const r = yield ic.tryGetExecutablePath(o + b["default"].sep + e, t);
+                const r = yield uc.tryGetExecutablePath(o + b["default"].sep + e, t);
                 if (r) {
                     return r;
                 }
@@ -7117,9 +7139,9 @@ function bc(e, t) {
     }));
 }
 
-var wc = bc;
+var vc = yc;
 
-function yc(e) {
+function Tc(e) {
     const t = e.force == null ? true : e.force;
     const r = Boolean(e.recursive);
     return {
@@ -7128,57 +7150,57 @@ function yc(e) {
     };
 }
 
-function vc(e, t, r, o) {
-    return ac(this, void 0, void 0, (function*() {
+function Ec(e, t, r, o) {
+    return cc(this, void 0, void 0, (function*() {
         if (r >= 255) return;
         r++;
-        yield hc(t);
-        const s = yield ic.readdir(e);
+        yield bc(t);
+        const s = yield uc.readdir(e);
         for (const n of s) {
             const s = `${e}/${n}`;
             const i = `${t}/${n}`;
-            const a = yield ic.lstat(s);
+            const a = yield uc.lstat(s);
             if (a.isDirectory()) {
-                yield vc(s, i, r, o);
+                yield Ec(s, i, r, o);
             } else {
-                yield Tc(s, i, o);
+                yield _c(s, i, o);
             }
         }
-        yield ic.chmod(t, (yield ic.stat(e)).mode);
+        yield uc.chmod(t, (yield uc.stat(e)).mode);
     }));
 }
 
-function Tc(e, t, r) {
-    return ac(this, void 0, void 0, (function*() {
-        if ((yield ic.lstat(e)).isSymbolicLink()) {
+function _c(e, t, r) {
+    return cc(this, void 0, void 0, (function*() {
+        if ((yield uc.lstat(e)).isSymbolicLink()) {
             try {
-                yield ic.lstat(t);
-                yield ic.unlink(t);
+                yield uc.lstat(t);
+                yield uc.unlink(t);
             } catch (e) {
                 if (e.code === "EPERM") {
-                    yield ic.chmod(t, "0666");
-                    yield ic.unlink(t);
+                    yield uc.chmod(t, "0666");
+                    yield uc.unlink(t);
                 }
             }
-            const r = yield ic.readlink(e);
-            yield ic.symlink(r, t, ic.IS_WINDOWS ? "junction" : null);
-        } else if (!(yield ic.exists(t)) || r) {
-            yield ic.copyFile(e, t);
+            const r = yield uc.readlink(e);
+            yield uc.symlink(r, t, uc.IS_WINDOWS ? "junction" : null);
+        } else if (!(yield uc.exists(t)) || r) {
+            yield uc.copyFile(e, t);
         }
     }));
 }
 
-var Ec = Object.defineProperty({
-    cp: lc,
-    mv: dc,
-    rmRF: mc,
-    mkdirP: gc,
-    which: wc
+var Oc = Object.defineProperty({
+    cp: dc,
+    mv: mc,
+    rmRF: gc,
+    mkdirP: wc,
+    which: vc
 }, "__esModule", {
     value: true
 });
 
-var _c = S && S.__awaiter || function(e, t, r, o) {
+var Pc = S && S.__awaiter || function(e, t, r, o) {
     function s(e) {
         return e instanceof r ? e : new r((function(t) {
             t(e);
@@ -7206,7 +7228,7 @@ var _c = S && S.__awaiter || function(e, t, r, o) {
     }));
 };
 
-var Oc = S && S.__importStar || function(e) {
+var kc = S && S.__importStar || function(e) {
     if (e && e.__esModule) return e;
     var t = {};
     if (e != null) for (var r in e) if (Object.hasOwnProperty.call(e, r)) t[r] = e[r];
@@ -7214,21 +7236,21 @@ var Oc = S && S.__importStar || function(e) {
     return t;
 };
 
-const Pc = Oc(h["default"]);
+const Sc = kc(h["default"]);
 
-const kc = Oc(T["default"]);
+const Ac = kc(T["default"]);
 
-const Sc = Oc(k["default"]);
+const Gc = kc(k["default"]);
 
-const Ac = Oc(b["default"]);
+const Cc = kc(b["default"]);
 
-const Gc = Oc(Ec);
+const jc = kc(Oc);
 
-const Cc = Oc(ic);
+const Rc = kc(uc);
 
-const jc = process.platform === "win32";
+const xc = process.platform === "win32";
 
-class Rc extends kc.EventEmitter {
+class Uc extends Ac.EventEmitter {
     constructor(e, t, r) {
         super();
         if (!e) {
@@ -7247,7 +7269,7 @@ class Rc extends kc.EventEmitter {
         const r = this._getSpawnFileName();
         const o = this._getSpawnArgs(e);
         let s = t ? "" : "[command]";
-        if (jc) {
+        if (xc) {
             if (this._isCmdFile()) {
                 s += r;
                 for (const e of o) {
@@ -7275,12 +7297,12 @@ class Rc extends kc.EventEmitter {
     _processLineBuffer(e, t, r) {
         try {
             let o = t + e.toString();
-            let s = o.indexOf(Pc.EOL);
+            let s = o.indexOf(Sc.EOL);
             while (s > -1) {
                 const e = o.substring(0, s);
                 r(e);
-                o = o.substring(s + Pc.EOL.length);
-                s = o.indexOf(Pc.EOL);
+                o = o.substring(s + Sc.EOL.length);
+                s = o.indexOf(Sc.EOL);
             }
             t = o;
         } catch (e) {
@@ -7288,7 +7310,7 @@ class Rc extends kc.EventEmitter {
         }
     }
     _getSpawnFileName() {
-        if (jc) {
+        if (xc) {
             if (this._isCmdFile()) {
                 return process.env["COMSPEC"] || "cmd.exe";
             }
@@ -7296,7 +7318,7 @@ class Rc extends kc.EventEmitter {
         return this.toolPath;
     }
     _getSpawnArgs(e) {
-        if (jc) {
+        if (xc) {
             if (this._isCmdFile()) {
                 let t = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
                 for (const r of this.args) {
@@ -7403,11 +7425,11 @@ class Rc extends kc.EventEmitter {
         return r;
     }
     exec() {
-        return _c(this, void 0, void 0, (function*() {
-            if (!Cc.isRooted(this.toolPath) && (this.toolPath.includes("/") || jc && this.toolPath.includes("\\"))) {
-                this.toolPath = Ac.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
+        return Pc(this, void 0, void 0, (function*() {
+            if (!Rc.isRooted(this.toolPath) && (this.toolPath.includes("/") || xc && this.toolPath.includes("\\"))) {
+                this.toolPath = Cc.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
             }
-            this.toolPath = yield Gc.which(this.toolPath, true);
+            this.toolPath = yield jc.which(this.toolPath, true);
             return new Promise(((e, t) => {
                 this._debug(`exec tool: ${this.toolPath}`);
                 this._debug("arguments:");
@@ -7416,14 +7438,14 @@ class Rc extends kc.EventEmitter {
                 }
                 const r = this._cloneExecOptions(this.options);
                 if (!r.silent && r.outStream) {
-                    r.outStream.write(this._getCommandString(r) + Pc.EOL);
+                    r.outStream.write(this._getCommandString(r) + Sc.EOL);
                 }
-                const o = new Dc(r, this.toolPath);
+                const o = new qc(r, this.toolPath);
                 o.on("debug", (e => {
                     this._debug(e);
                 }));
                 const s = this._getSpawnFileName();
-                const n = Sc.spawn(s, this._getSpawnArgs(r), this._getSpawnOptions(this.options, s));
+                const n = Gc.spawn(s, this._getSpawnArgs(r), this._getSpawnOptions(this.options, s));
                 const i = "";
                 if (n.stdout) {
                     n.stdout.on("data", (e => {
@@ -7502,9 +7524,9 @@ class Rc extends kc.EventEmitter {
     }
 }
 
-var xc = Rc;
+var Fc = Uc;
 
-function Uc(e) {
+function Dc(e) {
     const t = [];
     let r = false;
     let o = false;
@@ -7549,9 +7571,9 @@ function Uc(e) {
     return t;
 }
 
-var Fc = Uc;
+var $c = Dc;
 
-class Dc extends kc.EventEmitter {
+class qc extends Ac.EventEmitter {
     constructor(e, t) {
         super();
         this.processClosed = false;
@@ -7578,7 +7600,7 @@ class Dc extends kc.EventEmitter {
         if (this.processClosed) {
             this._setResult();
         } else if (this.processExited) {
-            this.timeout = setTimeout(Dc.HandleTimeout, this.delay, this);
+            this.timeout = setTimeout(qc.HandleTimeout, this.delay, this);
         }
     }
     _debug(e) {
@@ -7614,14 +7636,14 @@ class Dc extends kc.EventEmitter {
     }
 }
 
-var $c = Object.defineProperty({
-    ToolRunner: xc,
-    argStringToArray: Fc
+var Lc = Object.defineProperty({
+    ToolRunner: Fc,
+    argStringToArray: $c
 }, "__esModule", {
     value: true
 });
 
-var qc = S && S.__awaiter || function(e, t, r, o) {
+var Bc = S && S.__awaiter || function(e, t, r, o) {
     function s(e) {
         return e instanceof r ? e : new r((function(t) {
             t(e);
@@ -7649,7 +7671,7 @@ var qc = S && S.__awaiter || function(e, t, r, o) {
     }));
 };
 
-var Lc = S && S.__importStar || function(e) {
+var Ic = S && S.__importStar || function(e) {
     if (e && e.__esModule) return e;
     var t = {};
     if (e != null) for (var r in e) if (Object.hasOwnProperty.call(e, r)) t[r] = e[r];
@@ -7657,28 +7679,28 @@ var Lc = S && S.__importStar || function(e) {
     return t;
 };
 
-const Bc = Lc($c);
+const zc = Ic(Lc);
 
-function Ic(e, t, r) {
-    return qc(this, void 0, void 0, (function*() {
-        const o = Bc.argStringToArray(e);
+function Hc(e, t, r) {
+    return Bc(this, void 0, void 0, (function*() {
+        const o = zc.argStringToArray(e);
         if (o.length === 0) {
             throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
         }
         const s = o[0];
         t = o.slice(1).concat(t || []);
-        const n = new Bc.ToolRunner(s, t, r);
+        const n = new zc.ToolRunner(s, t, r);
         return n.exec();
     }));
 }
 
-var zc = Ic;
+var Mc = Hc;
 
-async function Hc(e, t) {
+async function Nc(e, t) {
     let r = "";
     let o = "";
     const s = Date.now();
-    const n = await zc(e, null, {
+    const n = await Mc(e, null, {
         ...t,
         silent: true,
         listeners: {
@@ -7699,22 +7721,22 @@ async function Hc(e, t) {
     };
 }
 
-async function Mc(e) {
+async function Wc(e) {
     try {
-        await Hc(`git fetch origin ${e} --depth=1`);
+        await Nc(`git fetch origin ${e} --depth=1`);
     } catch (t) {
         throw new Error(`Failed to git fetch ${e} ${t.message}`);
     }
-    const {exitCode: t} = await Hc(`git diff --quiet origin/${e}`, {
+    const {exitCode: t} = await Nc(`git diff --quiet origin/${e}`, {
         ignoreReturnCode: true
     });
     return t !== 0;
 }
 
-async function Nc({cwd: e} = {}) {
+async function Vc({cwd: e} = {}) {
     if (g["default"].existsSync("node_modules")) {
         Y.info("Cleaning node_modules");
-        await mc(b["default"].join(e, "node_modules"));
+        await gc(b["default"].join(e, "node_modules"));
     }
     const t = {
         cwd: e,
@@ -7734,27 +7756,27 @@ async function Nc({cwd: e} = {}) {
         Y.info("No lock file detected. Installing dependencies with npm");
         r = "npm i";
     }
-    const {exitCode: o, stdout: s, stderr: n} = await Hc(r, t);
+    const {exitCode: o, stdout: s, stderr: n} = await Nc(r, t);
     if (o > 0) {
         throw new Error(`${n}\n${s}`);
     }
 }
 
-async function Wc(e) {
-    const {exitCode: t} = await Hc(`git ls-files --error-unmatch ${e}`, {
+async function Jc(e) {
+    const {exitCode: t} = await Nc(`git ls-files --error-unmatch ${e}`, {
         ignoreReturnCode: true
     });
     return t === 0;
 }
 
-let Vc = false;
+let Kc = false;
 
-async function Jc({checkoutRef: e, refData: t, buildCommand: r}) {
+async function Yc({checkoutRef: e, refData: t, buildCommand: r}) {
     const o = process.cwd();
     Y.info(`Current working directory: ${o}`);
     if (e) {
         Y.info(`Checking out ref '${e}'`);
-        await Hc(`git checkout -f ${e}`);
+        await Nc(`git checkout -f ${e}`);
     }
     if (r !== "false") {
         if (!r) {
@@ -7770,27 +7792,27 @@ async function Jc({checkoutRef: e, refData: t, buildCommand: r}) {
             }
         }
         if (r) {
-            await Nc({
+            await Vc({
                 cwd: o
             }).catch((e => {
                 throw new Error(`Failed to install dependencies:\n${e.message}`);
             }));
             Y.info(`Running build command: ${r}`);
-            await Hc(r, {
+            await Nc(r, {
                 cwd: o
             }).catch((e => {
                 throw new Error(`Failed to run build command: ${r}\n${e.message}`);
             }));
         }
     }
-    if (!Vc) {
+    if (!Kc) {
         Y.info("Installing pkg-size globally");
-        await Hc("yarn global add pkg-size");
-        Y.addPath((await Hc("yarn global bin")).stdout.trim());
-        Vc = true;
+        await Nc("yarn global add pkg-size");
+        Y.addPath((await Nc("yarn global bin")).stdout.trim());
+        Kc = true;
     }
     Y.info("Getting package size");
-    const s = await Hc("pkg-size --json", {
+    const s = await Nc("pkg-size --json", {
         cwd: o
     }).catch((e => {
         throw new Error(`Failed to determine package size: ${e.message}`);
@@ -7807,20 +7829,20 @@ async function Jc({checkoutRef: e, refData: t, buildCommand: r}) {
         n.size += e.size;
         n.sizeGzip += e.sizeGzip;
         n.sizeBrotli += e.sizeBrotli;
-        const r = await Wc(`.${e.path}`);
+        const r = await Jc(`.${e.path}`);
         e.isTracked = r;
         e.label = r ? Zr(Yr(e.path), `${t.repo.html_url}/blob/${t.ref}${e.path}`) : Yr(e.path);
     })));
     Y.info("Cleaning up");
-    await Hc("git reset --hard");
-    const {stdout: i} = await Hc("git clean -dfx");
+    await Nc("git reset --hard");
+    const {stdout: i} = await Nc("git clean -dfx");
     Y.debug(i);
     return n;
 }
 
-async function Kc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedFiles: s, hideFiles: n, sortBy: i, sortOrder: a, displaySize: u}) {
+async function Zc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedFiles: s, hideFiles: n, sortBy: i, sortOrder: a, displaySize: u}) {
     Y.startGroup("Build HEAD");
-    const c = await Jc({
+    const c = await Yc({
         refData: e.head,
         buildCommand: t
     });
@@ -7828,18 +7850,19 @@ async function Kc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
     Y.endGroup();
     if (o === "head-only") {
         if (r !== "false") {
-            return ec({
+            return rc({
                 headPkgData: c,
-                hideFiles: n
+                hideFiles: n,
+                displaySize: u
             });
         }
     }
     const {ref: l} = e.base;
     let p;
-    if (await Mc(l)) {
+    if (await Wc(l)) {
         Y.info("HEAD is different from BASE. Triggering build.");
         Y.startGroup("Build BASE");
-        p = await Jc({
+        p = await Yc({
             checkoutRef: l,
             refData: e.base,
             buildCommand: t
@@ -7853,7 +7876,7 @@ async function Kc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
         };
     }
     Y.setOutput("basePkgData", p);
-    const d = nc(c, p, {
+    const d = ac(c, p, {
         sortBy: i,
         sortOrder: a,
         hideFiles: n
@@ -7869,13 +7892,13 @@ async function Kc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
     return false;
 }
 
-const Yc = Qr("🤖 This report was automatically generated by [pkg-size-action](https://github.com/privatenumber/pkg-size-action/)");
+const Qc = Qr("🤖 This report was automatically generated by [pkg-size-action](https://github.com/privatenumber/pkg-size-action/)");
 
 (async () => {
     const {GITHUB_TOKEN: e} = process.env;
     m["default"](e, 'Environment variable "GITHUB_TOKEN" not set. Required for accessing and reporting on the PR.');
     const {pull_request: t} = Kr.context.payload;
-    const r = await Kc({
+    const r = await Zc({
         pr: t,
         buildCommand: Y.getInput("build-command"),
         commentReport: Y.getInput("comment-report"),
@@ -7889,7 +7912,7 @@ const Yc = Qr("🤖 This report was automatically generated by [pkg-size-action]
     if (r) {
         await to({
             token: e,
-            commentSignature: Yc,
+            commentSignature: Qc,
             repo: Kr.context.repo,
             prNumber: t.number,
             body: r

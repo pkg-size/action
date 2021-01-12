@@ -29,6 +29,7 @@ async function generateSizeReport({
 			return headOnlyReportTemplate({
 				headPkgData,
 				hideFiles,
+				displaySize,
 			});
 		}
 	}
