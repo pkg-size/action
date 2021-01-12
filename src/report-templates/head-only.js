@@ -7,15 +7,20 @@ import {
 	getSizeLabels,
 	parseDisplaySize,
 	listSizes,
+	sortFiles,
 } from './utils.js';
 
 function headOnly({
 	headPkgData,
 	hideFiles,
 	displaySize,
+	sortBy,
+	sortOrder,
 }) {
 	const displaySizes = parseDisplaySize(displaySize);
 	const sizeHeadingLabel = getSizeLabels(displaySizes);
+
+	sortFiles(headPkgData.files, sortBy, sortOrder);
 	const [hidden, files] = partionHidden(hideFiles, headPkgData.files);
 
 	const table = markdownTable([

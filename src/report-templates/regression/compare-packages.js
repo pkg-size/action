@@ -1,5 +1,8 @@
 import { partition, round } from 'lodash-es';
-import { partionHidden } from '../utils.js';
+import {
+	partionHidden,
+	sortFiles,
+} from '../utils.js';
 
 const percent = (fraction) => {
 	if (fraction < 0.001) { // 0.09% and lower
@@ -61,10 +64,7 @@ function comparePackages(head, base, {
 
 	const allFiles = Object.values(fileMap);
 
-	allFiles.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
-	if (sortOrder === 'asc') {
-		allFiles.reverse();
-	}
+	sortFiles(allFiles, sortBy, sortOrder);
 
 	const [hidden, files] = partionHidden(hideFiles, allFiles);
 	const [unchanged, changed] = partition(

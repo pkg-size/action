@@ -43,9 +43,17 @@ const listSizes = (displaySizes, callback) => displaySizes
 	.map(({ property }) => callback(property))
 	.join(' / ');
 
+function sortFiles(files, sortBy, sortOrder) {
+	files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
+	if (sortOrder === 'asc') {
+		files.reverse();
+	}
+}
+
 export {
 	partionHidden,
 	getSizeLabels,
 	parseDisplaySize,
 	listSizes,
+	sortFiles,
 };

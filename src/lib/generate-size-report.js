@@ -28,8 +28,8 @@ async function generateSizeReport({
 			return headOnlyReportTemplate({
 				headPkgData,
 				displaySize,
-				// sortBy,
-				// sortOrder,
+				sortBy,
+				sortOrder,
 				hideFiles,
 			});
 		}
