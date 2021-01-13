@@ -1,4 +1,8 @@
-# 📊 pkg-size-action
+<p align="center"> 
+  <img src="/.github/logo.svg" width="116px">
+</p>
+
+<h1 align="center">pkg-size action</h1>
 
 Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
 
@@ -190,3 +194,9 @@ Glob pattern to hide files. For example, if you want to hide source-maps:
 ```yml
 hide-files: '*.{js,css}.map'
 ```
+
+
+## 💼 License
+MIT © Hiroki Osame
+
+Logo made by <a href="https://www.flaticon.com/free-icon/report_1055644" title="Freepik">Freepik</a>
