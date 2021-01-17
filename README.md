@@ -45,12 +45,12 @@ Get npm package size reports on your pull-requests.
 ## 👨🏻‍🏫 Examples
 
 <details>
-  <summary><strong>Set a custom build command to produce distribution assets</strong></summary>
+  <summary><strong>Set a custom command to build</strong></summary>
   <br>
 
-By default, pkg-size-action detects whether `npm run build` works. If not, it assumes your repo doesn't have a build step and won't even install dependencies.
+The default behavior detects whether `npm run build` exists. If not, it assumes your repo doesn't have a build step and won't even install dependencies.
 
-If your repo has a different build script, specify one via `build-command`. Disable producing a build by passing in `false`.
+If your repo has a different build script, specify one with `build-command`. Disable building by passing in `false`.
 
 ```yaml
 name: Package Size Report
@@ -80,8 +80,8 @@ jobs:
 <details>
   <summary><strong>Hiding source-map changes from report</strong></summary>
   <br>
-
-Source-maps can be a negligible when considering distribution size. Hide them from your report to reduce the noise using a glob.
+  
+Source-maps might add unnecessary noise to your report. Hide them using a glob.
 
 ```yaml
 name: Package Size Report
@@ -112,6 +112,8 @@ jobs:
   <summary><strong>Show unchanged & changed files in the same table</strong></summary>
   <br>
 
+The default behavior hides unchanged files in a collapsible. To include unchanged files in the visible table, set `unchanged-files` to `show`.
+
 ```yaml
 name: Package Size Report
 
@@ -136,6 +138,38 @@ jobs:
           unchanged-files: show # ⬅ Make unchanged files appear in the same table
 ```
 </details>
+
+<details>
+  <summary><strong>Use Brotli size</strong></summary>
+  <br>
+
+  Use `display-size: brotli` to only show [Brotli compression size](https://en.wikipedia.org/wiki/Brotli). Use a comma separated list to show multiple sizes.
+
+```yaml
+name: Package Size Report
+
+on:
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  pkg-size-report:
+    name: Package Size Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Package size report
+        uses: privatenumber/pkg-size-action@develop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          display-size: uncompressed, brotli # ⬅ Comma separated list of sizes to show
+```
+</details>
+
 
 ## ⚙️ Options
 
