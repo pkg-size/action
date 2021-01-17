@@ -4,14 +4,14 @@
 
 <h1 align="center">pkg-size action</h1>
 
-Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
+Get npm package size reports on your pull-requests.
 
 <img src="/.github/screenshot.png" width="80%">
 
 <sub>If you like this project, please star it & [follow me](https://github.com/privatenumber) to see what other cool projects I'm working on! ❤️</sub>
 
 ## 🙋‍♂️ Why?
-- 🎩 **Auto-detect distribution assets** Only tracks distribution files by using the same logic as `npm publish`!
+- 🎩 **Auto-detect distribution assets** Uses the same logic as `npm publish`!
 - 🙌 **Supports npm, yarn, and pnpm** Auto CI/frozen-lock installs across module installers!
 - 🔥 **Fully customizable report comment** Configure the default template or bring your own!
 
