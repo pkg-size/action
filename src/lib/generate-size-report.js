@@ -2,6 +2,7 @@ import { setOutput } from '@actions/core';
 import { regressionReportTemplate, headOnlyReportTemplate } from '../report-templates/index.js';
 import isBaseDiffFromHead from './is-base-diff-from-head.js';
 import buildRef from './build-ref.js';
+import exec from './exec.js';
 import * as log from './log.js';
 
 async function generateSizeReport({
@@ -45,6 +46,7 @@ async function generateSizeReport({
 			refData: pr.base,
 			buildCommand,
 		});
+		await exec(`git checkout -f ${pr.head.ref}`);
 		log.endGroup();
 	} else {
 		log.info('HEAD is identical to BASE. Skipping base build.');

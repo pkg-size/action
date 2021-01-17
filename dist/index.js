@@ -7865,6 +7865,7 @@ async function Xc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
             refData: e.base,
             buildCommand: t
         });
+        await Vc(`git checkout -f ${e.head.ref}`);
         Y.endGroup();
     } else {
         Y.info("HEAD is identical to BASE. Skipping base build.");
