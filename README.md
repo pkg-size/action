@@ -1,16 +1,12 @@
 <p align="center"> 
-  <img src="/.github/logo.svg" width="116px">
+  <img src="/.github/logo.svg" width="112px">
 </p>
 
 <h1 align="center">pkg-size action</h1>
 
-<p align="center">
-  <img src="/.github/screenshot.png" width="80%">
+Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
 
-  <br>
-
-  Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
-</p>
+<img src="/.github/screenshot.png" width="80%">
 
 <sub>If you like this project, please star it & [follow me](https://github.com/privatenumber) to see what other cool projects I'm working on! ❤️</sub>
 
