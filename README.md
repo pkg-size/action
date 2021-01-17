@@ -12,7 +12,7 @@ Get npm package size reports on your pull-requests.
 
 ## 🙋‍♂️ Why?
 - 🎩 **Auto-detect distribution assets** Uses the same logic as `npm publish`!
-- 🙌 **Supports npm, yarn, and pnpm** Auto CI/frozen-lock installs across module installers!
+- 🙌 **Supports npm, yarn, and pnpm** Auto CI/frozen-lock installs across package installers!
 - 🔥 **Fully customizable report comment** Configure the default template or bring your own!
 
 ## 🚦 Quick Setup
