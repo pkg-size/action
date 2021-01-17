@@ -4,9 +4,13 @@
 
 <h1 align="center">pkg-size action</h1>
 
-Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
+<p align="center">
+  <img src="/.github/screenshot.png" width="80%">
 
-<Screenshot>
+  <br>
+
+  Report npm package size changes on your pull-requests using [pkg-size](https://github.com/privatenumber/pkg-size).
+</p>
 
 <sub>If you like this project, please star it & [follow me](https://github.com/privatenumber) to see what other cool projects I'm working on! ❤️</sub>
 
