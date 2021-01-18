@@ -33,6 +33,7 @@ async function generateSizeReport({
 				hideFiles,
 			});
 		}
+		return false;
 	}
 
 	const { ref: baseRef } = pr.base;

@@ -7854,6 +7854,7 @@ async function Xc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
                 hideFiles: n
             });
         }
+        return false;
     }
     const {ref: l} = e.base;
     let p;
