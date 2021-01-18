@@ -6726,7 +6726,7 @@ function uc({headPkgData: e, basePkgData: t, sortBy: r, sortOrder: o, hideFiles:
         sortOrder: o,
         hideFiles: s
     });
-    Y.setOutput("pkgComparisonData", a);
+    Y.setOutput("regressionData", a);
     const {changed: u, unchanged: c, hidden: l} = a.files;
     const p = Qu(i);
     const d = Yu(p);

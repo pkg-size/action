@@ -35,15 +35,15 @@ function generateComment({
 	unchangedFiles,
 	displaySize,
 }) {
-	const pkgComparisonData = comparePackages(headPkgData, basePkgData, {
+	const regressionData = comparePackages(headPkgData, basePkgData, {
 		sortBy,
 		sortOrder,
 		hideFiles,
 	});
 
-	setOutput('pkgComparisonData', pkgComparisonData);
+	setOutput('regressionData', regressionData);
 
-	const { changed, unchanged, hidden } = pkgComparisonData.files;
+	const { changed, unchanged, hidden } = regressionData.files;
 	const displaySizes = parseDisplaySize(displaySize);
 	const sizeHeadingLabel = getSizeLabels(displaySizes);
 
@@ -66,18 +66,18 @@ function generateComment({
 		]),
 		[
 			`${strong('Total')} ${(unchangedFiles === 'show' ? '' : sub('_(Includes all files)_'))}`,
-			listSizes(displaySizes, p => c(byteSize(pkgComparisonData.base[p]))),
+			listSizes(displaySizes, p => c(byteSize(regressionData.base[p]))),
 			listSizes(displaySizes, p => (
-				sup(formatDelta(pkgComparisonData.diff[p]))
-				+ c(byteSize(pkgComparisonData.head[p]))
+				sup(formatDelta(regressionData.diff[p]))
+				+ c(byteSize(regressionData.head[p]))
 			)),
 		],
 		[
 			strong('Tarball size'),
-			c(byteSize(pkgComparisonData.base.tarballSize)),
+			c(byteSize(regressionData.base.tarballSize)),
 			(
-				sup(formatDelta(pkgComparisonData.diff.tarballSize))
-				+ c(byteSize(pkgComparisonData.head.tarballSize))
+				sup(formatDelta(regressionData.diff.tarballSize))
+				+ c(byteSize(regressionData.head.tarballSize))
 			),
 		],
 	], {
@@ -123,7 +123,7 @@ function generateComment({
 	}
 
 	return outdent`
-	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${formatDelta(pkgComparisonData.diff.size) || 'No changes'}</kbd>
+	### 📊 Package size report&nbsp;&nbsp;&nbsp;<kbd>${formatDelta(regressionData.diff.size) || 'No changes'}</kbd>
 
 	${table}
 
