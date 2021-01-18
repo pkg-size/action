@@ -170,7 +170,6 @@ jobs:
 ```
 </details>
 
-
 ## ⚙️ Options
 
 ### build-command
@@ -228,6 +227,17 @@ Glob pattern to hide files. For example, if you want to hide source-maps:
 ```yml
 hide-files: '*.{js,css}.map'
 ```
+
+## 📝 Outputs
+
+### headPkgData
+Size report JSON from building the PR head.
+
+### basePkgData
+Size report JSON from building the PR base. Only available in regression mode.
+
+### regressionData
+Size regression report JSON from building the PR base. Only available in regression mode.
 
 
 ## 💼 License
