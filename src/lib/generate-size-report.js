@@ -22,6 +22,7 @@ async function generateSizeReport({
 	});
 	setOutput('headPkgData', headPkgData);
 	log.endGroup();
+	console.log(JSON.stringify(headPkgData, null, 4));
 
 	if (mode === 'head-only') {
 		if (commentReport !== 'false') {
@@ -55,6 +56,8 @@ async function generateSizeReport({
 		};
 	}
 	setOutput('basePkgData', basePkgData);
+
+	console.log(JSON.stringify(basePkgData, null, 4));
 
 	if (commentReport !== 'false') {
 		return regressionReportTemplate({

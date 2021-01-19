@@ -6727,6 +6727,7 @@ function uc({headPkgData: e, basePkgData: t, sortBy: r, sortOrder: o, hideFiles:
         hideFiles: s
     });
     Y.setOutput("regressionData", a);
+    console.log(JSON.stringify(a, null, 4));
     const {changed: u, unchanged: c, hidden: l} = a.files;
     const p = Qu(i);
     const d = Yu(p);
@@ -7844,6 +7845,7 @@ async function Xc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
     });
     Y.setOutput("headPkgData", c);
     Y.endGroup();
+    console.log(JSON.stringify(c, null, 4));
     if (o === "head-only") {
         if (r !== "false") {
             return cc({
@@ -7875,6 +7877,7 @@ async function Xc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedF
         };
     }
     Y.setOutput("basePkgData", p);
+    console.log(JSON.stringify(p, null, 4));
     if (r !== "false") {
         return uc({
             headPkgData: c,

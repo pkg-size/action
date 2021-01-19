@@ -42,6 +42,7 @@ function generateComment({
 	});
 
 	setOutput('regressionData', regressionData);
+	console.log(JSON.stringify(regressionData, null, 4));
 
 	const { changed, unchanged, hidden } = regressionData.files;
 	const displaySizes = parseDisplaySize(displaySize);
