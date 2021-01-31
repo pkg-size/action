@@ -7794,11 +7794,13 @@ async function Qc({checkoutRef: e, refData: t, buildCommand: r}) {
                 throw new Error(`Failed to install dependencies:\n${e.message}`);
             }));
             Y.info(`Running build command: ${r}`);
+            const e = Date.now();
             await Vc(r, {
                 cwd: o
             }).catch((e => {
                 throw new Error(`Failed to run build command: ${r}\n${e.message}`);
             }));
+            Y.info(`Build completed in ${(Date.now() - e) / 1e3}s`);
         }
     }
     if (!Zc) {
