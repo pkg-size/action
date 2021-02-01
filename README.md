@@ -35,7 +35,7 @@ Get npm package size reports on your pull-requests.
             uses: actions/checkout@v2
 
           - name: Package size report
-            uses: privatenumber/pkg-size-action@develop
+            uses: pkg-size/action@develop
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     ```
@@ -69,7 +69,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: privatenumber/pkg-size-action@develop
+        uses: pkg-size/action@develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -100,7 +100,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: privatenumber/pkg-size-action@develop
+        uses: pkg-size/action@develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -131,7 +131,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: privatenumber/pkg-size-action@develop
+        uses: pkg-size/action@develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -162,7 +162,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: privatenumber/pkg-size-action@develop
+        uses: pkg-size/action@develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

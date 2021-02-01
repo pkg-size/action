@@ -12,8 +12,8 @@
 		"watch"
 	],
 	"license": "MIT",
-	"repository": "privatenumber/pkg-size-action",
-	"funding": "https://github.com/privatenumber/pkg-size-action?sponsor=1",
+	"repository": "pkg-size/action",
+	"funding": "https://github.com/pkg-size/action?sponsor=1",
 	"author": {
 		"name": "Hiroki Osame",
 		"email": "hiroki.osame@gmail.com"
