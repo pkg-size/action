@@ -40,7 +40,12 @@ Get npm package size reports on your pull-requests.
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     ```
 
-2. Try making a PR against one of the designated branches! You'll see a comment on your PR reporting the difference package size. This comment will be automatically updated as you push changes to your PR.
+2. Try making a PR against one of the designated branches.
+
+3. Get the pkg-size report as a comment on the PR! 📊
+
+	You'll see a comment on your PR reporting the package size regression. This comment will be automatically updated as you push changes to your PR.
+
 
 ## 👨🏻‍🏫 Examples
 
@@ -48,7 +53,7 @@ Get npm package size reports on your pull-requests.
   <summary><strong>Set a custom command to build</strong></summary>
   <br>
 
-The default behavior detects whether `npm run build` exists. If not, it assumes your repo doesn't have a build step and won't even install dependencies.
+The default behavior detects whether `npm run build` exists. If not, it assumes your repo doesn't have a build step and won't try to install dependencies.
 
 If your repo has a different build script, specify one with `build-command`. Disable building by passing in `false`.
 
@@ -173,7 +178,7 @@ jobs:
 ## ⚙️ Options
 
 ### build-command
-Default: `npm run build` if exists in `package.json`
+Default: `npm run build` if it exists in `package.json`, otherwise `false`.
 
 Command to build the package and produce distribution files with. Pass in `false` to disable attempting to produce a build.
 
