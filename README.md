@@ -40,7 +40,7 @@
             uses: actions/checkout@v2
 
           - name: Package size report
-            uses: pkg-size/action@v1.0.0
+            uses: pkg-size/action@v1
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     ```
@@ -79,7 +79,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: pkg-size/action@v1.0.0
+        uses: pkg-size/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -110,7 +110,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: pkg-size/action@v1.0.0
+        uses: pkg-size/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -141,7 +141,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: pkg-size/action@v1.0.0
+        uses: pkg-size/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -172,7 +172,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Package size report
-        uses: pkg-size/action@v1.0.0
+        uses: pkg-size/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
