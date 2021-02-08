@@ -4,18 +4,21 @@
 
 <h1 align="center">pkg-size action</h1>
 
-Get npm package size reports on your pull-requests.
+[pkg-size-action](https://github.com/pkg-size/action) is a [GitHub Action](https://github.com/features/actions) for getting automated size reports on your pull-requests.
 
 <img src="/.github/screenshot.png" width="80%">
 
 <sub>If you like this project, please star it & [follow me](https://github.com/privatenumber) to see what other cool projects I'm working on! ❤️</sub>
 
-## 🙋‍♂️ Why?
-- 🎩 **Auto-detect distribution assets** Uses the same logic as `npm publish`!
-- 🙌 **Supports npm, yarn, and pnpm** Auto CI/frozen-lock installs across package installers!
-- 🔥 **Fully customizable report comment** Configure the default template or bring your own!
 
-## 🚦 Quick Setup
+## ⭐️ Features
+- 📦 **Auto-detects npm distribution assets** using [pkg-size](https://github.com/pkg-size/pkg-size)
+- 🔥 **Node.js package installer agnostic** Supports auto lock-file installs from npm, yarn, pnpm
+- 🗜 **See compression sizes** Option to show uncompressed, Gzip, and Brotli size
+- ⚙️ **Configurable** Change the build command. Customize reports formats. Filter out unwanted files. 
+
+## 🚦 3-step setup
+
 1. Create the following file in your repo: `.github/workflows/package-size-report.yml`:
 
     ```yaml
@@ -42,7 +45,7 @@ Get npm package size reports on your pull-requests.
 
 2. Try making a PR against one of the designated branches.
 
-3. Get the pkg-size report as a comment on the PR! 📊
+3. 📊 Get the pkg-size report as a comment on the PR!
 
 	You'll see a comment on your PR reporting the package size regression. This comment will be automatically updated as you push changes to your PR.
 
@@ -232,6 +235,11 @@ Glob pattern to hide files. For example, if you want to hide source-maps:
 ```yml
 hide-files: '*.{js,css}.map'
 ```
+
+## 💁‍♀️ FAQ
+
+### Can I use this for non-published projects?
+Yes. All you need to do is specify distribution files in the `files` array in `package.json`.
 
 ## 💼 License
 MIT © Hiroki Osame
