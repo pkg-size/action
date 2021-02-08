@@ -6,7 +6,9 @@
 
 [pkg-size-action](https://github.com/pkg-size/action) is a [GitHub Action](https://github.com/features/actions) for getting automated size reports on your pull-requests.
 
-<img src="/.github/screenshot.png" width="80%">
+<p align="center">
+  <img src="/.github/screenshot.png" width="80%">
+</p>
 
 <sub>If you like this project, please star it & [follow me](https://github.com/privatenumber) to see what other cool projects I'm working on! ❤️</sub>
 
