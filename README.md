@@ -243,6 +243,12 @@ hide-files: '*.{js,css}.map'
 ### Can I use this for non-published projects?
 Yes. All you need to do is specify distribution files in the `files` array in `package.json`.
 
+### How is this different from [size-limit-action](https://github.com/marketplace/actions/size-limit-action)?
+
+[size-limit-action](https://github.com/marketplace/actions/size-limit-action) approaches size monitoring from a budgeting standpoint, and has features such as rejecting PRs if the proposed changes are too large. It requires specifying each distribution file and doesn't show compression sizes.
+
+**pkg-size-action** accepts that size increases can be often warranted if the feature/bug-fix is important, and approaches monitoring from a purely informational standpoint. It encourages being size conscious without blocking your changes. pkg-size-action can also automatically detect distribution files based on your `package.json` configuration.
+
 ## 💼 License
 MIT © Hiroki Osame
 
