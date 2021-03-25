@@ -62,7 +62,7 @@ async function buildRef({
 
 	if (!pkgSizeInstalled) {
 		log.info('Installing pkg-size globally');
-		await exec('yarn global add pkg-size');
+		await exec('yarn global add "pkg-size/pkg-size#built"');
 		addPath((await exec('yarn global bin')).stdout.trim());
 		pkgSizeInstalled = true;
 	}
