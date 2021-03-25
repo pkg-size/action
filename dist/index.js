@@ -7828,9 +7828,9 @@ async function Qc({checkoutRef: e, refData: t, buildCommand: r}) {
         n.size += e.size;
         n.sizeGzip += e.sizeGzip;
         n.sizeBrotli += e.sizeBrotli;
-        const r = await Yc(`.${e.path}`);
+        const r = await Yc(e.path);
         e.isTracked = r;
-        e.label = r ? Zr(Yr(e.path), `${t.repo.html_url}/blob/${t.ref}${e.path}`) : Yr(e.path);
+        e.label = r ? Zr(Yr(e.path), `${t.repo.html_url}/blob/${t.ref}/${e.path}`) : Yr(e.path);
     })));
     Y.info("Cleaning up");
     await Vc("git reset --hard");
