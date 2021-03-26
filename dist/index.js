@@ -7759,7 +7759,6 @@ async function Kc({cwd: e} = {}) {
 }
 
 async function Yc(e) {
-    console.log("checking is tracked", e);
     const {exitCode: t} = await Vc(`git ls-files --error-unmatch ${e}`, {
         ignoreReturnCode: true
     });
@@ -7805,8 +7804,8 @@ async function Qc({checkoutRef: e, refData: t, buildCommand: r}) {
         }
     }
     if (!Zc) {
-        Y.info('Installing pkg-size globally from "pkg-size/pkg-size#built"');
-        await Vc('yarn global add "pkg-size/pkg-size#built"');
+        Y.info("Installing pkg-size globally");
+        await Vc("yarn global add pkg-size");
         Y.addPath((await Vc("yarn global bin")).stdout.trim());
         Zc = true;
     }
