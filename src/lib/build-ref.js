@@ -86,11 +86,11 @@ async function buildRef({
 		pkgData.sizeGzip += file.sizeGzip;
 		pkgData.sizeBrotli += file.sizeBrotli;
 
-		const isTracked = await isFileTracked(`.${file.path}`);
+		const isTracked = await isFileTracked(file.path);
 		file.isTracked = isTracked;
 		file.label = (
 			isTracked
-				? link(c(file.path), `${refData.repo.html_url}/blob/${refData.ref}${file.path}`)
+				? link(c(file.path), `${refData.repo.html_url}/blob/${refData.ref}/${file.path}`)
 				: c(file.path)
 		);
 	}));
