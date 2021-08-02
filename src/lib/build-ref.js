@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { addPath } from '@actions/core';
 import * as log from './log.js';
 import exec from './exec.js';
 import npmCi from './npm-ci.js';
@@ -62,8 +61,7 @@ async function buildRef({
 
 	if (!pkgSizeInstalled) {
 		log.info('Installing pkg-size globally');
-		await exec('yarn global add pkg-size');
-		addPath((await exec('yarn global bin')).stdout.trim());
+		await exec('npm i -g pkg-size');
 		pkgSizeInstalled = true;
 	}
 
