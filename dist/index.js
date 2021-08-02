@@ -7805,8 +7805,7 @@ async function Qc({checkoutRef: e, refData: t, buildCommand: r}) {
     }
     if (!Zc) {
         Y.info("Installing pkg-size globally");
-        await Vc("yarn global add pkg-size");
-        Y.addPath((await Vc("yarn global bin")).stdout.trim());
+        await Vc("npm i -g pkg-size");
         Zc = true;
     }
     Y.info("Getting package size");
