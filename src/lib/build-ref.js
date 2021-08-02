@@ -66,6 +66,9 @@ async function buildRef({
 	}
 
 	log.info('Getting package size');
+	const test = await exec('which pkg-size');
+	log.info(test.stdout);
+
 	const result = await exec('pkg-size --json', { cwd }).catch((error) => {
 		throw new Error(`Failed to determine package size: ${error.message}`);
 	});

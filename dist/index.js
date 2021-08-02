@@ -8053,32 +8053,34 @@ async function Cc({checkoutRef: e, refData: t, buildCommand: r}) {
         jc = true;
     }
     $.info("Getting package size");
-    const s = await kc("pkg-size --json", {
+    const s = await kc("which pkg-size");
+    $.info(s.stdout);
+    const n = await kc("pkg-size --json", {
         cwd: o
     }).catch((e => {
         throw new Error(`Failed to determine package size: ${e.message}`);
     }));
-    $.debug(JSON.stringify(s, null, 4));
-    const n = {
-        ...JSON.parse(s.stdout),
+    $.debug(JSON.stringify(n, null, 4));
+    const i = {
+        ...JSON.parse(n.stdout),
         ref: t,
         size: 0,
         sizeGzip: 0,
         sizeBrotli: 0
     };
-    await Promise.all(n.files.map((async e => {
-        n.size += e.size;
-        n.sizeGzip += e.sizeGzip;
-        n.sizeBrotli += e.sizeBrotli;
+    await Promise.all(i.files.map((async e => {
+        i.size += e.size;
+        i.sizeGzip += e.sizeGzip;
+        i.sizeBrotli += e.sizeBrotli;
         const r = await Gc(e.path);
         e.isTracked = r;
         e.label = r ? $r(Dr(e.path), `${t.repo.html_url}/blob/${t.ref}/${e.path}`) : Dr(e.path);
     })));
     $.info("Cleaning up");
     await kc("git reset --hard");
-    const {stdout: i} = await kc("git clean -dfx");
-    $.debug(i);
-    return n;
+    const {stdout: a} = await kc("git clean -dfx");
+    $.debug(a);
+    return i;
 }
 
 async function Rc({pr: e, buildCommand: t, commentReport: r, mode: o, unchangedFiles: s, hideFiles: n, sortBy: i, sortOrder: a, displaySize: u}) {
