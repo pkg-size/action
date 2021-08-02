@@ -6800,19 +6800,19 @@ function hc(e, t) {
 }
 
 function gc(e, t, r) {
-    r.files.forEach((r => {
-        if (!e[r.path]) {
-            e[r.path] = {
-                path: r.path,
-                label: r.label
+    for (const o of r.files) {
+        if (!e[o.path]) {
+            e[o.path] = {
+                path: o.path,
+                label: o.label
             };
         }
-        const o = e[r.path];
-        o[t] = r;
-        if (o.head && o.base) {
-            o.diff = hc(o.head, o.base);
+        const r = e[o.path];
+        r[t] = o;
+        if (r.head && r.base) {
+            r.diff = hc(r.head, r.base);
         }
-    }));
+    }
 }
 
 function bc(e, t, {sortBy: r, sortOrder: o, hideFiles: s} = {}) {
