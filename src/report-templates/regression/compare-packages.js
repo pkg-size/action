@@ -36,7 +36,7 @@ function calculateDiff(head, base) {
 }
 
 function processPkgFiles(fileMap, type, pkgData) {
-	pkgData.files.forEach((file) => {
+	for (const file of pkgData.files) {
 		if (!fileMap[file.path]) {
 			fileMap[file.path] = {
 				path: file.path,
@@ -50,7 +50,7 @@ function processPkgFiles(fileMap, type, pkgData) {
 		if (entry.head && entry.base) {
 			entry.diff = calculateDiff(entry.head, entry.base);
 		}
-	});
+	}
 }
 
 function comparePackages(head, base, {
