@@ -88,6 +88,41 @@ jobs:
 </details>
 
 <details>
+  <summary><strong>Specify node version</strong></summary>
+  <br>
+
+By default, `ubuntu-latest` has the latest version of node available. If your
+repo needs to specify an exact version of node, you can use the `actions/setup-node` action.
+
+```yaml
+name: Package Size Report
+
+on:
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  pkg-size-report:
+    name: Package Size Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.4.0'
+
+      - name: Package size report
+        uses: pkg-size/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+</details>
+
+<details>
   <summary><strong>Hiding source-map changes from report</strong></summary>
   <br>
   
