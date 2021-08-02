@@ -39,6 +39,11 @@
           - name: Checkout
             uses: actions/checkout@v2
 
+          - name: Setup Node.js
+            uses: actions/setup-node@v2
+            with:
+              node-version: '14' # ⬅ Specify a version of Node.js to build your app
+
           - name: Package size report
             uses: pkg-size/action@v1
             env:
@@ -78,6 +83,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Package size report
         uses: pkg-size/action@v1
         env:
@@ -108,6 +118,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
       - name: Package size report
         uses: pkg-size/action@v1
@@ -140,6 +155,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Package size report
         uses: pkg-size/action@v1
         env:
@@ -170,6 +190,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
       - name: Package size report
         uses: pkg-size/action@v1
