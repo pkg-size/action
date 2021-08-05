@@ -7940,18 +7940,27 @@ async function kc(e, t) {
     let r = "";
     let o = "";
     const s = Date.now();
-    const n = await Pc.exec(e, null, {
-        ...t,
-        silent: true,
-        listeners: {
-            stdout(e) {
-                r += e.toString();
-            },
-            stderr(e) {
-                o += e.toString();
+    let n;
+    try {
+        console.log(e);
+        n = await Pc.exec(e, null, {
+            ...t,
+            silent: true,
+            listeners: {
+                stdout(e) {
+                    r += e.toString();
+                    console.log("stdout", e.toString());
+                },
+                stderr(e) {
+                    o += e.toString();
+                    console.log("stderr", e.toString());
+                }
             }
-        }
-    });
+        });
+    } catch (e) {
+        console.log("caught error", e);
+        throw e;
+    }
     const i = Date.now() - s;
     return {
         exitCode: n,
