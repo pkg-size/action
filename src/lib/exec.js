@@ -5,18 +5,27 @@ async function exec(commandLine, options) {
 	let stderr = '';
 
 	const startTime = Date.now();
-	const exitCode = await _exec(commandLine, null, {
-		...options,
-		silent: true,
-		listeners: {
-			stdout(data) {
-				stdout += data.toString();
+	let exitCode;
+	try {
+		console.log(commandLine);
+		exitCode = await _exec(commandLine, null, {
+			...options,
+			silent: true,
+			listeners: {
+				stdout(data) {
+					stdout += data.toString();
+					console.log('stdout', data.toString());
+				},
+				stderr(data) {
+					stderr += data.toString();
+					console.log('stderr', data.toString());
+				},
 			},
-			stderr(data) {
-				stderr += data.toString();
-			},
-		},
-	});
+		});	
+	} catch (error) {
+		console.log('caught error', error);
+		throw error;
+	}
 	const duration = Date.now() - startTime;
 
 	return {
