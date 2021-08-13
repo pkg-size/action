@@ -1,7 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
 import builtins from 'builtin-modules';
+import esbuild from 'rollup-plugin-esbuild';
 
 const rollupConfig = {
 	input: 'src/index.js',
@@ -10,11 +10,10 @@ const rollupConfig = {
 		nodeResolve({
 			preferBuiltins: false,
 		}),
-		terser({
-			compress: false,
-			format: {
-				beautify: true,
-			},
+		esbuild({
+			minifyIdentifiers: true,
+			minifySyntax: true,
+			legalComments: 'none',
 		}),
 	],
 	external: builtins,

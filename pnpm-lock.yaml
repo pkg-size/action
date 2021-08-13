@@ -12,6 +12,7 @@ specifiers:
   builtin-modules: ^3.1.0
   byte-size: ^7.0.1
   conventional-changelog-conventionalcommits: ^4.6.0
+  esbuild: ^0.12.20
   eslint: ^7.32.0
   glob-to-regexp: ^0.4.1
   husky: ^4.3.8
@@ -20,6 +21,7 @@ specifiers:
   markdown-table: ^2.0.0
   outdent: ^0.7.1
   rollup: ^2.55.1
+  rollup-plugin-esbuild: ^4.5.0
   rollup-plugin-terser: ^7.0.2
 
 devDependencies:
@@ -34,6 +36,7 @@ devDependencies:
   builtin-modules: 3.2.0
   byte-size: 7.0.1
   conventional-changelog-conventionalcommits: 4.6.0
+  esbuild: 0.12.20
   eslint: 7.32.0
   glob-to-regexp: 0.4.1
   husky: 4.3.8
@@ -42,6 +45,7 @@ devDependencies:
   markdown-table: 2.0.0
   outdent: 0.7.1
   rollup: 2.55.1
+  rollup-plugin-esbuild: 4.5.0_esbuild@0.12.20+rollup@2.55.1
   rollup-plugin-terser: 7.0.2_rollup@2.55.1
 
 packages:
@@ -657,6 +661,14 @@ packages:
       rollup: 2.55.1
     dev: true
 
+  /@rollup/pluginutils/4.1.1:
+    resolution: {integrity: sha512-clDjivHqWGXi7u+0d2r2sBi4Ie6VLEAzWMIkvJLnDmxoOhBYOTfzGbOQBA32THHm11/LiJbd01tJUpJsbshSWQ==}
+    engines: {node: '>= 8.0.0'}
+    dependencies:
+      estree-walker: 2.0.2
+      picomatch: 2.2.2
+    dev: true
+
   /@types/estree/0.0.39:
     resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==}
     dev: true
@@ -1171,6 +1183,12 @@ packages:
       is-callable: 1.2.2
       is-date-object: 1.0.2
       is-symbol: 1.0.3
+    dev: true
+
+  /esbuild/0.12.20:
+    resolution: {integrity: sha512-u7+0qTo9Z64MD9PhooEngCmzyEYJ6ovFhPp8PLNh3UasR5Ihjv6HWVXqm8uHmasdQlpsAf0IsY4U0YVUfCpt4Q==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /escalade/3.1.1:
@@ -1949,6 +1967,11 @@ packages:
       supports-color: 7.2.0
     dev: true
 
+  /joycon/3.0.1:
+    resolution: {integrity: sha512-SJcJNBg32dGgxhPtM0wQqxqV0ax9k/9TaUskGDSJkSFSQOEWWvQ3zzWdGQRIUry2j1zA5+ReH13t0Mf3StuVZA==}
+    engines: {node: '>=10'}
+    dev: true
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: true
@@ -2018,6 +2041,10 @@ packages:
       semver: 6.3.0
     transitivePeerDependencies:
       - eslint
+    dev: true
+
+  /jsonc-parser/3.0.0:
+    resolution: {integrity: sha512-fQzRfAbIBnR0IQvftw9FJveWiHp72Fg20giDrHz6TdfB12UH/uue0D3hm57UB5KgAVuniLMCaS8P1IMj9NR7cA==}
     dev: true
 
   /levn/0.4.1:
@@ -2634,6 +2661,20 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.1.7
+    dev: true
+
+  /rollup-plugin-esbuild/4.5.0_esbuild@0.12.20+rollup@2.55.1:
+    resolution: {integrity: sha512-ieUd3AoYWsN6Tfp0LBNnC+QpdhKjDEaH4NK3ghuEXOH56/7TAtD+hMbD9vSWZgsGSbaqCkrn4j6PaUj1vOSt1g==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      esbuild: '>=0.10.1'
+      rollup: ^1.20.0 || ^2.0.0
+    dependencies:
+      '@rollup/pluginutils': 4.1.1
+      esbuild: 0.12.20
+      joycon: 3.0.1
+      jsonc-parser: 3.0.0
+      rollup: 2.55.1
     dev: true
 
   /rollup-plugin-terser/7.0.2_rollup@2.55.1:
