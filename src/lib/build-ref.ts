@@ -1,4 +1,5 @@
 import fs from 'fs';
+import type { Ref } from '../types';
 import * as log from './log';
 import exec from './exec';
 import npmCi from './npm-ci';
@@ -9,7 +10,7 @@ let pkgSizeInstalled = false;
 
 type Options = {
 	checkoutRef?: string;
-	refData: any;
+	refData: Ref;
 	buildCommand?: string;
 };
 

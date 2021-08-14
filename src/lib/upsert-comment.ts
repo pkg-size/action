@@ -5,7 +5,7 @@ type Options = {
 	token: string;
 	commentSignature: string;
 	repo: any;
-	prNumber: string;
+	prNumber: number;
 	body: string;
 };
 

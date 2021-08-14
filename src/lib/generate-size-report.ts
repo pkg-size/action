@@ -1,8 +1,21 @@
 import { setOutput } from '@actions/core';
+import type { PullRequest } from '@octokit/webhooks-types';
 import { regressionReportTemplate, headOnlyReportTemplate } from '../report-templates/index';
 import isBaseDiffFromHead from './is-base-diff-from-head';
 import buildRef from './build-ref';
 import * as log from './log';
+
+type Options = {
+	pr: PullRequest;
+	buildCommand: string;
+	commentReport: string;
+	mode: string;
+	unchangedFiles: string;
+	hideFiles: string;
+	sortBy: string;
+	sortOrder: string;
+	displaySize: string;
+};
 
 async function generateSizeReport({
 	pr,
@@ -14,7 +27,7 @@ async function generateSizeReport({
 	sortBy,
 	sortOrder,
 	displaySize,
-}) {
+}: Options) {
 	log.startGroup('Build HEAD');
 	const headPkgData = await buildRef({
 		refData: pr.head,
