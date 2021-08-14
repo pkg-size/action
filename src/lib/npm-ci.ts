@@ -4,7 +4,9 @@ import { rmRF } from '@actions/io';
 import * as log from './log';
 import exec from './exec';
 
-async function npmCi({ cwd } = {}) {
+async function npmCi(
+	cwd = process.cwd(),
+) {
 	if (fs.existsSync('node_modules')) {
 		log.info('Cleaning node_modules');
 		await rmRF(path.join(cwd, 'node_modules'));

@@ -7,11 +7,17 @@ import { c, link } from './markdown';
 
 let pkgSizeInstalled = false;
 
+type Options = {
+	checkoutRef?: string;
+	refData: any;
+	buildCommand?: string;
+};
+
 async function buildRef({
 	checkoutRef,
 	refData,
 	buildCommand,
-}) {
+}: Options) {
 	const cwd = process.cwd();
 
 	log.info(`Current working directory: ${cwd}`);
@@ -34,7 +40,7 @@ async function buildRef({
 		if (!buildCommand) {
 			let pkgJson;
 			try {
-				pkgJson = JSON.parse(fs.readFileSync('./package.json'));
+				pkgJson = JSON.parse(fs.readFileSync('./package.json').toString());
 			} catch (error) {
 				log.warning('Error reading package.json', error);
 			}
@@ -46,7 +52,7 @@ async function buildRef({
 		}
 
 		if (buildCommand) {
-			await npmCi({ cwd }).catch((error) => {
+			await npmCi(cwd).catch((error) => {
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 

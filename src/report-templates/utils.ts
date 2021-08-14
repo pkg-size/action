@@ -1,7 +1,10 @@
 import { partition } from 'lodash-es';
 import globToRegExp from 'glob-to-regexp';
 
-function partionHidden(hideFilesGlob, files) {
+function partionHidden(
+	hideFilesGlob: string | undefined,
+	files: { path: string }[],
+) {
 	if (!hideFilesGlob) {
 		return [[], files];
 	}
@@ -9,7 +12,12 @@ function partionHidden(hideFilesGlob, files) {
 	return partition(files, file => hideFilesPtrn.test(file.path));
 }
 
-function getSizeLabels(displaySizes) {
+function getSizeLabels(
+	displaySizes: {
+		property: string;
+		label: string;
+	}[],
+) {
 	if (displaySizes.length === 1 && displaySizes[0].property === 'size') {
 		return '';
 	}
@@ -29,7 +37,7 @@ const supportedSizes = {
 		label: 'Brotli',
 		property: 'sizeBrotli',
 	},
-};
+} as const;
 
 function parseDisplaySize(displaySize: string) {
 	return displaySize
@@ -39,11 +47,21 @@ function parseDisplaySize(displaySize: string) {
 		.map(s => supportedSizes[s]);
 }
 
-const listSizes = (displaySizes, callback) => displaySizes
+const listSizes = (
+	displaySizes: { property: any }[],
+	callback: (any) => any,
+) => displaySizes
 	.map(({ property }) => callback(property))
 	.join(' / ');
 
-function sortFiles(files, sortBy: string, sortOrder: string) {
+function sortFiles(
+	files: {
+		path: string;
+		[key: string]: any;
+	}[],
+	sortBy: string,
+	sortOrder: string,
+) {
 	files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
 	if (sortOrder === 'asc') {
 		files.reverse();

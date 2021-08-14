@@ -1,6 +1,6 @@
 import { setOutput } from '@actions/core';
 import byteSize from 'byte-size';
-import markdownTable from 'markdown-table';
+import { markdownTable } from 'markdown-table';
 import outdent from 'outdent';
 import {
 	c, sub, sup, strong,
@@ -12,7 +12,7 @@ import {
 } from '../utils';
 import comparePackages from './compare-packages';
 
-const directionSymbol = (value) => {
+const directionSymbol = (value: number) => {
 	if (value < 0) {
 		return '↓';
 	}

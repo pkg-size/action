@@ -9,6 +9,9 @@ specifiers:
   '@pvtnbr/eslint-config-typescript': ^0.1.20
   '@rollup/plugin-commonjs': ^17.1.0
   '@rollup/plugin-node-resolve': ^11.2.1
+  '@types/glob-to-regexp': ^0.4.1
+  '@types/lodash-es': ^4.17.4
+  '@types/markdown-table': ^3.0.0
   '@types/node': ^16.6.1
   builtin-modules: ^3.1.0
   byte-size: ^7.0.1
@@ -19,7 +22,7 @@ specifiers:
   husky: ^4.3.8
   lint-staged: ^10.5.4
   lodash-es: ^4.17.21
-  markdown-table: ^2.0.0
+  markdown-table: ^3.0.1
   outdent: ^0.7.1
   rollup: ^2.55.1
   rollup-plugin-esbuild: ^4.5.0
@@ -35,6 +38,9 @@ devDependencies:
   '@pvtnbr/eslint-config-typescript': 0.1.20_eslint@7.32.0+typescript@4.3.5
   '@rollup/plugin-commonjs': 17.1.0_rollup@2.55.1
   '@rollup/plugin-node-resolve': 11.2.1_rollup@2.55.1
+  '@types/glob-to-regexp': 0.4.1
+  '@types/lodash-es': 4.17.4
+  '@types/markdown-table': 3.0.0
   '@types/node': 16.6.1
   builtin-modules: 3.2.0
   byte-size: 7.0.1
@@ -45,7 +51,7 @@ devDependencies:
   husky: 4.3.8
   lint-staged: 10.5.4
   lodash-es: 4.17.21
-  markdown-table: 2.0.0
+  markdown-table: 3.0.1
   outdent: 0.7.1
   rollup: 2.55.1
   rollup-plugin-esbuild: 4.5.0_esbuild@0.12.20+rollup@2.55.1
@@ -716,12 +722,33 @@ packages:
     resolution: {integrity: sha512-jnqIUKDUqJbDIUxm0Uj7bnlMnRm1T/eZ9N+AVMqhPgzrba2GhGG5o/jCTwmdPK709nEZsGoMzXEDUjcXHa3W0g==}
     dev: true
 
+  /@types/glob-to-regexp/0.4.1:
+    resolution: {integrity: sha512-S0mIukll6fbF0tvrKic/jj+jI8SHoSvGU+Cs95b/jzZEnBYCbj+7aJtQ9yeABuK3xP1okwA3jEH9qIRayijnvQ==}
+    dev: true
+
   /@types/json-schema/7.0.9:
     resolution: {integrity: sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==}
     dev: true
 
   /@types/json5/0.0.29:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
+    dev: true
+
+  /@types/lodash-es/4.17.4:
+    resolution: {integrity: sha512-BBz79DCJbD2CVYZH67MBeHZRX++HF+5p8Mo5MzjZi64Wac39S3diedJYHZtScbRVf4DjZyN6LzA0SB0zy+HSSQ==}
+    dependencies:
+      '@types/lodash': 4.14.172
+    dev: true
+
+  /@types/lodash/4.14.172:
+    resolution: {integrity: sha512-/BHF5HAx3em7/KkzVKm3LrsD6HZAXuXO1AJZQ3cRRBZj4oHZDviWPYu0aEplAqDFNHZPW6d3G7KN+ONcCCC7pw==}
+    dev: true
+
+  /@types/markdown-table/3.0.0:
+    resolution: {integrity: sha512-vX5zya26rnLLHdAKA3E9ZOT07CJslYp2gZfAZiXKUY5vd2RRiJyOQKrSlmUjyJ+eNoDAPkHflebG3PsfqC32aA==}
+    deprecated: This is a stub types definition. markdown-table provides its own type definitions, so you do not need this installed.
+    dependencies:
+      markdown-table: 2.0.0
     dev: true
 
   /@types/node-fetch/2.5.7:
@@ -2387,6 +2414,10 @@ packages:
     resolution: {integrity: sha512-Ezda85ToJUBhM6WGaG6veasyym+Tbs3cMAw/ZhOPqXiYsr0jgocBV3j3nx+4lk47plLlIqjwuTm/ywVI+zjJ/A==}
     dependencies:
       repeat-string: 1.6.1
+    dev: true
+
+  /markdown-table/3.0.1:
+    resolution: {integrity: sha512-CBbaYXKSGnE1uLRpKA1SWgIRb2PQrpkllNWpZtZe6VojOJ4ysqiq7/2glYcmKsOYN09QgH/HEBX5hIshAeiK6A==}
     dev: true
 
   /merge-stream/2.0.0:

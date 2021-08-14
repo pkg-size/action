@@ -1,13 +1,21 @@
 import { getOctokit } from '@actions/github';
 import * as log from './log';
 
+type Options = {
+	token: string;
+	commentSignature: string;
+	repo: any;
+	prNumber: string;
+	body: string;
+};
+
 async function upsertComment({
 	token,
 	commentSignature,
 	repo,
 	prNumber,
 	body,
-}) {
+}: Options) {
 	log.startGroup('Comment on PR');
 
 	body += `\n\n${commentSignature}`;
@@ -20,7 +28,7 @@ async function upsertComment({
 		issue_number: prNumber,
 	});
 
-	const hasPreviousComment = comments.find(comment => comment.body.endsWith(commentSignature));
+	const hasPreviousComment = comments.find(comment => comment.body?.endsWith(commentSignature));
 	if (hasPreviousComment) {
 		log.info(`Updating previous comment ID ${hasPreviousComment.id}`);
 		await octokit.issues.updateComment({
