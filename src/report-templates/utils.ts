@@ -31,7 +31,7 @@ const supportedSizes = {
 	},
 };
 
-function parseDisplaySize(displaySize) {
+function parseDisplaySize(displaySize: string) {
 	return displaySize
 		.split(',')
 		.map(s => s.trim())
@@ -43,7 +43,7 @@ const listSizes = (displaySizes, callback) => displaySizes
 	.map(({ property }) => callback(property))
 	.join(' / ');
 
-function sortFiles(files, sortBy, sortOrder) {
+function sortFiles(files, sortBy: string, sortOrder: string) {
 	files.sort((a, b) => (b[sortBy] - a[sortBy]) || (a.path.localeCompare(b.path)));
 	if (sortOrder === 'asc') {
 		files.reverse();

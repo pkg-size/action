@@ -1,5 +1,5 @@
 import { getOctokit } from '@actions/github';
-import * as log from './log.js';
+import * as log from './log';
 
 async function upsertComment({
 	token,

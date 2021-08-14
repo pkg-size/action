@@ -2,7 +2,7 @@ import { partition, round } from 'lodash-es';
 import {
 	partionHidden,
 	sortFiles,
-} from '../utils.js';
+} from '../utils';
 
 const percent = (fraction) => {
 	if (fraction < 0.001) { // 0.09% and lower

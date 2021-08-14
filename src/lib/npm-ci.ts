@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { rmRF } from '@actions/io';
-import * as log from './log.js';
-import exec from './exec.js';
+import * as log from './log';
+import exec from './exec';
 
 async function npmCi({ cwd } = {}) {
 	if (fs.existsSync('node_modules')) {

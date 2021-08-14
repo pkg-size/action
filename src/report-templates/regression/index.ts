@@ -4,13 +4,13 @@ import markdownTable from 'markdown-table';
 import outdent from 'outdent';
 import {
 	c, sub, sup, strong,
-} from '../../lib/markdown.js';
+} from '../../lib/markdown';
 import {
 	getSizeLabels,
 	parseDisplaySize,
 	listSizes,
-} from '../utils.js';
-import comparePackages from './compare-packages.js';
+} from '../utils';
+import comparePackages from './compare-packages';
 
 const directionSymbol = (value) => {
 	if (value < 0) {

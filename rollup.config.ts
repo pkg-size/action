@@ -4,7 +4,7 @@ import builtins from 'builtin-modules';
 import esbuild from 'rollup-plugin-esbuild';
 
 const rollupConfig = {
-	input: 'src/index.js',
+	input: 'src/index.ts',
 	plugins: [
 		commonjs(),
 		nodeResolve({

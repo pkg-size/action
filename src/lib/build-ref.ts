@@ -1,9 +1,9 @@
 import fs from 'fs';
-import * as log from './log.js';
-import exec from './exec.js';
-import npmCi from './npm-ci.js';
-import isFileTracked from './is-file-tracked.js';
-import { c, link } from './markdown.js';
+import * as log from './log';
+import exec from './exec';
+import npmCi from './npm-ci';
+import isFileTracked from './is-file-tracked';
+import { c, link } from './markdown';
 
 let pkgSizeInstalled = false;
 

@@ -31,7 +31,7 @@
 		}
 	},
 	"lint-staged": {
-		"src/**/*.js": [
+		"src/**/*.{ts,js}": [
 			"eslint",
 			"npm run build",
 			"git add dist"
@@ -43,9 +43,10 @@
 		"@actions/exec": "^1.1.0",
 		"@actions/github": "^4.0.0",
 		"@actions/io": "^1.1.1",
-		"@pvtnbr/eslint-config-base": "^0.1.19",
+		"@pvtnbr/eslint-config-typescript": "^0.1.20",
 		"@rollup/plugin-commonjs": "^17.1.0",
 		"@rollup/plugin-node-resolve": "^11.2.1",
+		"@types/node": "^16.6.1",
 		"builtin-modules": "^3.1.0",
 		"byte-size": "^7.0.1",
 		"conventional-changelog-conventionalcommits": "^4.6.0",
@@ -59,10 +60,11 @@
 		"outdent": "^0.7.1",
 		"rollup": "^2.55.1",
 		"rollup-plugin-esbuild": "^4.5.0",
-		"rollup-plugin-terser": "^7.0.2"
+		"rollup-plugin-terser": "^7.0.2",
+		"typescript": "^4.3.5"
 	},
 	"eslintConfig": {
-		"extends": "@pvtnbr/eslint-config-base",
+		"extends": "@pvtnbr/eslint-config-typescript",
 		"rules": {
 			"unicorn/prevent-abbreviations": [
 				"error",

@@ -1,8 +1,8 @@
 import { setOutput } from '@actions/core';
-import { regressionReportTemplate, headOnlyReportTemplate } from '../report-templates/index.js';
-import isBaseDiffFromHead from './is-base-diff-from-head.js';
-import buildRef from './build-ref.js';
-import * as log from './log.js';
+import { regressionReportTemplate, headOnlyReportTemplate } from '../report-templates/index';
+import isBaseDiffFromHead from './is-base-diff-from-head';
+import buildRef from './build-ref';
+import * as log from './log';
 
 async function generateSizeReport({
 	pr,

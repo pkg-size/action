@@ -5357,7 +5357,7 @@ var ioUtil = createCommonjsModule(function(e, t) {
 }, __spreadProps$2 = (e, t) => __defProps$2(e, __getOwnPropDescs$2(t));
 async function exec(e, t) {
   let n = "", s = "";
-  const o = Date.now(), i = await exec_1.exec(e, null, __spreadProps$2(__spreadValues$2({}, t), {
+  const o = Date.now(), i = await exec_1.exec(e, void 0, __spreadProps$2(__spreadValues$2({}, t), {
     silent: !0,
     listeners: {
       stdout(a) {
@@ -5398,7 +5398,9 @@ async function npmCi({ cwd: e } = {}) {
 ${o}`);
 }
 async function isFileTracked(e) {
-  const { exitCode: t } = await exec(`git ls-files --error-unmatch ${e}`, { ignoreReturnCode: !0 });
+  const { exitCode: t } = await exec(`git ls-files --error-unmatch ${e}`, {
+    ignoreReturnCode: !0
+  });
   return t === 0;
 }
 var __defProp$1 = Object.defineProperty, __defProps$1 = Object.defineProperties, __getOwnPropDescs$1 = Object.getOwnPropertyDescriptors, __getOwnPropSymbols$1 = Object.getOwnPropertySymbols, __hasOwnProp$1 = Object.prototype.hasOwnProperty, __propIsEnum$1 = Object.prototype.propertyIsEnumerable, __defNormalProp$1 = (e, t, n) => t in e ? __defProp$1(e, t, { enumerable: !0, configurable: !0, writable: !0, value: n }) : e[t] = n, __spreadValues$1 = (e, t) => {
