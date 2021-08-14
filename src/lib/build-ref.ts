@@ -1,17 +1,24 @@
 import fs from 'fs';
-import * as log from './log.js';
-import exec from './exec.js';
-import npmCi from './npm-ci.js';
-import isFileTracked from './is-file-tracked.js';
-import { c, link } from './markdown.js';
+import type { Ref } from '../types';
+import * as log from './log';
+import exec from './exec';
+import npmCi from './npm-ci';
+import isFileTracked from './is-file-tracked';
+import { c, link } from './markdown';
 
 let pkgSizeInstalled = false;
+
+type Options = {
+	checkoutRef?: string;
+	refData: Ref;
+	buildCommand?: string;
+};
 
 async function buildRef({
 	checkoutRef,
 	refData,
 	buildCommand,
-}) {
+}: Options) {
 	const cwd = process.cwd();
 
 	log.info(`Current working directory: ${cwd}`);
@@ -34,7 +41,7 @@ async function buildRef({
 		if (!buildCommand) {
 			let pkgJson;
 			try {
-				pkgJson = JSON.parse(fs.readFileSync('./package.json'));
+				pkgJson = JSON.parse(fs.readFileSync('./package.json').toString());
 			} catch (error) {
 				log.warning('Error reading package.json', error);
 			}
@@ -46,7 +53,7 @@ async function buildRef({
 		}
 
 		if (buildCommand) {
-			await npmCi({ cwd }).catch((error) => {
+			await npmCi(cwd).catch((error) => {
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 

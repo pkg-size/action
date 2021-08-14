@@ -1,11 +1,11 @@
-import exec from './exec.js';
+import exec from './exec';
 
 /*
  * Compares files between current ref and the base ref (not commits)
  * The clean up (git reset --hard) that happens is crucial as it
  * takes into consideration uncommitted files
  */
-async function isBaseDiffFromHead(baseRef) {
+async function isBaseDiffFromHead(baseRef: string) {
 	try {
 		await exec(`git fetch origin ${baseRef} --depth=1`);
 	} catch (error) {

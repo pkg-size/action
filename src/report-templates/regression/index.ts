@@ -1,18 +1,18 @@
 import { setOutput } from '@actions/core';
 import byteSize from 'byte-size';
-import markdownTable from 'markdown-table';
+import { markdownTable } from 'markdown-table';
 import outdent from 'outdent';
 import {
 	c, sub, sup, strong,
-} from '../../lib/markdown.js';
+} from '../../lib/markdown';
 import {
 	getSizeLabels,
 	parseDisplaySize,
 	listSizes,
-} from '../utils.js';
-import comparePackages from './compare-packages.js';
+} from '../utils';
+import comparePackages from './compare-packages';
 
-const directionSymbol = (value) => {
+const directionSymbol = (value: number) => {
 	if (value < 0) {
 		return '↓';
 	}

@@ -1,11 +1,14 @@
-import { exec as _exec } from '@actions/exec';
+import { exec as _exec, ExecOptions } from '@actions/exec';
 
-async function exec(command, options) {
+async function exec(
+	command: string,
+	options?: ExecOptions,
+) {
 	let stdout = '';
 	let stderr = '';
 
 	const startTime = Date.now();
-	const exitCode = await _exec(command, null, {
+	const exitCode = await _exec(command, undefined, {
 		...options,
 		silent: true,
 		listeners: {
