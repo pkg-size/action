@@ -25,5 +25,5 @@ inputs:
     description: 'Command to install the package with, if empty the action will try to autodetect it'
 
 runs:
-  using: 'node16'
+  using: 'node14'
   main: 'dist/index.js'
