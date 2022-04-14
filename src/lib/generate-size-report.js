@@ -14,11 +14,13 @@ async function generateSizeReport({
 	sortBy,
 	sortOrder,
 	displaySize,
+	installCommand,
 }) {
 	log.startGroup('Build HEAD');
 	const headPkgData = await buildRef({
 		refData: pr.head,
 		buildCommand,
+		installCommand,
 	});
 	setOutput('headPkgData', headPkgData);
 	log.endGroup();

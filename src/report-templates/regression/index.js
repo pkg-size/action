@@ -1,6 +1,6 @@
 import { setOutput } from '@actions/core';
 import byteSize from 'byte-size';
-import markdownTable from 'markdown-table';
+import { markdownTable } from 'markdown-table';
 import outdent from 'outdent';
 import {
 	c, sub, sup, strong,

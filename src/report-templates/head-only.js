@@ -1,5 +1,5 @@
 import byteSize from 'byte-size';
-import markdownTable from 'markdown-table';
+import { markdownTable } from 'markdown-table';
 import outdent from 'outdent';
 import { c, strong } from '../lib/markdown.js';
 import {

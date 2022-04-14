@@ -7,7 +7,6 @@ async function exec(command, options) {
 	const startTime = Date.now();
 	const exitCode = await _exec(command, null, {
 		...options,
-		silent: true,
 		listeners: {
 			stdout(data) {
 				stdout += data.toString();

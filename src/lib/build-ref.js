@@ -11,6 +11,7 @@ async function buildRef({
 	checkoutRef,
 	refData,
 	buildCommand,
+	installCommand,
 }) {
 	const cwd = process.cwd();
 
@@ -46,7 +47,7 @@ async function buildRef({
 		}
 
 		if (buildCommand) {
-			await npmCi({ cwd }).catch((error) => {
+			await npmCi({ installCommand, cwd }).catch((error) => {
 				throw new Error(`Failed to install dependencies:\n${error.message}`);
 			});
 
