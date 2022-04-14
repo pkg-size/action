@@ -5766,7 +5766,6 @@ var $d = Object.defineProperty, Gd = Object.defineProperties, Cd = Object.getOwn
 async function K(e, t) {
   let r = "", n = "";
   const s = Date.now(), o = await Vs(e, null, jd(Ud({}, t), {
-    silent: !0,
     listeners: {
       stdout(a) {
         r += a.toString();
