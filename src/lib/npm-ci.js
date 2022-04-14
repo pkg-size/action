@@ -4,10 +4,12 @@ import { rmRF } from '@actions/io';
 import * as log from './log.js';
 import exec from './exec.js';
 
-async function npmCi({
-	cwd,
-	installCommand = autoDetectInstallCommand(),
-} = {}) {
+async function npmCi({ cwd, installCommand } = {}) {
+	if (!installCommand) {
+		installCommand = autoDetectInstallCommand();
+	} else {
+		log.info(`Custom install command providing. Installing dependencies with ${installCommand}`);
+	}
 	if (fs.existsSync('node_modules')) {
 		log.info('Cleaning node_modules');
 		await rmRF(path.join(cwd, 'node_modules'));
