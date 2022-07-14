@@ -10,13 +10,13 @@ var W = (e, t) => {
       t.indexOf(s) < 0 && Y.call(e, s) && (n[s] = e[s]);
   return n;
 };
-var assert_1 = require("assert"), require$$0 = require("os"), fs = require("fs"), require$$1 = require("path"), http = require("http"), https = require("https");
+var assert_1 = require("assert"), require$$0 = require("os"), fs_1 = require("fs"), require$$1 = require("path"), http = require("http"), https = require("https");
 require("net");
 var tls = require("tls"), events = require("events"), util_1 = require("util"), Stream = require("stream"), Url = require("url"), zlib = require("zlib"), string_decoder_1 = require("string_decoder"), require$$0$1 = require("child_process"), timers_1 = require("timers");
 function _interopDefaultLegacy(e) {
   return e && typeof e == "object" && "default" in e ? e : { default: e };
 }
-var assert_1__default = /* @__PURE__ */ _interopDefaultLegacy(assert_1), require$$0__default = /* @__PURE__ */ _interopDefaultLegacy(require$$0), fs__default = /* @__PURE__ */ _interopDefaultLegacy(fs), require$$1__default = /* @__PURE__ */ _interopDefaultLegacy(require$$1), http__default = /* @__PURE__ */ _interopDefaultLegacy(http), https__default = /* @__PURE__ */ _interopDefaultLegacy(https), tls__default = /* @__PURE__ */ _interopDefaultLegacy(tls), events__default = /* @__PURE__ */ _interopDefaultLegacy(events), util_1__default = /* @__PURE__ */ _interopDefaultLegacy(util_1), Stream__default = /* @__PURE__ */ _interopDefaultLegacy(Stream), Url__default = /* @__PURE__ */ _interopDefaultLegacy(Url), zlib__default = /* @__PURE__ */ _interopDefaultLegacy(zlib), string_decoder_1__default = /* @__PURE__ */ _interopDefaultLegacy(string_decoder_1), require$$0__default$1 = /* @__PURE__ */ _interopDefaultLegacy(require$$0$1), timers_1__default = /* @__PURE__ */ _interopDefaultLegacy(timers_1), commonjsGlobal = typeof globalThis != "undefined" ? globalThis : typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : {};
+var assert_1__default = /* @__PURE__ */ _interopDefaultLegacy(assert_1), require$$0__default = /* @__PURE__ */ _interopDefaultLegacy(require$$0), fs_1__default = /* @__PURE__ */ _interopDefaultLegacy(fs_1), require$$1__default = /* @__PURE__ */ _interopDefaultLegacy(require$$1), http__default = /* @__PURE__ */ _interopDefaultLegacy(http), https__default = /* @__PURE__ */ _interopDefaultLegacy(https), tls__default = /* @__PURE__ */ _interopDefaultLegacy(tls), events__default = /* @__PURE__ */ _interopDefaultLegacy(events), util_1__default = /* @__PURE__ */ _interopDefaultLegacy(util_1), Stream__default = /* @__PURE__ */ _interopDefaultLegacy(Stream), Url__default = /* @__PURE__ */ _interopDefaultLegacy(Url), zlib__default = /* @__PURE__ */ _interopDefaultLegacy(zlib), string_decoder_1__default = /* @__PURE__ */ _interopDefaultLegacy(string_decoder_1), require$$0__default$1 = /* @__PURE__ */ _interopDefaultLegacy(require$$0$1), timers_1__default = /* @__PURE__ */ _interopDefaultLegacy(timers_1), commonjsGlobal = typeof globalThis != "undefined" ? globalThis : typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : {};
 function getAugmentedNamespace(e) {
   if (e.__esModule)
     return e;
@@ -118,7 +118,7 @@ var utils$2 = createCommonjsModule(function(e, t) {
     return s(h, u), h;
   };
   Object.defineProperty(t, "__esModule", { value: !0 }), t.issueCommand = void 0;
-  const i = o(fs__default.default), p = o(require$$0__default.default);
+  const i = o(fs_1__default.default), p = o(require$$0__default.default);
   function a(u, h) {
     const b = process.env[`GITHUB_${u}`];
     if (!b)
@@ -274,21 +274,21 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     });
   }
   t.group = A;
-  function k(S, j) {
+  function D(S, j) {
     command.issueCommand("save-state", { name: S }, j);
   }
-  t.saveState = k;
-  function D(S) {
+  t.saveState = D;
+  function k(S) {
     return process.env[`STATE_${S}`] || "";
   }
-  t.getState = D;
+  t.getState = k;
 }), context = createCommonjsModule(function(e, t) {
   Object.defineProperty(t, "__esModule", { value: !0 }), t.Context = void 0;
   class n {
     constructor() {
       if (this.payload = {}, process.env.GITHUB_EVENT_PATH)
-        if (fs__default.default.existsSync(process.env.GITHUB_EVENT_PATH))
-          this.payload = JSON.parse(fs__default.default.readFileSync(process.env.GITHUB_EVENT_PATH, { encoding: "utf8" }));
+        if (fs_1__default.default.existsSync(process.env.GITHUB_EVENT_PATH))
+          this.payload = JSON.parse(fs_1__default.default.readFileSync(process.env.GITHUB_EVENT_PATH, { encoding: "utf8" }));
         else {
           const o = process.env.GITHUB_EVENT_PATH;
           process.stdout.write(`GITHUB_EVENT_PATH ${o} does not exist${require$$0__default.default.EOL}`);
@@ -593,26 +593,26 @@ var debug_1 = debug, tunnel$1 = {
       let T = new URL(w), v = this._prepareRequest(f, T, g), O = this._allowRetries && h.indexOf(f) != -1 ? this._maxRetries + 1 : 1, $ = 0, A;
       for (; $ < O; ) {
         if (A = await this.requestRaw(v, m), A && A.message && A.message.statusCode === s.Unauthorized) {
-          let D;
+          let k;
           for (let S = 0; S < this.handlers.length; S++)
             if (this.handlers[S].canHandleAuthentication(A)) {
-              D = this.handlers[S];
+              k = this.handlers[S];
               break;
             }
-          return D ? D.handleAuthentication(this, v, m) : A;
+          return k ? k.handleAuthentication(this, v, m) : A;
         }
-        let k = this._maxRedirects;
-        for (; a.indexOf(A.message.statusCode) != -1 && this._allowRedirects && k > 0; ) {
-          const D = A.message.headers.location;
-          if (!D)
+        let D = this._maxRedirects;
+        for (; a.indexOf(A.message.statusCode) != -1 && this._allowRedirects && D > 0; ) {
+          const k = A.message.headers.location;
+          if (!k)
             break;
-          let S = new URL(D);
+          let S = new URL(k);
           if (T.protocol == "https:" && T.protocol != S.protocol && !this._allowRedirectDowngrade)
             throw new Error("Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.");
           if (await A.readBody(), S.hostname !== T.hostname)
             for (let j in g)
               j.toLowerCase() === "authorization" && delete g[j];
-          v = this._prepareRequest(f, S, g), A = await this.requestRaw(v, m), k--;
+          v = this._prepareRequest(f, S, g), A = await this.requestRaw(v, m), D--;
         }
         if (u.indexOf(A.message.statusCode) == -1)
           return A;
@@ -731,8 +731,8 @@ var debug_1 = debug, tunnel$1 = {
         if (T > 299) {
           let A;
           O && O.message ? A = O.message : $ && $.length > 0 ? A = $ : A = "Failed request: (" + T + ")";
-          let k = new _(A, T);
-          k.result = v.result, g(k);
+          let D = new _(A, T);
+          D.result = v.result, g(D);
         } else
           m(v);
       });
@@ -3529,7 +3529,7 @@ function repeat(e, t) {
 var markdownTable_1 = markdownTable, trailingWhitespace = / +$/, space = " ", lineFeed = `
 `, dash = "-", colon = ":", verticalBar = "|", x = 0, C = 67, L = 76, R = 82, c = 99, l = 108, r = 114;
 function markdownTable(e, t) {
-  for (var n = t || {}, s = n.padding !== !1, o = n.delimiterStart !== !1, i = n.delimiterEnd !== !1, p = (n.align || []).concat(), a = n.alignDelimiters !== !1, u = [], h = n.stringLength || defaultStringLength, b = -1, y = e.length, _ = [], E = [], P = [], G = [], d = [], f = 0, w, m, g, T, v, O, $, A, k, D, S; ++b < y; ) {
+  for (var n = t || {}, s = n.padding !== !1, o = n.delimiterStart !== !1, i = n.delimiterEnd !== !1, p = (n.align || []).concat(), a = n.alignDelimiters !== !1, u = [], h = n.stringLength || defaultStringLength, b = -1, y = e.length, _ = [], E = [], P = [], G = [], d = [], f = 0, w, m, g, T, v, O, $, A, D, k, S; ++b < y; ) {
     for (w = e[b], m = -1, g = w.length, P = [], G = [], g > f && (f = g); ++m < g; )
       O = serialize(w[m]), a === !0 && (v = h(O), G[m] = v, T = d[m], (T === void 0 || v > T) && (d[m] = v)), P.push(O);
     _[b] = P, E[b] = G;
@@ -3541,10 +3541,10 @@ function markdownTable(e, t) {
     for (S = toAlignment(p); ++m < g; )
       u[m] = S;
   for (m = -1, g = f, P = [], G = []; ++m < g; )
-    S = u[m], k = "", D = "", S === l ? k = colon : S === r ? D = colon : S === c && (k = colon, D = colon), v = a ? Math.max(1, d[m] - k.length - D.length) : 1, O = k + repeatString(dash, v) + D, a === !0 && (v = k.length + v + D.length, v > d[m] && (d[m] = v), G[m] = v), P[m] = O;
+    S = u[m], D = "", k = "", S === l ? D = colon : S === r ? k = colon : S === c && (D = colon, k = colon), v = a ? Math.max(1, d[m] - D.length - k.length) : 1, O = D + repeatString(dash, v) + k, a === !0 && (v = D.length + v + k.length, v > d[m] && (d[m] = v), G[m] = v), P[m] = O;
   for (_.splice(1, 0, P), E.splice(1, 0, G), b = -1, y = _.length, $ = []; ++b < y; ) {
     for (P = _[b], G = E[b], m = -1, g = f, A = []; ++m < g; )
-      O = P[m] || "", k = "", D = "", a === !0 && (v = d[m] - (G[m] || 0), S = u[m], S === r ? k = repeatString(space, v) : S === c ? v % 2 == 0 ? (k = repeatString(space, v / 2), D = k) : (k = repeatString(space, v / 2 + 0.5), D = repeatString(space, v / 2 - 0.5)) : D = repeatString(space, v)), o === !0 && m === 0 && A.push(verticalBar), s === !0 && !(a === !1 && O === "") && (o === !0 || m !== 0) && A.push(space), a === !0 && A.push(k), A.push(O), a === !0 && A.push(D), s === !0 && A.push(space), (i === !0 || m !== g - 1) && A.push(verticalBar);
+      O = P[m] || "", D = "", k = "", a === !0 && (v = d[m] - (G[m] || 0), S = u[m], S === r ? D = repeatString(space, v) : S === c ? v % 2 == 0 ? (D = repeatString(space, v / 2), k = D) : (D = repeatString(space, v / 2 + 0.5), k = repeatString(space, v / 2 - 0.5)) : k = repeatString(space, v)), o === !0 && m === 0 && A.push(verticalBar), s === !0 && !(a === !1 && O === "") && (o === !0 || m !== 0) && A.push(space), a === !0 && A.push(D), A.push(O), a === !0 && A.push(k), s === !0 && A.push(space), (i === !0 || m !== g - 1) && A.push(verticalBar);
     A = A.join(""), i === !1 && (A = A.replace(trailingWhitespace, "")), $.push(A);
   }
   return $.join(lineFeed);
@@ -4686,28 +4686,28 @@ var ioUtil = createCommonjsModule(function(e, t) {
       });
     }
     return new (w || (w = Promise))(function(T, v) {
-      function O(k) {
+      function O(D) {
         try {
-          A(m.next(k));
-        } catch (D) {
-          v(D);
+          A(m.next(D));
+        } catch (k) {
+          v(k);
         }
       }
-      function $(k) {
+      function $(D) {
         try {
-          A(m.throw(k));
-        } catch (D) {
-          v(D);
+          A(m.throw(D));
+        } catch (k) {
+          v(k);
         }
       }
-      function A(k) {
-        k.done ? T(k.value) : g(k.value).then(O, $);
+      function A(D) {
+        D.done ? T(D.value) : g(D.value).then(O, $);
       }
       A((m = m.apply(d, f || [])).next());
     });
   }, p;
   Object.defineProperty(t, "__esModule", { value: !0 }), t.getCmdPath = t.tryGetExecutablePath = t.isRooted = t.isDirectory = t.exists = t.IS_WINDOWS = t.unlink = t.symlink = t.stat = t.rmdir = t.rename = t.readlink = t.readdir = t.mkdir = t.lstat = t.copyFile = t.chmod = void 0;
-  const a = o(fs__default.default), u = o(require$$1__default.default);
+  const a = o(fs_1__default.default), u = o(require$$1__default.default);
   p = a.promises, t.chmod = p.chmod, t.copyFile = p.copyFile, t.lstat = p.lstat, t.mkdir = p.mkdir, t.readdir = p.readdir, t.readlink = p.readlink, t.rename = p.rename, t.rmdir = p.rmdir, t.stat = p.stat, t.symlink = p.symlink, t.unlink = p.unlink, t.IS_WINDOWS = process.platform === "win32";
   function h(d) {
     return i(this, void 0, void 0, function* () {
@@ -4811,27 +4811,27 @@ var ioUtil = createCommonjsModule(function(e, t) {
     return s(T, g), T;
   }, i = commonjsGlobal && commonjsGlobal.__awaiter || function(g, T, v, O) {
     function $(A) {
-      return A instanceof v ? A : new v(function(k) {
-        k(A);
+      return A instanceof v ? A : new v(function(D) {
+        D(A);
       });
     }
-    return new (v || (v = Promise))(function(A, k) {
-      function D(U) {
+    return new (v || (v = Promise))(function(A, D) {
+      function k(U) {
         try {
           j(O.next(U));
         } catch (F) {
-          k(F);
+          D(F);
         }
       }
       function S(U) {
         try {
           j(O.throw(U));
         } catch (F) {
-          k(F);
+          D(F);
         }
       }
       function j(U) {
-        U.done ? A(U.value) : $(U.value).then(D, S);
+        U.done ? A(U.value) : $(U.value).then(k, S);
       }
       j((O = O.apply(g, T || [])).next());
     });
@@ -4840,21 +4840,21 @@ var ioUtil = createCommonjsModule(function(e, t) {
   const p = o(require$$0__default$1.default), a = o(require$$1__default.default), u = o(ioUtil), h = util_1__default.default.promisify(p.exec), b = util_1__default.default.promisify(p.execFile);
   function y(g, T, v = {}) {
     return i(this, void 0, void 0, function* () {
-      const { force: O, recursive: $, copySourceDirectory: A } = f(v), k = (yield u.exists(T)) ? yield u.stat(T) : null;
-      if (k && k.isFile() && !O)
+      const { force: O, recursive: $, copySourceDirectory: A } = f(v), D = (yield u.exists(T)) ? yield u.stat(T) : null;
+      if (D && D.isFile() && !O)
         return;
-      const D = k && k.isDirectory() && A ? a.join(T, a.basename(g)) : T;
+      const k = D && D.isDirectory() && A ? a.join(T, a.basename(g)) : T;
       if (!(yield u.exists(g)))
         throw new Error(`no such file or directory: ${g}`);
       if ((yield u.stat(g)).isDirectory())
         if ($)
-          yield w(g, D, 0, O);
+          yield w(g, k, 0, O);
         else
           throw new Error(`Failed to copy. ${g} is a directory, but tried to copy without recursive flag.`);
       else {
-        if (a.relative(g, D) === "")
-          throw new Error(`'${D}' and '${g}' are the same file`);
-        yield m(g, D, O);
+        if (a.relative(g, k) === "")
+          throw new Error(`'${k}' and '${g}' are the same file`);
+        yield m(g, k, O);
       }
     });
   }
@@ -4968,8 +4968,8 @@ var ioUtil = createCommonjsModule(function(e, t) {
       v++, yield P(T);
       const $ = yield u.readdir(g);
       for (const A of $) {
-        const k = `${g}/${A}`, D = `${T}/${A}`;
-        (yield u.lstat(k)).isDirectory() ? yield w(k, D, v, O) : yield m(k, D, O);
+        const D = `${g}/${A}`, k = `${T}/${A}`;
+        (yield u.lstat(D)).isDirectory() ? yield w(D, k, v, O) : yield m(D, k, O);
       }
       yield u.chmod(T, (yield u.stat(g)).mode);
     });
@@ -5014,22 +5014,22 @@ var ioUtil = createCommonjsModule(function(e, t) {
       });
     }
     return new (w || (w = Promise))(function(T, v) {
-      function O(k) {
+      function O(D) {
         try {
-          A(m.next(k));
-        } catch (D) {
-          v(D);
+          A(m.next(D));
+        } catch (k) {
+          v(k);
         }
       }
-      function $(k) {
+      function $(D) {
         try {
-          A(m.throw(k));
-        } catch (D) {
-          v(D);
+          A(m.throw(D));
+        } catch (k) {
+          v(k);
         }
       }
-      function A(k) {
-        k.done ? T(k.value) : g(k.value).then(O, $);
+      function A(D) {
+        D.done ? T(D.value) : g(D.value).then(O, $);
       }
       A((m = m.apply(d, f || [])).next());
     });
@@ -5189,14 +5189,14 @@ var ioUtil = createCommonjsModule(function(e, t) {
           const T = this._getSpawnFileName(), v = u.spawn(T, this._getSpawnArgs(m), this._getSpawnOptions(this.options, T));
           let O = "";
           v.stdout && v.stdout.on("data", (A) => {
-            this.options.listeners && this.options.listeners.stdout && this.options.listeners.stdout(A), !m.silent && m.outStream && m.outStream.write(A), O = this._processLineBuffer(A, O, (k) => {
-              this.options.listeners && this.options.listeners.stdline && this.options.listeners.stdline(k);
+            this.options.listeners && this.options.listeners.stdout && this.options.listeners.stdout(A), !m.silent && m.outStream && m.outStream.write(A), O = this._processLineBuffer(A, O, (D) => {
+              this.options.listeners && this.options.listeners.stdline && this.options.listeners.stdline(D);
             });
           });
           let $ = "";
           if (v.stderr && v.stderr.on("data", (A) => {
-            g.processStderr = !0, this.options.listeners && this.options.listeners.stderr && this.options.listeners.stderr(A), !m.silent && m.errStream && m.outStream && (m.failOnStdErr ? m.errStream : m.outStream).write(A), $ = this._processLineBuffer(A, $, (k) => {
-              this.options.listeners && this.options.listeners.errline && this.options.listeners.errline(k);
+            g.processStderr = !0, this.options.listeners && this.options.listeners.stderr && this.options.listeners.stderr(A), !m.silent && m.errStream && m.outStream && (m.failOnStdErr ? m.errStream : m.outStream).write(A), $ = this._processLineBuffer(A, $, (D) => {
+              this.options.listeners && this.options.listeners.errline && this.options.listeners.errline(D);
             });
           }), v.on("error", (A) => {
             g.processError = A.message, g.processExited = !0, g.processClosed = !0, g.CheckComplete();
@@ -5204,8 +5204,8 @@ var ioUtil = createCommonjsModule(function(e, t) {
             g.processExitCode = A, g.processExited = !0, this._debug(`Exit code ${A} received from tool '${this.toolPath}'`), g.CheckComplete();
           }), v.on("close", (A) => {
             g.processExitCode = A, g.processExited = !0, g.processClosed = !0, this._debug(`STDIO streams have closed for tool '${this.toolPath}'`), g.CheckComplete();
-          }), g.on("done", (A, k) => {
-            O.length > 0 && this.emit("stdline", O), $.length > 0 && this.emit("errline", $), v.removeAllListeners(), A ? w(A) : f(k);
+          }), g.on("done", (A, D) => {
+            O.length > 0 && this.emit("stdline", O), $.length > 0 && this.emit("errline", $), v.removeAllListeners(), A ? w(A) : f(D);
           }), this.options.input) {
             if (!v.stdin)
               throw new Error("child process missing stdin");
@@ -5385,17 +5385,14 @@ async function isBaseDiffFromHead(e) {
   return t !== 0;
 }
 async function npmCi({ cwd: e } = {}) {
-  fs__default.default.existsSync("node_modules") && (core.info("Cleaning node_modules"), await io.rmRF(require$$1__default.default.join(e, "node_modules")));
-  const t = {
+  fs_1__default.default.existsSync("node_modules") && (core.info("Cleaning node_modules"), await io.rmRF(require$$1__default.default.join(e, "node_modules")));
+  const { exitCode: t, stdout: n, stderr: s } = await exec("npx ci", {
     cwd: e,
     ignoreReturnCode: !0
-  };
-  let n = "";
-  fs__default.default.existsSync("package-lock.json") ? (core.info("Installing dependencies with npm"), n = "npm ci") : fs__default.default.existsSync("yarn.lock") ? (core.info("Installing dependencies with yarn"), n = "yarn install --frozen-lockfile") : fs__default.default.existsSync("pnpm-lock.yaml") ? (core.info("Installing dependencies with pnpm"), n = "npx pnpm i --frozen-lockfile") : (core.info("No lock file detected. Installing dependencies with npm"), n = "npm i");
-  const { exitCode: s, stdout: o, stderr: i } = await exec(n, t);
-  if (s > 0)
-    throw new Error(`${i}
-${o}`);
+  });
+  if (t > 0)
+    throw new Error(`${s}
+${n}`);
 }
 async function isFileTracked(e) {
   const { exitCode: t } = await exec(`git ls-files --error-unmatch ${e}`, { ignoreReturnCode: !0 });
@@ -5420,7 +5417,7 @@ async function buildRef({
     if (!n) {
       let a;
       try {
-        a = JSON.parse(fs__default.default.readFileSync("./package.json"));
+        a = JSON.parse(fs_1__default.default.readFileSync("./package.json"));
       } catch (u) {
         core.warning("Error reading package.json", u);
       }
